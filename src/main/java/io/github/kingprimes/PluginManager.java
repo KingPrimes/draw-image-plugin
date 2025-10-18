@@ -1,4 +1,4 @@
-﻿package io.github.kingprimes;
+package io.github.kingprimes;
 
 import java.io.File;
 import java.net.URL;

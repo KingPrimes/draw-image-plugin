@@ -1,4 +1,4 @@
-﻿package io.github.kingprimes;
+package io.github.kingprimes;
 
 import com.sun.jna.Library;
 import com.sun.jna.Pointer;
