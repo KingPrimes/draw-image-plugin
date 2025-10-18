@@ -3,6 +3,8 @@ package io.github.kingprimes;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
+import io.github.kingprimes.defaultdraw.DefaultDrawHelpImage;
+import io.github.kingprimes.defaultdraw.DefaultDrawWarframeSubscribeImage;
 import io.github.kingprimes.model.*;
 import io.github.kingprimes.model.enums.SyndicateEnum;
 import io.github.kingprimes.model.worldstate.*;
@@ -22,6 +24,7 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private final NativeDrawLibrary library;
 
+
     public JNADrawPluginAdapter(String libraryName) {
         try {
             this.library = Native.load(libraryName, NativeDrawLibrary.class);
@@ -30,6 +33,25 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
         }
     }
 
+    /**
+     * 绘制帮助图像
+     *
+     * @param helpInfo 帮助信息
+     * @return 图像流
+     */
+    @Override
+    public byte[] drawHelpImage(List<String> helpInfo) {
+        try {
+            Pointer pointer = convertToPointer(helpInfo);
+            byte[] bytes = pointerToByteArray(library.nativeDrawHelpImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return DefaultDrawHelpImage.drawHelpImage(helpInfo);
+        } catch (Exception e) {
+            return DefaultDrawHelpImage.drawHelpImage(helpInfo);
+        }
+    }
 
     /**
      * 绘制所有平原图像
@@ -350,6 +372,29 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
         Pointer pointer = convertToPointer(vt);
         return pointerToByteArray(library.nativeDrawVoidTraderImage(pointer));
 
+    }
+
+    /**
+     * 绘制 订阅 帮助 图像
+     *
+     * @param subscribe   订阅类型数据
+     * @param missionType 订阅任务类型数据
+     * @return 图像流
+     */
+    @Override
+    public byte[] drawWarframeSubscribeImage(Map<Integer, String> subscribe, Map<Integer, String> missionType) {
+        try {
+            Pointer sp = convertToPointer(subscribe);
+            Pointer mp = convertToPointer(missionType);
+            byte[] bytes = pointerToByteArray(library.nativeDrawWarframeSubscribeImage(sp, mp));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            } else {
+                return DefaultDrawWarframeSubscribeImage.drawWarframeSubscribeImage(subscribe, missionType);
+            }
+        } catch (Exception e) {
+            return DefaultDrawWarframeSubscribeImage.drawWarframeSubscribeImage(subscribe, missionType);
+        }
     }
 
     /**
