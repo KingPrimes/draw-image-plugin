@@ -104,12 +104,16 @@ public final class ImageIOUtils {
      * @return 随机返回的小美王图片
      */
     public static BufferedImage getRandomXiaoMeiWangImage() {
-        return switch ((int) (Math.random() * 3)) {
-            case 1 -> getXiaoMeiWangKneelingImage();
-            case 2 -> getXiaoMeiWangIllustrationImage();
-            case 3 -> getXiaoMeiWangKneelingLaceImage();
-            default -> getXiaoMeiWangRightImage();
-        };
+        double random = Math.random();
+        if (random < 0.0019) {
+            return getXiaoMeiWangKneelingLaceImage();
+        } else if (random < 0.1) {
+            return getXiaoMeiWangKneelingImage();
+        } else if (random < 0.2) {
+            return getXiaoMeiWangIllustrationImage();
+        } else {
+            return getXiaoMeiWangRightImage();
+        }
     }
 
     /**
