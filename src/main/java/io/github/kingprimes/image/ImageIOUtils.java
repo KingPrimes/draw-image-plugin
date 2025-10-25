@@ -78,6 +78,15 @@ public final class ImageIOUtils {
     }
 
     /**
+     * 获取小美王跪姿-蕾丝图片
+     *
+     * @return BufferedImage 返回小美王跪姿图片对象
+     */
+    public static BufferedImage getXiaoMeiWangKneelingLaceImage() {
+        return getResourcesImage("/image/XiaoMeiWang-kneeling-lace.png");
+    }
+
+    /**
      * 获取小美王插图图片
      *
      * @return BufferedImage 返回小美王插图的BufferedImage对象
@@ -87,7 +96,10 @@ public final class ImageIOUtils {
     }
 
     /**
-     * 随机获取 {@link #getXiaoMeiWangRightImage}、{@link #getXiaoMeiWangKneelingImage}、{@link #getXiaoMeiWangIllustrationImage} 这三张图片中的一张图片返回
+     * 随机获取 <br/>
+     * {@link #getXiaoMeiWangRightImage}、{@link #getXiaoMeiWangKneelingImage}<br/>
+     * {@link #getXiaoMeiWangIllustrationImage} {@link #getXiaoMeiWangKneelingLaceImage}<br/>
+     * 这四张图片中的一张图片返回
      *
      * @return 随机返回的小美王图片
      */
@@ -95,6 +107,7 @@ public final class ImageIOUtils {
         return switch ((int) (Math.random() * 3)) {
             case 1 -> getXiaoMeiWangKneelingImage();
             case 2 -> getXiaoMeiWangIllustrationImage();
+            case 3 -> getXiaoMeiWangKneelingLaceImage();
             default -> getXiaoMeiWangRightImage();
         };
     }

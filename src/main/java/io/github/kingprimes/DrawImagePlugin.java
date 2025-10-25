@@ -250,14 +250,18 @@ public interface DrawImagePlugin {
      *
      * @return 插件名称
      */
-    String getPluginName();
+    default String getPluginName() {
+        return "default";
+    }
 
     /**
      * 获取插件版本
      *
      * @return 插件版本
      */
-    String getPluginVersion();
+    default String getPluginVersion() {
+        return "1.0.0";
+    }
 
     /**
      * 释放插件内存

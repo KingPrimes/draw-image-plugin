@@ -18,7 +18,7 @@ import java.util.Map;
  * @author KingPrimes
  * @version 1.0.0
  */
-public class DefaultDrawWarframeSubscribeImage {
+public final class DefaultDrawWarframeSubscribeImage {
 
     static final int WIDTH = 1300;
     static final int HEIGHT = 1000;
