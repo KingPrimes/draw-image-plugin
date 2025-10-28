@@ -40,4 +40,11 @@ public class AllCycle {
      * @see VallisCycle
      */
     VallisCycle vallisCycle;
+
+    /**
+     * 扎里曼
+     *
+     * @see ZarimanCycle
+     */
+    ZarimanCycle zarimanCycle;
 }

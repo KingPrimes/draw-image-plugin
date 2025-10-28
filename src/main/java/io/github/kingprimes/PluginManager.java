@@ -1,9 +1,12 @@
 package io.github.kingprimes;
 
+import io.github.kingprimes.defaultdraw.DefaultDrawImagePlugin;
+
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.logging.Logger;
@@ -198,8 +201,13 @@ public final class PluginManager {
      * @return 插件列表
      */
     public List<DrawImagePlugin> getAllPlugins() {
-        LOGGER.fine("获取所有已加载的插件，当前共有 %d 个插件".formatted(plugins.size()));
-        return new ArrayList<>(plugins);
+        if (!plugins.isEmpty()) {
+            LOGGER.fine("获取所有已加载的插件，当前共有 %d 个插件".formatted(plugins.size()));
+            return new ArrayList<>(plugins);
+        } else {
+            LOGGER.warning("未找到插件，返回默认实现。");
+            return Collections.singletonList(new DefaultDrawImagePlugin());
+        }
     }
 
     /**
@@ -217,7 +225,8 @@ public final class PluginManager {
                     .findFirst()
                     .orElse(null);
         }
-        throw new RuntimeException("未找到插件: %s".formatted(pluginName));
+        LOGGER.warning("未找到插件: %s 将返回默认实现。".formatted(pluginName));
+        return new DefaultDrawImagePlugin();
     }
 
     /**
@@ -227,7 +236,8 @@ public final class PluginManager {
      */
     public DrawImagePlugin getFirstPlugin() {
         if (plugins.isEmpty()) {
-            throw new RuntimeException("未加载任何插件");
+            LOGGER.warning("未找到插件，返回默认实现。");
+            return new DefaultDrawImagePlugin();
         }
         LOGGER.fine("返回第一个加载的插件: %s".formatted(plugins.getFirst().getPluginName()));
         return plugins.getFirst();

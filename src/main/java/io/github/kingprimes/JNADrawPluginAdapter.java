@@ -3,8 +3,7 @@ package io.github.kingprimes;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
-import io.github.kingprimes.defaultdraw.DefaultDrawHelpImage;
-import io.github.kingprimes.defaultdraw.DefaultDrawWarframeSubscribeImage;
+import io.github.kingprimes.defaultdraw.DefaultDrawImagePlugin;
 import io.github.kingprimes.model.*;
 import io.github.kingprimes.model.enums.SyndicateEnum;
 import io.github.kingprimes.model.worldstate.*;
@@ -47,9 +46,9 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
             if (bytes != null && bytes.length > 0) {
                 return bytes;
             }
-            return DefaultDrawHelpImage.drawHelpImage(helpInfo);
+            return new DefaultDrawImagePlugin().drawHelpImage(helpInfo);
         } catch (Exception e) {
-            return DefaultDrawHelpImage.drawHelpImage(helpInfo);
+            return new DefaultDrawImagePlugin().drawHelpImage(helpInfo);
         }
     }
 
@@ -61,8 +60,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawAllCycleImage(AllCycle allCycle) {
-        Pointer pointer = convertToPointer(allCycle);
-        return pointerToByteArray(library.nativeDrawAllCycleImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(allCycle);
+            byte[] bytes = pointerToByteArray(library.nativeDrawAllCycleImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawAllCycleImage(allCycle);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawAllCycleImage(allCycle);
+        }
     }
 
     /**
@@ -390,10 +397,10 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
             if (bytes != null && bytes.length > 0) {
                 return bytes;
             } else {
-                return DefaultDrawWarframeSubscribeImage.drawWarframeSubscribeImage(subscribe, missionType);
+                return new DefaultDrawImagePlugin().drawWarframeSubscribeImage(subscribe, missionType);
             }
         } catch (Exception e) {
-            return DefaultDrawWarframeSubscribeImage.drawWarframeSubscribeImage(subscribe, missionType);
+            return new DefaultDrawImagePlugin().drawWarframeSubscribeImage(subscribe, missionType);
         }
     }
 

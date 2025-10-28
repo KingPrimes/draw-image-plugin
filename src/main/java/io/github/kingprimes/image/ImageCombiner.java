@@ -185,6 +185,20 @@ public class ImageCombiner {
     }
 
     /**
+     * 清除指定矩形区域内的像素
+     *
+     * @param x      矩形左上角的 x 坐标
+     * @param y      矩形左上角的 y 坐标
+     * @param width  矩形的宽度
+     * @param height 矩形的高度
+     * @return 当前 ImageCombiner 实例，用于支持链式调用
+     */
+    public ImageCombiner clearRect(int x, int y, int width, int height) {
+        g2.clearRect(x, y, width, height);
+        return this;
+    }
+
+    /**
      * 在图像上绘制圆弧轮廓（基于指定的外接矩形和角度范围）
      *
      * @param x          外接矩形左上角的 x 坐标
@@ -717,6 +731,44 @@ public class ImageCombiner {
     }
 
     /**
+     * 绘制双层边框
+     *
+     * @param roundRect 参数
+     * @return 当前实例
+     */
+    public ImageCombiner drawTooRoundRect(RoundRect roundRect) {
+        this.setColor(new Color(0xB1B1B1))
+                .setStroke(roundRect.stroke)
+                .drawRoundRect(roundRect.x, roundRect.y, roundRect.width, roundRect.height, roundRect.arcWidth, roundRect.arcHeight);
+
+        // 内层边框（深灰色）
+        this.setColor(new Color(0x333333))
+                .setStroke(roundRect.stroke)
+                .drawRoundRect(roundRect.offsetX, roundRect.offsetY, roundRect.offsetWidth, roundRect.offsetHeight, roundRect.arcWidth, roundRect.arcHeight);
+        return this;
+    }
+
+    public ImageCombiner drawTooRoundRect() {
+        int borderPadding = 20;
+        int innerWidth = this.getCombinedImage().getWidth() - borderPadding * 2;
+        int innerHeight = this.getCombinedImage().getHeight() - borderPadding * 2;
+        this.drawTooRoundRect(new RoundRect(
+                borderPadding - 8,
+                borderPadding,
+                borderPadding - 8,
+                borderPadding,
+                innerWidth + 16,
+                innerWidth,
+                innerHeight + 16,
+                innerHeight,
+                20,
+                20,
+                4
+        ));
+        return this;
+    }
+
+    /**
      * 预设标题样式：居中+渐变背景+白色边框+阴影
      * <p>实现逻辑：调用{@link #drawAdvancedText(String, int, Align, boolean, Color, Color, Color, boolean, Color, int, int, Color, int, int)}方法绘制文本，同时绘制渐变背景+白色边框+阴影</p>
      * <p>参数校验：若输入文本为null，则直接返回当前实例，不执行任何绘制操作</p>
@@ -945,6 +997,14 @@ public class ImageCombiner {
         return this;
     }
 
+    /**
+     * 获取当前Graphics2D对象
+     *
+     * @return 当前Graphics2D对象
+     */
+    public Graphics2D getGraphics() {
+        return g2;
+    }
 
     /**
      * 在指定位置绘制图像，保持图像原始比例进行缩放
@@ -980,6 +1040,7 @@ public class ImageCombiner {
         return this;
     }
 
+
     /**
      * 文本对齐方式
      */
@@ -1010,5 +1071,24 @@ public class ImageCombiner {
          * JPG格式
          */
         JPG
+    }
+
+    /**
+     * 双层边框参数
+     *
+     * @param x            外层边框的x坐标
+     * @param offsetX      内层边框的x坐标
+     * @param y            外层边框的y坐标
+     * @param offsetY      内层边框的y坐标
+     * @param width        外层边框的宽度
+     * @param offsetWidth  内层边框的宽度
+     * @param height       外层边框的高度
+     * @param offsetHeight 内层边框的高度
+     * @param arcWidth     圆角的宽度
+     * @param arcHeight    圆角的高度
+     * @param stroke       边框的宽度
+     */
+    public record RoundRect(int x, int offsetX, int y, int offsetY, int width, int offsetWidth, int height,
+                            int offsetHeight, int arcWidth, int arcHeight, int stroke) {
     }
 }

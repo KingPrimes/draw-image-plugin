@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  * @author KingPrimes
  * @version 1.0.0
  */
-public final class DefaultDrawHelpImage {
+final class DefaultDrawHelpImage {
 
     private static final Pattern PIPE_PATTERN = Pattern.compile("\\|");
 
@@ -54,7 +54,7 @@ public final class DefaultDrawHelpImage {
         ImageCombiner combiner = new ImageCombiner(WIDTH, totalHeight, ImageCombiner.OutputFormat.PNG);
         combiner.setFont(Fonts.FONT_TEXT)
                 .setColor(Color.WHITE)
-                .fillRect(0, 0, WIDTH, totalHeight);
+                .fillRect(0, 0, WIDTH, totalHeight).drawTooRoundRect();
 
         // 标题绘制
         String title = "帮助中心";
@@ -116,7 +116,7 @@ public final class DefaultDrawHelpImage {
         // 底部署名
         String footer = "Posted by: KingPrimes";
         combiner.setColor(Color.GRAY)
-                .addCenteredText(footer, totalHeight - FOOTER_HEIGHT + 10);
+                .addCenteredText(footer, totalHeight - FOOTER_HEIGHT);
 
         combiner.combine();
         try (ByteArrayOutputStream bos = combiner.getCombinedImageOutStream()) {
@@ -127,18 +127,7 @@ public final class DefaultDrawHelpImage {
     }
 
     // 内部辅助类：缓存行信息（坐标、背景状态、文字内容）
-    private static class RowInfo {
-        final int x;
-        final int y;
-        final boolean isEvenRow;
-        final String command;
-
-        RowInfo(int x, int y, boolean isEvenRow, String command) {
-            this.x = x;
-            this.y = y;
-            this.isEvenRow = isEvenRow;
-            this.command = command;
-        }
+    private record RowInfo(int x, int y, boolean isEvenRow, String command) {
     }
 
 }

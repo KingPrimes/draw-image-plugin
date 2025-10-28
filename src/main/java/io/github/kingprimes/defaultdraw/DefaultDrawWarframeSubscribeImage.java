@@ -18,7 +18,7 @@ import java.util.Map;
  * @author KingPrimes
  * @version 1.0.0
  */
-public final class DefaultDrawWarframeSubscribeImage {
+final class DefaultDrawWarframeSubscribeImage {
 
     static final int WIDTH = 1300;
     static final int HEIGHT = 1000;
@@ -52,27 +52,16 @@ public final class DefaultDrawWarframeSubscribeImage {
         int borderPadding = 20;
         int innerWidth = WIDTH - borderPadding * 2;
         int innerHeight = HEIGHT - borderPadding * 2;
-
-        // 外层边框（浅灰色）
-        combiner.setColor(new Color(0xB1B1B1))
-                .setStroke(4)
-                .drawRoundRect(borderPadding - 8, borderPadding - 8, innerWidth + 16, innerHeight + 16, 20, 20);
-
-        // 内层边框（深灰色）
-        combiner.setColor(new Color(0x333333))
-                .setStroke(4)
-                .drawRoundRect(borderPadding, borderPadding, innerWidth, innerHeight, 20, 20);
-
         int backgroundY = MARGIN + borderPadding + TITLE_HEIGHT + 30; // 文字区域下方开始
         BufferedImage backgroundImage = ImageIOUtils.getRandomXiaoMeiWangImage();
         int maxImageWidth = innerWidth / 2 + 80;
         int maxImageHeight = innerHeight - (backgroundY - MARGIN - borderPadding);
-
-        combiner.drawImageWithAspectRatio(backgroundImage,
-                WIDTH / 2 + borderPadding, // 右侧起始X坐标
-                backgroundY,
-                maxImageWidth,
-                maxImageHeight);
+        combiner.drawTooRoundRect()
+                .drawImageWithAspectRatio(backgroundImage,
+                        WIDTH / 2 + borderPadding, // 右侧起始X坐标
+                        backgroundY,
+                        maxImageWidth,
+                        maxImageHeight);
 
         int y = MARGIN + borderPadding + TITLE_HEIGHT / 2;
         // ================== 标题 Start ==================
@@ -216,7 +205,7 @@ public final class DefaultDrawWarframeSubscribeImage {
         y += j / 3 + missionType.size() * 2 - 50;
         // ================== 底部署名 Start ==================
         String footer = "Posted by: KingPrimes";
-        combiner.setColor(blackColor)
+        combiner.setColor(Color.GRAY)
                 .setFont(mainFont)
                 .addCenteredText(footer, y);
         // ================== 底部署名 END ==================
