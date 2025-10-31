@@ -113,7 +113,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawActiveMissionImage(List<ActiveMission> activeMission) {
-        return new byte[0];
+        return DefaultDrawActiveMission.drawActiveMissionImage(activeMission);
     }
 
     /**

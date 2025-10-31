@@ -2,6 +2,7 @@ package io.github.kingprimes.model.worldstate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.kingprimes.model.enums.FactionEnum;
 import io.github.kingprimes.model.enums.MissionTypeEnum;
 import io.github.kingprimes.model.enums.VoidEnum;
 import lombok.Data;
@@ -36,6 +37,12 @@ public class ActiveMission extends BastWorldState {
     private String node;
 
     /**
+     * 派系
+     */
+    @JsonProperty("Faction")
+    private FactionEnum faction;
+
+    /**
      * 地区
      */
     @JsonProperty("Region")
@@ -49,7 +56,7 @@ public class ActiveMission extends BastWorldState {
      * 是否是钢铁模式
      */
     @JsonProperty("Hard")
-    private Boolean hard;
+    private Boolean hard = false;
 
     /**
      * 获取任务类型
