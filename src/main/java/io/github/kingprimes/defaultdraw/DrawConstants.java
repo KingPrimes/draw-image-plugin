@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
  * <p>该类包含仅在defaultdraw包内使用的绘图常量和工具方法</p>
  *
  * @author KingPrimes
- * @version 1.0.0
+ * @version 1.0.3
  */
 final class DrawConstants {
 

@@ -15,7 +15,7 @@ import static io.github.kingprimes.defaultdraw.DrawConstants.*;
  * 默认所有系统信息图片绘制工具类
  *
  * @author KingPrimes
- * @version 1.0.0
+ * @version 1.0.3
  */
 final class DefaultDrawAllInfoImage {
 
