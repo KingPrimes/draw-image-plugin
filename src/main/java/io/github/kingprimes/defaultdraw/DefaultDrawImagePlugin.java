@@ -69,7 +69,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawArbitrationImage(Arbitration arbitration) {
-        return new byte[0];
+        return DefaultDrawArbitrationImage.drawArbitrationImage(arbitration);
     }
 
     /**
@@ -80,7 +80,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawArbitrationsImage(List<Arbitration> arbitrations) {
-        return new byte[0];
+        return DefaultDrawArbitrationsImage.drawArbitrationsImage(arbitrations);
     }
 
     /**
