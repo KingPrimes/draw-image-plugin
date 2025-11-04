@@ -30,42 +30,31 @@ final class DefaultDrawHelpImage {
      * @return 生成的帮助图片的 PNG 格式字节数组。
      */
     public static byte[] drawHelpImage(List<String> helpInfo) {
-        final int WIDTH = DrawConstants.IMAGE_WIDTH;
-        final int MARGIN = DrawConstants.IMAGE_MARGIN;
-        final int HEADER_HEIGHT = DrawConstants.HELP_IMAGE_HEADER_HEIGHT;
-        final int FONT_SIZE = Fonts.FONT_TEXT.getSize();
-        final int ROW_HEIGHT = DrawConstants.HELP_IMAGE_ROW_HEIGHT;
-        final int ITEMS_PER_COLUMN = DrawConstants.HELP_IMAGE_ITEMS_PER_COLUMN;
 
         // 预计算布局参数
-        int columnCount = (helpInfo.size() + ITEMS_PER_COLUMN - 1) / ITEMS_PER_COLUMN;
+        int columnCount = (helpInfo.size() + HELP_IMAGE_ITEMS_PER_COLUMN - 1) / HELP_IMAGE_ITEMS_PER_COLUMN;
         int maxItemsInColumn = (helpInfo.size() + columnCount - 1) / columnCount;
-        int totalHeight = MARGIN + IMAGE_TITLE_HEIGHT + HEADER_HEIGHT + (maxItemsInColumn * ROW_HEIGHT) + MARGIN + IMAGE_FOOTER_HEIGHT;
-        int rounderWidth = Math.multiplyExact(WIDTH, 9) / 10;
-        int centerX = (WIDTH - rounderWidth) / 2;
+        int totalHeight = IMAGE_MARGIN + IMAGE_TITLE_HEIGHT + IMAGE_HEADER_HEIGHT + (maxItemsInColumn * HELP_IMAGE_ROW_HEIGHT) + IMAGE_MARGIN + IMAGE_FOOTER_HEIGHT;
+        int rounderWidth = Math.multiplyExact(IMAGE_WIDTH, 9) / 10;
+        int centerX = (IMAGE_WIDTH - rounderWidth) / 2;
         int columnWidth = rounderWidth / 2;  // 预计算列宽
 
-        // 复用颜色对象
-        Color evenRowColor = DrawConstants.HELP_IMAGE_EVEN_ROW_COLOR; // 更浅的灰白色背景
-        Color textColor = DrawConstants.HELP_IMAGE_TEXT_COLOR;    // 深灰色文字，提高对比度
-        Color headerBgColor = DrawConstants.HELP_IMAGE_HEADER_BG_COLOR; // 更深的蓝色表头
-        Color titleColor = DrawConstants.HELP_IMAGE_TITLE_COLOR;   // 标题颜色保持一致
 
-        ImageCombiner combiner = new ImageCombiner(WIDTH, totalHeight, ImageCombiner.OutputFormat.PNG);
+        ImageCombiner combiner = new ImageCombiner(IMAGE_WIDTH, totalHeight, ImageCombiner.OutputFormat.PNG);
         combiner.setFont(Fonts.FONT_TEXT)
                 .setColor(Color.WHITE)
-                .fillRect(0, 0, WIDTH, totalHeight).drawTooRoundRect();
+                .fillRect(0, 0, IMAGE_WIDTH, totalHeight).drawTooRoundRect();
 
         // 标题绘制
         String title = "帮助中心";
-        combiner.setColor(titleColor)
-                .addCenteredText(title, MARGIN + IMAGE_TITLE_HEIGHT / 2);
+        combiner.setColor(HELP_IMAGE_TITLE_COLOR)
+                .addCenteredText(title, IMAGE_MARGIN + IMAGE_TITLE_HEIGHT / 2);
 
         // 表头绘制
-        int y = MARGIN + IMAGE_TITLE_HEIGHT;
-        ImageCombiner roundedCombiner = new ImageCombiner(rounderWidth, HEADER_HEIGHT, ImageCombiner.OutputFormat.PNG);
-        roundedCombiner.setColor(headerBgColor)
-                .fillRect(0, 0, rounderWidth, HEADER_HEIGHT)
+        int y = IMAGE_MARGIN + IMAGE_TITLE_HEIGHT;
+        ImageCombiner roundedCombiner = new ImageCombiner(rounderWidth, IMAGE_HEADER_HEIGHT, ImageCombiner.OutputFormat.PNG);
+        roundedCombiner.setColor(HELP_IMAGE_HEADER_BG_COLOR)
+                .fillRect(0, 0, rounderWidth, IMAGE_HEADER_HEIGHT)
                 .combine();
         combiner.addRoundedImage(roundedCombiner.getCombinedImage(), centerX, y - 5, 25);
         combiner.setColor(Color.WHITE)
@@ -79,12 +68,12 @@ final class DefaultDrawHelpImage {
 
         for (int i = 0; i < helpInfo.size(); i++) {
             // 计算当前行列位置
-            currentColumn = i / ITEMS_PER_COLUMN;
-            currentRowInColumn = i % ITEMS_PER_COLUMN;
+            currentColumn = i / HELP_IMAGE_ITEMS_PER_COLUMN;
+            currentRowInColumn = i % HELP_IMAGE_ITEMS_PER_COLUMN;
 
             // 预计算坐标
             int rowX = centerX + (currentColumn * columnWidth);
-            int rowY = y + (currentRowInColumn * ROW_HEIGHT) + ROW_HEIGHT;  // +ROW_HEIGHT是因为初始y已包含表头高度
+            int rowY = y + (currentRowInColumn * HELP_IMAGE_ROW_HEIGHT) + HELP_IMAGE_ROW_HEIGHT;  // +ROW_HEIGHT是因为初始y已包含表头高度
 
             // 预解析数据
             String line = helpInfo.get(i);
@@ -94,19 +83,19 @@ final class DefaultDrawHelpImage {
             RowInfo rowInfo = new RowInfo(rowX, rowY, currentRowInColumn % 2 == 0, command);
             rowInfos.add(rowInfo);
             if (rowInfo.isEvenRow) {
-                combiner.setColor(evenRowColor);
-                combiner.fillRect(rowInfo.x, rowInfo.y + (ROW_HEIGHT / 2) - (FONT_SIZE / 2), columnWidth, ROW_HEIGHT);
+                combiner.setColor(HELP_IMAGE_EVEN_ROW_COLOR);
+                combiner.fillRect(rowInfo.x, rowInfo.y + (HELP_IMAGE_ROW_HEIGHT / 2) - (FONT_SIZE / 2), columnWidth, HELP_IMAGE_ROW_HEIGHT);
             }
         }
 
         // 2. 绘制背景图片
         BufferedImage backgroundImage = ImageIOUtils.getRandomXiaoMeiWangImage();
-        int maxImageWidth = WIDTH / 2;
-        int maxImageHeight = totalHeight - imageY - MARGIN;
-        combiner.drawImageWithAspectRatio(backgroundImage, WIDTH / 2 + 40, imageY + MARGIN, maxImageWidth, maxImageHeight);
+        int maxImageWidth = IMAGE_WIDTH / 2;
+        int maxImageHeight = totalHeight - imageY - IMAGE_MARGIN;
+        combiner.drawImageWithAspectRatio(backgroundImage, IMAGE_WIDTH / 2 + 40, imageY + IMAGE_MARGIN, maxImageWidth, maxImageHeight);
 
         // 3. 绘制所有数据行文字（批量操作）
-        combiner.setColor(textColor);
+        combiner.setColor(HELP_IMAGE_TEXT_COLOR);
         for (RowInfo info : rowInfos) {
             if (!info.command.isEmpty()) {
                 combiner.addText(info.command, info.x, info.y);

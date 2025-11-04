@@ -27,14 +27,13 @@ final class DefaultDrawAllInfoImage {
      * @return 图像所需的高度
      */
     private static int calculateImageHeight(AllInfo allInfo) {
-        int height = IMAGE_MARGIN + IMAGE_TITLE_HEIGHT + IMAGE_ROW_HEIGHT; // 顶部边距 + 标题高度 + 第一个部分间距
+        int height = IMAGE_MARGIN_TOP + IMAGE_TITLE_HEIGHT + IMAGE_ROW_HEIGHT; // 顶部边距 + 标题高度 + 第一个部分间距
 
         // CPU信息部分高度
         if (allInfo.getCpuInfo() != null) {
             height += IMAGE_ROW_HEIGHT + 10; // 部分标题行高 + 上边距
             // CPU信息行数 (按新布局: 型号1行 + 核心数/线程数1行 + 频率/缓存1行 + 用户/系统使用率1行 + 等待/空闲率1行)
             height += IMAGE_ROW_HEIGHT * 5; // 5行信息
-            height += IMAGE_ROW_HEIGHT;
         }
 
         // JVM信息部分高度
@@ -42,7 +41,6 @@ final class DefaultDrawAllInfoImage {
             height += IMAGE_ROW_HEIGHT + 10; // 部分标题行高 + 上边距
             // JVM信息行数 (按新布局: 版本1行 + 内存信息1行 + 使用率/空闲率1行)
             height += IMAGE_ROW_HEIGHT * 3; // 3行信息
-            height += IMAGE_ROW_HEIGHT;
         }
 
         // 系统信息部分高度
@@ -50,7 +48,6 @@ final class DefaultDrawAllInfoImage {
             height += IMAGE_ROW_HEIGHT + 10; // 部分标题行高 + 上边距
             // 系统信息行数 (按新布局: 操作系统/架构1行 + 计算机名/IP1行)
             height += IMAGE_ROW_HEIGHT * 2; // 2行信息
-            height += IMAGE_ROW_HEIGHT;
         }
 
         // 磁盘信息部分高度
@@ -58,18 +55,17 @@ final class DefaultDrawAllInfoImage {
             height += (IMAGE_ROW_HEIGHT * 2) + 10; // 部分标题行高 + 上边距
             // 磁盘信息行数 (按新布局: 每个磁盘2行信息 + 10像素间距)
             int diskCount = allInfo.getSysFileInfos().getSysFileInfos().size();
-            height += diskCount * (FONT_SIZE * 2 + IMAGE_ROW_HEIGHT * 2); // 每个磁盘2行信息 + 10像素间距
+            height += diskCount * (FONT_SIZE * 2 + IMAGE_ROW_HEIGHT); // 每个磁盘2行信息 + 10像素间距
         }
 
         if (allInfo.getPackageVersion() != null) {
             height += (IMAGE_ROW_HEIGHT * 2) + 10; // 部分标题行高 + 上边距
             // 包版本信息行数 (按新布局: 包名/版本1行)
             height += IMAGE_ROW_HEIGHT; // 1行信息
-            height += IMAGE_ROW_HEIGHT;
         }
 
         // 底部边距
-        height += IMAGE_MARGIN + 50; // 底部边距 + 底部署名区域
+        height += IMAGE_MARGIN + IMAGE_FOOTER_HEIGHT; // 底部边距 + 底部署名区域
 
         return Math.max(height, 800); // 最小高度为800像素
     }
@@ -104,25 +100,21 @@ final class DefaultDrawAllInfoImage {
         // 绘制CPU信息
         if (allInfo.getCpuInfo() != null) {
             startY = drawCpuInfo(combiner, allInfo.getCpuInfo(), startY);
-            startY += IMAGE_ROW_HEIGHT;
         }
 
         // 绘制包版本信息
         if (allInfo.getPackageVersion() != null) {
             startY = drawPackageVersion(combiner, allInfo.getPackageVersion(), startY);
-            startY += IMAGE_ROW_HEIGHT;
         }
 
         // 绘制JVM信息
         if (allInfo.getJvmInfo() != null) {
             startY = drawJvmInfo(combiner, allInfo.getJvmInfo(), startY);
-            startY += IMAGE_ROW_HEIGHT;
         }
 
         // 绘制系统信息
         if (allInfo.getSystemInfo() != null) {
             startY = drawSystemInfo(combiner, allInfo.getSystemInfo(), startY);
-            startY += IMAGE_ROW_HEIGHT;
         }
 
         // 绘制磁盘信息
@@ -360,10 +352,6 @@ final class DefaultDrawAllInfoImage {
         combiner.setColor(TEXT_COLOR);
 
         for (SysFileInfos.SysFileInfo fileInfo : fileInfos) {
-            // 防止内容超出画布
-            if (y > combiner.getCanvasHeight() - 150) {
-                break;
-            }
 
             // 盘符、类型、文件系统为一行
             if (fileInfo.getDirName() != null) {

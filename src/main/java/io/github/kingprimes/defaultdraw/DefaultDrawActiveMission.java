@@ -2,19 +2,16 @@ package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
 import io.github.kingprimes.image.ImageIOUtils;
-import io.github.kingprimes.image.TextUtils;
 import io.github.kingprimes.model.enums.MissionTypeEnum;
 import io.github.kingprimes.model.enums.VoidEnum;
 import io.github.kingprimes.model.worldstate.ActiveMission;
-import io.github.kingprimes.utils.Fonts;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
-import static io.github.kingprimes.defaultdraw.DrawConstants.PAGE_BACKGROUND_COLOR;
-import static io.github.kingprimes.defaultdraw.DrawConstants.addFooter;
+import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
 /**
  * 默认 裂隙任务绘制工具类
@@ -23,25 +20,6 @@ import static io.github.kingprimes.defaultdraw.DrawConstants.addFooter;
  * @version 1.0.3
  */
 final class DefaultDrawActiveMission {
-    static final int WIDTH = DrawConstants.ACTIVE_MISSION_IMAGE_WIDTH;
-    static final int MARGIN = DrawConstants.ACTIVE_MISSION_IMAGE_MARGIN;
-    static final int TITLE_HEIGHT = DrawConstants.IMAGE_TITLE_HEIGHT;
-    static final int ROW_HEIGHT = DrawConstants.ACTIVE_MISSION_IMAGE_ROW_HEIGHT;
-    static final int ROW_MARGIN = DrawConstants.ACTIVE_MISSION_IMAGE_ROW_MARGIN;
-    static final Font FONT = Fonts.FONT_TEXT;
-    static final Color HEADER_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_HEADER_COLOR;
-    static final Color LOCATION_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_LOCATION_COLOR;
-    static final Color TIME_LOW_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_TIME_LOW_COLOR;
-    static final Color TIME_MEDIUM_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_TIME_MEDIUM_COLOR;
-    static final Color TIME_HIGH_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_TIME_HIGH_COLOR;
-
-    // 遗物等级颜色
-    static final Color VOID_T1_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_VOID_T1_COLOR;
-    static final Color VOID_T2_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_VOID_T2_COLOR;
-    static final Color VOID_T3_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_VOID_T3_COLOR;
-    static final Color VOID_T4_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_VOID_T4_COLOR;
-    static final Color VOID_T5_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_VOID_T5_COLOR;
-    static final Color VOID_T6_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_VOID_T6_COLOR;
 
     /**
      * 绘制裂隙任务图像
@@ -56,53 +34,53 @@ final class DefaultDrawActiveMission {
 
         // 动态计算高度
         int contentRows = activeMission.size();
-        int contentHeight = contentRows * (ROW_HEIGHT + ROW_MARGIN) - ROW_MARGIN; // 减去最后一个项目的边距
-        int height = TITLE_HEIGHT + 20 + contentHeight + 80; // 上边距 + 标题高度 + 标题与内容间距 + 内容高度 + 下边距
+        int contentHeight = contentRows * (IMAGE_ROW_HEIGHT + IMAGE_ROW_MARGIN) - IMAGE_ROW_MARGIN; // 减去最后一个项目的边距
+        int height = IMAGE_MARGIN_TOP + IMAGE_TITLE_HEIGHT + contentHeight + IMAGE_FOOTER_HEIGHT; // 上边距 + 标题高度 + 标题与内容间距 + 内容高度 + 下边距
 
         // 创建画布
-        ImageCombiner combiner = new ImageCombiner(WIDTH, height, ImageCombiner.OutputFormat.PNG);
+        ImageCombiner combiner = new ImageCombiner(ACTIVE_MISSION_WIDTH, height, ImageCombiner.OutputFormat.PNG);
 
         // 填充背景色
         combiner.setColor(PAGE_BACKGROUND_COLOR)
-                .fillRect(0, 0, WIDTH, height)
+                .fillRect(0, 0, ACTIVE_MISSION_WIDTH, height)
                 .drawTooRoundRect();
 
-        combiner.setColor(HEADER_COLOR)
+        combiner.setColor(ACTIVE_MISSION_HEADER_COLOR)
                 .setFont(FONT)
-                .addCenteredText(activeMission.getFirst().getHard() ? "钢铁裂隙" : "虚空裂隙", 80);
+                .addCenteredText(activeMission.getFirst().getHard() ? "钢铁裂隙" : "虚空裂隙", IMAGE_MARGIN_TOP);
         BufferedImage backgroundImage = ImageIOUtils.getRandomXiaoMeiWangImage();
-        int maxImageWidth = WIDTH / 2;
-        int maxImageHeight = height - MARGIN;
-        combiner.drawImageWithAspectRatio(backgroundImage, WIDTH / 2 + 78, MARGIN, maxImageWidth, maxImageHeight);
+        int maxImageWidth = ACTIVE_MISSION_WIDTH / 2;
+        int maxImageHeight = height - IMAGE_MARGIN;
+        combiner.drawImageWithAspectRatio(backgroundImage, ACTIVE_MISSION_WIDTH / 2 + 78, IMAGE_MARGIN, maxImageWidth, maxImageHeight);
         // 绘制内容区域
-        int y = MARGIN + ROW_HEIGHT + 20;
+        int y = IMAGE_MARGIN + IMAGE_ROW_HEIGHT + IMAGE_ROW_HEIGHT;
 
         for (ActiveMission mission : activeMission) {
-            int x = 60;
+            int x = IMAGE_MARGIN;
             // 裂隙类型
             String modifier = mission.getModifier();
             combiner.setColor(getModifierColor(mission.getVoidEnum()))
                     .addText(modifier, x, y);
 
-            x += TextUtils.getFortWidth(modifier, FONT) + MARGIN;
+            x += IMAGE_MARGIN + 60;
             // 任务类型和派系
             String missionInfo = mission.getMissionTypeName() + "-" + mission.getFaction().getName();
             combiner.setColor(MissionTypeEnum.getColor(mission.getMissionType() == null ? MissionTypeEnum.MT_DEFAULT : mission.getMissionType()))
                     .addText(missionInfo, x, y);
 
             // 节点位置
-            x += TextUtils.getFortWidth(missionInfo, FONT) + MARGIN + 20;
+            x += IMAGE_MARGIN + 260;
             String node = mission.getNode();
-            combiner.setColor(LOCATION_COLOR)
+            combiner.setColor(ACTIVE_MISSION_LOCATION_COLOR)
                     .addText(node, x, y);
 
             // 剩余时间
-            x += TextUtils.getFortWidth(node, FONT) + MARGIN + 40;
+            x += IMAGE_MARGIN + 300;
             Color timeColor = getTimeColor(mission);
             combiner.setColor(timeColor)
                     .addText(mission.getTimeLeft(), x, y);
 
-            y += ROW_HEIGHT;
+            y += IMAGE_ROW_HEIGHT;
         }
 
         // 底部署名
@@ -118,12 +96,12 @@ final class DefaultDrawActiveMission {
 
     private static Color getModifierColor(VoidEnum ve) {
         return switch (ve) {
-            case VoidT1 -> VOID_T1_COLOR;
-            case VoidT2 -> VOID_T2_COLOR;
-            case VoidT3 -> VOID_T3_COLOR;
-            case VoidT4 -> VOID_T4_COLOR;
-            case VoidT5 -> VOID_T5_COLOR;
-            case VoidT6 -> VOID_T6_COLOR;
+            case VoidT1 -> ACTIVE_MISSION_VOID_T1_COLOR;
+            case VoidT2 -> ACTIVE_MISSION_VOID_T2_COLOR;
+            case VoidT3 -> ACTIVE_MISSION_VOID_T3_COLOR;
+            case VoidT4 -> ACTIVE_MISSION_VOID_T4_COLOR;
+            case VoidT5 -> ACTIVE_MISSION_VOID_T5_COLOR;
+            case VoidT6 -> ACTIVE_MISSION_VOID_T6_COLOR;
         };
     }
 
@@ -137,16 +115,16 @@ final class DefaultDrawActiveMission {
         // 简化处理：根据时间字符串中是否包含小时来判断紧急程度
         String timeLeft = mission.getTimeLeft();
         if (timeLeft.contains("h")) {
-            return TIME_HIGH_COLOR; // 时间充足 - 绿色
+            return ACTIVE_MISSION_TIME_HIGH_COLOR; // 时间充足 - 绿色
         } else if (timeLeft.contains("m")) {
             int minutes = extractMinutes(timeLeft);
             if (minutes < 10) {
-                return TIME_LOW_COLOR; // 时间紧急 - 红色
+                return ACTIVE_MISSION_TIME_LOW_COLOR; // 时间紧急 - 红色
             } else {
-                return TIME_MEDIUM_COLOR; // 时间适中 - 黄色
+                return ACTIVE_MISSION_TIME_MEDIUM_COLOR; // 时间适中 - 黄色
             }
         } else {
-            return TIME_LOW_COLOR; // 时间紧急 - 红色
+            return ACTIVE_MISSION_TIME_LOW_COLOR; // 时间紧急 - 红色
         }
     }
 

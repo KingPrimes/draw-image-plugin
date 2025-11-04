@@ -748,6 +748,11 @@ public class ImageCombiner {
         return this;
     }
 
+    /**
+     * 绘制双层边框
+     *
+     * @return 当前实例
+     */
     public ImageCombiner drawTooRoundRect() {
         int borderPadding = 20;
         int innerWidth = this.getCombinedImage().getWidth() - borderPadding * 2;
@@ -1009,12 +1014,12 @@ public class ImageCombiner {
     /**
      * 在指定位置绘制图像，保持图像原始比例进行缩放
      *
-     * @param img 要绘制的图像对象
-     *            * @param x      图像绘制的x坐标位置
-     *            * @param y      图像绘制的y坐标位置
-     *            * @param maxWidth  图像绘制的最大宽度
-     *            * @param maxHeight 图像绘制的最大高度
-     *            * @return 返回当前ImageCombiner实例，支持链式调用
+     * @param img       要绘制的图像对象
+     * @param x         图像绘制的x坐标位置
+     * @param y         图像绘制的y坐标位置
+     * @param maxWidth  图像绘制的最大宽度
+     * @param maxHeight 图像绘制的最大高度
+     * @return 返回当前ImageCombiner实例，支持链式调用
      */
     public ImageCombiner drawImageWithAspectRatio(Image img, int x, int y, int maxWidth, int maxHeight) {
         if (img == null) {

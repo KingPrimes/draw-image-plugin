@@ -13,8 +13,8 @@ import java.text.DecimalFormat;
  * @author KingPrimes
  * @version 1.0.0
  */
-class DrawConstants {
-    // ================== 通用常量 ==================
+final class DrawConstants {
+
     /**
      * 底部署名文本
      */
@@ -26,7 +26,10 @@ class DrawConstants {
     public static final Font FONT = Fonts.FONT_TEXT;
 
     public static final int FONT_SIZE = FONT.getSize();
-    // ================== 通用尺寸常量 ==================
+    /**
+     * 帮助图像每行高度
+     */
+    public static final int HELP_IMAGE_ROW_HEIGHT = FONT_SIZE + 20;
     /**
      * 标准图像宽度
      */
@@ -42,16 +45,27 @@ class DrawConstants {
     /**
      * 标准图像行高度
      */
-    public static final int IMAGE_ROW_HEIGHT = 40;
+    public static final int IMAGE_ROW_HEIGHT = 50;
+    /**
+     * 标准图像上边距
+     */
+    public static final int IMAGE_MARGIN_TOP = 60;
     /**
      * 标准图像底部高度
      */
     public static final int IMAGE_FOOTER_HEIGHT = 40;
     /**
+     * 标准图像表头高度
+     */
+    public static final int IMAGE_HEADER_HEIGHT = 60;
+    /**
+     * 标准图像行边距
+     */
+    public static final int IMAGE_ROW_MARGIN = 15;
+    /**
      * 页面背景色
      */
     public static final Color PAGE_BACKGROUND_COLOR = new Color(0xd2d6dc);
-    // ================== 通用颜色常量 ==================
     /**
      * 标题颜色
      */
@@ -68,20 +82,6 @@ class DrawConstants {
      * 黑色
      */
     public static final Color BLACK_COLOR = Color.BLACK;
-    /**
-     * 帮助图像表头高度
-     */
-    public static final int HELP_IMAGE_HEADER_HEIGHT = 60;
-
-    // ================== 帮助图像常量 ==================
-    /**
-     * 帮助图像每行高度
-     */
-    public static final int HELP_IMAGE_ROW_HEIGHT = Fonts.FONT_TEXT.getSize() + 20;
-    /**
-     * 帮助图像底部高度
-     */
-    public static final int HELP_IMAGE_FOOTER_HEIGHT = 40;
     /**
      * 帮助图像每列项目数
      */
@@ -107,7 +107,7 @@ class DrawConstants {
      */
     public static final int ALL_CYCLE_TABLE_HEADER_HEIGHT = 50;
 
-    // ================== 循环图像常量 ==================
+
     /**
      * 循环图像行高度
      */
@@ -124,84 +124,74 @@ class DrawConstants {
      * 循环图像寒冷状态颜色
      */
     public static final Color ALL_CYCLE_COLD_COLOR = new Color(0x00B4FF);
-    /**
-     * 活动任务图像宽度
-     */
-    public static final int ACTIVE_MISSION_IMAGE_WIDTH = 1500;
 
-    // ================== 活动任务图像常量 ==================
+
     /**
-     * 活动任务图像边距
+     * 裂隙任务图像宽度
      */
-    public static final int ACTIVE_MISSION_IMAGE_MARGIN = 60;
+    public static final int ACTIVE_MISSION_WIDTH = 1500;
+
     /**
-     * 活动任务图像行高度
+     * 裂隙任务图像头部颜色
      */
-    public static final int ACTIVE_MISSION_IMAGE_ROW_HEIGHT = 60;
+    public static final Color ACTIVE_MISSION_HEADER_COLOR = new Color(0x1a2c38);
     /**
-     * 活动任务图像行边距
+     * 裂隙任务图像任务文本颜色
      */
-    public static final int ACTIVE_MISSION_IMAGE_ROW_MARGIN = 15;
+    public static final Color ACTIVE_MISSION_LOCATION_COLOR = new Color(0xff7e5f);
     /**
-     * 活动任务图像头部颜色
+     * 裂隙任务图像时间低色
      */
-    public static final Color ACTIVE_MISSION_IMAGE_HEADER_COLOR = new Color(0x1a2c38);
+    public static final Color ACTIVE_MISSION_TIME_LOW_COLOR = new Color(0xff6b6b);
     /**
-     * 活动任务图像任务文本颜色
+     * 裂隙任务图像时间中色
      */
-    public static final Color ACTIVE_MISSION_IMAGE_LOCATION_COLOR = new Color(0xff7e5f);
+    public static final Color ACTIVE_MISSION_TIME_MEDIUM_COLOR = new Color(0xfeca57);
     /**
-     * 活动任务图像时间低色
+     * 裂隙任务图像时间高色
      */
-    public static final Color ACTIVE_MISSION_IMAGE_TIME_LOW_COLOR = new Color(0xff6b6b);
+    public static final Color ACTIVE_MISSION_TIME_HIGH_COLOR = new Color(0x1dd1a1);
     /**
-     * 活动任务图像时间中色
+     * 裂隙任务图像虚空T1颜色
      */
-    public static final Color ACTIVE_MISSION_IMAGE_TIME_MEDIUM_COLOR = new Color(0xfeca57);
+    public static final Color ACTIVE_MISSION_VOID_T1_COLOR = new Color(0x514234);
     /**
-     * 活动任务图像时间高色
+     * 裂隙任务图像虚空T2颜色
      */
-    public static final Color ACTIVE_MISSION_IMAGE_TIME_HIGH_COLOR = new Color(0x1dd1a1);
+    public static final Color ACTIVE_MISSION_VOID_T2_COLOR = new Color(0x75562B);
     /**
-     * 活动任务图像虚空T1颜色
+     * 裂隙任务图像虚空T3颜色
      */
-    public static final Color ACTIVE_MISSION_IMAGE_VOID_T1_COLOR = new Color(0x514234);
+    public static final Color ACTIVE_MISSION_VOID_T3_COLOR = new Color(0xB3B3B3);
     /**
-     * 活动任务图像虚空T2颜色
+     * 裂隙任务图像虚空T4颜色
      */
-    public static final Color ACTIVE_MISSION_IMAGE_VOID_T2_COLOR = new Color(0x75562B);
+    public static final Color ACTIVE_MISSION_VOID_T4_COLOR = new Color(0xC1BE39);
     /**
-     * 活动任务图像虚空T3颜色
+     * 裂隙任务图像虚空T5颜色
      */
-    public static final Color ACTIVE_MISSION_IMAGE_VOID_T3_COLOR = new Color(0xB3B3B3);
+    public static final Color ACTIVE_MISSION_VOID_T5_COLOR = new Color(0x872A2C);
     /**
-     * 活动任务图像虚空T4颜色
+     * 裂隙任务图像虚空T6颜色
      */
-    public static final Color ACTIVE_MISSION_IMAGE_VOID_T4_COLOR = new Color(0xC1BE39);
-    /**
-     * 活动任务图像虚空T5颜色
-     */
-    public static final Color ACTIVE_MISSION_IMAGE_VOID_T5_COLOR = new Color(0x872A2C);
-    /**
-     * 活动任务图像虚空T6颜色
-     */
-    public static final Color ACTIVE_MISSION_IMAGE_VOID_T6_COLOR = new Color(0x7f8c8d);
+    public static final Color ACTIVE_MISSION_VOID_T6_COLOR = new Color(0x7f8c8d);
+
+
     /**
      * 系统信息图像百分比格式
      */
     public static final DecimalFormat ALL_INFO_PERCENT_FORMAT = new DecimalFormat("0.00");
-
-    // ================== 系统信息图像常量 ==================
     /**
      * 系统信息图像内存格式
      */
     public static final DecimalFormat ALL_INFO_MEMORY_FORMAT = new DecimalFormat("0.00");
+
+
     /**
      * 订阅图像宽度
      */
     public static final int SUBSCRIBE_IMAGE_WIDTH = 1300;
 
-    // ================== 订阅图像常量 ==================
     /**
      * 订阅图像高度
      */
@@ -244,8 +234,7 @@ class DrawConstants {
      * @param y        底部署名的Y坐标
      */
     public static void addFooter(ImageCombiner combiner, int y) {
-        combiner.setColor(Color.GRAY)
-                .addCenteredText(FOOTER_TEXT, y);
+        combiner.setColor(Color.GRAY).addCenteredText(FOOTER_TEXT, y);
     }
 
     /**
@@ -256,7 +245,6 @@ class DrawConstants {
      * @param y        底部署名的Y坐标
      */
     public static void addFooter(ImageCombiner combiner, Color color, int y) {
-        combiner.setColor(color)
-                .addCenteredText(FOOTER_TEXT, y);
+        combiner.setColor(color).addCenteredText(FOOTER_TEXT, y);
     }
 }
