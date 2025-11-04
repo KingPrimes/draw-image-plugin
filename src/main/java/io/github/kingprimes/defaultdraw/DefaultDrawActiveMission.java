@@ -3,6 +3,7 @@ package io.github.kingprimes.defaultdraw;
 import io.github.kingprimes.image.ImageCombiner;
 import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.image.TextUtils;
+import io.github.kingprimes.model.enums.MissionTypeEnum;
 import io.github.kingprimes.model.enums.VoidEnum;
 import io.github.kingprimes.model.worldstate.ActiveMission;
 import io.github.kingprimes.utils.Fonts;
@@ -12,6 +13,9 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
+import static io.github.kingprimes.defaultdraw.DrawConstants.PAGE_BACKGROUND_COLOR;
+import static io.github.kingprimes.defaultdraw.DrawConstants.addFooter;
+
 /**
  * 默认 裂隙任务绘制工具类
  *
@@ -19,27 +23,25 @@ import java.util.List;
  * @version 1.0.3
  */
 final class DefaultDrawActiveMission {
-    static final int WIDTH = 1500;
-    static final int MARGIN = 60;
-    static final int TITLE_HEIGHT = 60;
-    static final int ROW_HEIGHT = 60;
-    static final int ROW_MARGIN = 15;
+    static final int WIDTH = DrawConstants.ACTIVE_MISSION_IMAGE_WIDTH;
+    static final int MARGIN = DrawConstants.ACTIVE_MISSION_IMAGE_MARGIN;
+    static final int TITLE_HEIGHT = DrawConstants.IMAGE_TITLE_HEIGHT;
+    static final int ROW_HEIGHT = DrawConstants.ACTIVE_MISSION_IMAGE_ROW_HEIGHT;
+    static final int ROW_MARGIN = DrawConstants.ACTIVE_MISSION_IMAGE_ROW_MARGIN;
     static final Font FONT = Fonts.FONT_TEXT;
-    static final Color BACKGROUND_COLOR = new Color(0x437BBF);
-    static final Color HEADER_COLOR = new Color(0x1a2c38);
-    static final Color TASK_TEXT_COLOR = new Color(0xff7e5f);
-    static final Color LOCATION_COLOR = new Color(0xdfe6e9);
-    static final Color TIME_LOW_COLOR = new Color(0xff6b6b);
-    static final Color TIME_MEDIUM_COLOR = new Color(0xfeca57);
-    static final Color TIME_HIGH_COLOR = new Color(0x1dd1a1);
+    static final Color HEADER_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_HEADER_COLOR;
+    static final Color LOCATION_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_LOCATION_COLOR;
+    static final Color TIME_LOW_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_TIME_LOW_COLOR;
+    static final Color TIME_MEDIUM_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_TIME_MEDIUM_COLOR;
+    static final Color TIME_HIGH_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_TIME_HIGH_COLOR;
 
     // 遗物等级颜色
-    static final Color VOID_T1_COLOR = new Color(0x514234);
-    static final Color VOID_T2_COLOR = new Color(0x75562B);
-    static final Color VOID_T3_COLOR = new Color(0xB3B3B3);
-    static final Color VOID_T4_COLOR = new Color(0xE0DC46);
-    static final Color VOID_T5_COLOR = new Color(0x872A2C);
-    static final Color VOID_T6_COLOR = new Color(0x7f8c8d);
+    static final Color VOID_T1_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_VOID_T1_COLOR;
+    static final Color VOID_T2_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_VOID_T2_COLOR;
+    static final Color VOID_T3_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_VOID_T3_COLOR;
+    static final Color VOID_T4_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_VOID_T4_COLOR;
+    static final Color VOID_T5_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_VOID_T5_COLOR;
+    static final Color VOID_T6_COLOR = DrawConstants.ACTIVE_MISSION_IMAGE_VOID_T6_COLOR;
 
     /**
      * 绘制裂隙任务图像
@@ -61,7 +63,7 @@ final class DefaultDrawActiveMission {
         ImageCombiner combiner = new ImageCombiner(WIDTH, height, ImageCombiner.OutputFormat.PNG);
 
         // 填充背景色
-        combiner.setColor(BACKGROUND_COLOR)
+        combiner.setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, WIDTH, height)
                 .drawTooRoundRect();
 
@@ -84,8 +86,8 @@ final class DefaultDrawActiveMission {
 
             x += TextUtils.getFortWidth(modifier, FONT) + MARGIN;
             // 任务类型和派系
-            String missionInfo = mission.getMissionType() + "-" + mission.getFaction().getName();
-            combiner.setColor(TASK_TEXT_COLOR)
+            String missionInfo = mission.getMissionTypeName() + "-" + mission.getFaction().getName();
+            combiner.setColor(MissionTypeEnum.getColor(mission.getMissionType() == null ? MissionTypeEnum.MT_DEFAULT : mission.getMissionType()))
                     .addText(missionInfo, x, y);
 
             // 节点位置
@@ -102,6 +104,9 @@ final class DefaultDrawActiveMission {
 
             y += ROW_HEIGHT;
         }
+
+        // 底部署名
+        addFooter(combiner, height - 40);
 
         combiner.combine();
         try (ByteArrayOutputStream bos = combiner.getCombinedImageOutStream()) {

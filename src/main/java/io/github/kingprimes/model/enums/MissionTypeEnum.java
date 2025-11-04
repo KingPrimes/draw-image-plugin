@@ -2,6 +2,7 @@ package io.github.kingprimes.model.enums;
 
 import lombok.Getter;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -220,5 +221,44 @@ public enum MissionTypeEnum {
         return Arrays.stream(values())
                 .sorted(Comparator.comparingInt(MissionTypeEnum::getOrder))
                 .toList();
+    }
+
+    /**
+     * 根据任务类型获取对应的颜色
+     *
+     * @return 代表该任务类型的Color对象
+     */
+    public static Color getColor(MissionTypeEnum missionTypeEnum) {
+        return switch (missionTypeEnum) {
+            case MT_ASSASSINATION -> new Color(0xff6b6b); // 刺杀 - 红色
+            case MT_EXTERMINATION -> new Color(0xff9f43); // 歼灭 - 橙色
+            case MT_SURVIVAL -> new Color(0xCDA241); // 生存 - 黄色
+            case MT_RESCUE -> new Color(0x1dd1a1); // 救援 - 绿色
+            case MT_SABOTAGE -> new Color(0x54a0ff); // 破坏 - 蓝色
+            case MT_CAPTURE -> new Color(0x5f27cd); // 捕获 - 紫色
+            case MT_INTEL -> new Color(0x00d2d3); // 间谍 - 青色
+            case MT_DEFENSE -> new Color(0xff9ff3); // 防御 - 粉色
+            case MT_MOBILE_DEFENSE -> new Color(0x75B1E6); // 移动防御 - 灰色
+            case MT_TERRITORY -> new Color(0x01a3a4); // 拦截 - 深青色
+            case MT_HIVE -> new Color(0x8395a7); // 清巢 - 石板灰
+            case MT_RETRIEVAL -> new Color(0xffeaa7); // 劫持 - 浅黄
+            case MT_EXCAVATE -> new Color(0xdda0dd); // 挖掘 - 梅花色
+            case MT_SALVAGE -> new Color(0xa29bfe); // 资源回收 - 紫罗兰
+            case MT_ASSAULT -> new Color(0xff7675); // 强袭 - 浅红
+            case MT_EVACUATION -> new Color(0xfdcb6e); // 叛逃 - 金色
+            case MT_ARTIFACT, MT_DISRUPTION -> new Color(0xe17055); // 中断 - 橘红
+            case MT_VOID_FLOOD -> new Color(0x6c5ce7); // 虚空洪流 - 靛蓝
+            case MT_VOID_CASCADE -> new Color(0xa29bfe); // 虚空覆涌 - 熏衣草
+            case MT_VOID_ARMAGEDDON -> new Color(0x2d3436); // 虚空决战 - 深灰
+            case MT_ALCHEMY -> new Color(0x00b894); // 元素转换 - 绿松石
+            case MT_CAMBIRE -> new Color(0xe84393); // 异化区 - 热粉
+            case MT_SHRINE_DEFENSE -> new Color(0xfd79a8); // 祈运坛防御 - 粉红
+            case MT_FACEOFF -> new Color(0xe67e22); // 对战 - 胡萝卜色
+            case MT_SKIRMISH -> new Color(0xe74c3c); // 前哨战 - 珊瑚红
+            case MT_VOLATILE -> new Color(0xf39c12); // 爆发 - 太阳花黄
+            case MT_ORPHEUS -> new Color(0x9b59b6); // 奥菲斯 - 紫水晶
+            case MT_ASCENSION -> new Color(0x3498db); // 扬升 - 湛蓝
+            default -> Color.BLACK; // 默认黑色
+        };
     }
 }

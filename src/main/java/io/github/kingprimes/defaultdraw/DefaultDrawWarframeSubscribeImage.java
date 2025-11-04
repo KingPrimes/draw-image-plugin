@@ -3,7 +3,6 @@ package io.github.kingprimes.defaultdraw;
 import io.github.kingprimes.image.ImageCombiner;
 import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.image.TextUtils;
-import io.github.kingprimes.utils.Fonts;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,6 +10,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
 /**
  * 默认订阅图片绘制工具类
@@ -20,17 +21,12 @@ import java.util.Map;
  */
 final class DefaultDrawWarframeSubscribeImage {
 
-    static final int WIDTH = 1300;
-    static final int HEIGHT = 1000;
-    static final int MARGIN = 20;
-    static final int TITLE_HEIGHT = 50;
-    static final Color blackColor = Color.BLACK;
-    static final Color blueColor = new Color(0x1c84c6);
-    static final Color purpleColor = new Color(0x6110f3);
-    static final Color redColor = new Color(0xff0000);
-    static final Color brownColor = new Color(0xaf5244);
-    static final Font mainFont = Fonts.FONT_TEXT;
-    static final int TEXT_LINE_HEIGHT = mainFont.getSize();
+    static final int MARGIN = SUBSCRIBE_IMAGE_MARGIN;
+    static final int TITLE_HEIGHT = SUBSCRIBE_IMAGE_TITLE_HEIGHT;
+    static final Color blueColor = SUBSCRIBE_IMAGE_BLUE_COLOR;
+    static final Color purpleColor = SUBSCRIBE_IMAGE_PURPLE_COLOR;
+    static final Color redColor = SUBSCRIBE_IMAGE_RED_COLOR;
+    static final Color brownColor = SUBSCRIBE_IMAGE_BROWN_COLOR;
 
     /**
      * <p>绘制 Warframe 订阅指令说明图片。</p>
@@ -43,22 +39,22 @@ final class DefaultDrawWarframeSubscribeImage {
      */
     public static byte[] drawWarframeSubscribeImage(Map<Integer, String> subscribe, Map<Integer, String> missionType) {
         // 创建画布
-        ImageCombiner combiner = new ImageCombiner(WIDTH, HEIGHT, ImageCombiner.OutputFormat.PNG);
+        ImageCombiner combiner = new ImageCombiner(SUBSCRIBE_IMAGE_WIDTH, SUBSCRIBE_IMAGE_HEIGHT, ImageCombiner.OutputFormat.PNG);
 
-        combiner.setFont(mainFont)
+        combiner.setFont(FONT)
                 .setColor(Color.WHITE)
-                .fillRect(0, 0, WIDTH, HEIGHT); // 白色背景
+                .fillRect(0, 0, SUBSCRIBE_IMAGE_WIDTH, SUBSCRIBE_IMAGE_HEIGHT); // 白色背景
 
         int borderPadding = 20;
-        int innerWidth = WIDTH - borderPadding * 2;
-        int innerHeight = HEIGHT - borderPadding * 2;
+        int innerWidth = SUBSCRIBE_IMAGE_WIDTH - borderPadding * 2;
+        int innerHeight = SUBSCRIBE_IMAGE_HEIGHT - borderPadding * 2;
         int backgroundY = MARGIN + borderPadding + TITLE_HEIGHT + 30; // 文字区域下方开始
         BufferedImage backgroundImage = ImageIOUtils.getRandomXiaoMeiWangImage();
         int maxImageWidth = innerWidth / 2 + 80;
         int maxImageHeight = innerHeight - (backgroundY - MARGIN - borderPadding);
         combiner.drawTooRoundRect()
                 .drawImageWithAspectRatio(backgroundImage,
-                        WIDTH / 2 + borderPadding, // 右侧起始X坐标
+                        SUBSCRIBE_IMAGE_WIDTH / 2 + borderPadding, // 右侧起始X坐标
                         backgroundY,
                         maxImageWidth,
                         maxImageHeight);
@@ -66,8 +62,8 @@ final class DefaultDrawWarframeSubscribeImage {
         int y = MARGIN + borderPadding + TITLE_HEIGHT / 2;
         // ================== 标题 Start ==================
         String title = "---订阅指令表---";
-        combiner.setColor(blackColor)
-                .setFont(mainFont)
+        combiner.setColor(BLACK_COLOR)
+                .setFont(FONT)
                 .addCenteredText(title, y);
         // ================== 标题 END ==================
 
@@ -80,19 +76,19 @@ final class DefaultDrawWarframeSubscribeImage {
         String missionTypeText = "[-订阅任务类型]";
         String relicLevelText = "[-订阅遗物等级]";
 
-        combiner.setColor(blackColor)
+        combiner.setColor(BLACK_COLOR)
                 .addText(usage, x, y);
 
-        x += TextUtils.getFortWidth(usage, mainFont) + 80;
+        x += TextUtils.getFortWidth(usage, FONT) + 80;
         combiner.setColor(blueColor)
                 .addText(subscribeText, x, y);
-        x += TextUtils.getFortWidth(subscribeText, mainFont);
+        x += TextUtils.getFortWidth(subscribeText, FONT);
         combiner.setColor(purpleColor)
                 .addText(subscribeTypeText, x, y);
-        x += TextUtils.getFortWidth(subscribeTypeText, mainFont) + 60;
+        x += TextUtils.getFortWidth(subscribeTypeText, FONT) + 60;
         combiner.setColor(redColor)
                 .addText(missionTypeText, x, y);
-        x += TextUtils.getFortWidth(missionTypeText, mainFont) + 60;
+        x += TextUtils.getFortWidth(missionTypeText, FONT) + 60;
         combiner.setColor(brownColor)
                 .addText(relicLevelText, x, y);
         // ================== 命令使用方式 END ==================
@@ -100,27 +96,27 @@ final class DefaultDrawWarframeSubscribeImage {
 
         // ================== 下方的例子 Start ==================
         x = MARGIN + 40;
-        y += TEXT_LINE_HEIGHT + MARGIN;
+        y += FONT_SIZE + MARGIN;
         String example = "下方的例子是指：";
         String subscribeTypeExample = "裂隙";
         String missionTypeExample = "生存模式";
         String relicLevelExample = "后纪";
-        combiner.setColor(blackColor)
+        combiner.setColor(BLACK_COLOR)
                 .addText(example, x, y);
 
-        x += TextUtils.getFortWidth(example, mainFont) + 80;
+        x += TextUtils.getFortWidth(example, FONT) + 80;
         combiner.setColor(blueColor)
                 .addText(subscribeText, x, y);
 
-        x += TextUtils.getFortWidth(subscribeText, mainFont);
+        x += TextUtils.getFortWidth(subscribeText, FONT);
         combiner.setColor(purpleColor)
                 .addText(subscribeTypeExample, x, y);
 
-        x += TextUtils.getFortWidth(subscribeTypeExample, mainFont);
+        x += TextUtils.getFortWidth(subscribeTypeExample, FONT);
         combiner.setColor(redColor)
                 .addText(missionTypeExample, x, y);
 
-        x += TextUtils.getFortWidth(missionTypeExample, mainFont) + 30;
+        x += TextUtils.getFortWidth(missionTypeExample, FONT) + 30;
         combiner.setColor(brownColor)
                 .addText(relicLevelExample, x, y);
         // ================== 下方的例子 END ==================
@@ -128,27 +124,27 @@ final class DefaultDrawWarframeSubscribeImage {
 
         // ================== 指令例子 Start ==================
         x = MARGIN + 40;
-        y += TEXT_LINE_HEIGHT + MARGIN;
+        y += FONT_SIZE + MARGIN;
         String l = "指令例子：";
         String t = "9";
         String f = "-11";
         String r = "-4";
-        combiner.setColor(blackColor)
+        combiner.setColor(BLACK_COLOR)
                 .addText(l, x, y);
 
-        x += TextUtils.getFortWidth(l, mainFont) + 40;
+        x += TextUtils.getFortWidth(l, FONT) + 40;
         combiner.setColor(blueColor)
                 .addText(subscribeText, x, y);
 
-        x += TextUtils.getFortWidth(subscribeText, mainFont);
+        x += TextUtils.getFortWidth(subscribeText, FONT);
         combiner.setColor(purpleColor)
                 .addText(t, x, y);
 
-        x += TextUtils.getFortWidth(t, mainFont);
+        x += TextUtils.getFortWidth(t, FONT);
         combiner.setColor(redColor)
                 .addText(f, x, y);
 
-        x += TextUtils.getFortWidth(f, mainFont);
+        x += TextUtils.getFortWidth(f, FONT);
         combiner.setColor(brownColor)
                 .addText(r, x, y);
         // ================== 指令例子 END ==================
@@ -156,59 +152,55 @@ final class DefaultDrawWarframeSubscribeImage {
 
         // ================== 注意事项 Start ==================
         x = MARGIN + 40;
-        y += TEXT_LINE_HEIGHT + MARGIN;
+        y += FONT_SIZE + MARGIN;
         String note = "注意事项：";
         String rl = "遗物等级";
         String only = "只有在订阅";
         String f3 = "裂隙";
         String useful = "时有用";
 
-        combiner.setColor(blackColor)
+        combiner.setColor(BLACK_COLOR)
                 .addText(note, x, y);
 
-        x += TextUtils.getFortWidth(note, mainFont) + 40;
+        x += TextUtils.getFortWidth(note, FONT) + 40;
         combiner.setColor(brownColor)
                 .addText(rl, x, y);
 
-        x += TextUtils.getFortWidth(rl, mainFont) + 30;
-        combiner.setColor(blackColor)
+        x += TextUtils.getFortWidth(rl, FONT) + 30;
+        combiner.setColor(BLACK_COLOR)
                 .addText(only, x, y);
 
-        x += TextUtils.getFortWidth(only, mainFont) + 60;
+        x += TextUtils.getFortWidth(only, FONT) + 60;
         combiner.setColor(purpleColor)
                 .addText(f3, x, y);
 
-        x += TextUtils.getFortWidth(f3, mainFont);
-        combiner.setColor(blackColor)
+        x += TextUtils.getFortWidth(f3, FONT);
+        combiner.setColor(BLACK_COLOR)
                 .addText(useful, x, y);
         // ================== 注意事项 END ==================
 
 
         // ================== 订阅内容类型数值 Start ==================
         String subscribeTitle = "订阅内容类型数值";
-        y += TEXT_LINE_HEIGHT + MARGIN;
+        y += FONT_SIZE + MARGIN;
         combiner.setColor(purpleColor)
-                .setFont(mainFont)
+                .setFont(FONT)
                 .addCenteredText(subscribeTitle, y);
 
-        y += TextUtils.getFortHeight(subscribeTitle, mainFont) + MARGIN;
+        y += TextUtils.getFortHeight(subscribeTitle, FONT) + MARGIN;
         int j = drawTable(combiner, subscribe, y, purpleColor);
         y += j / 3 + subscribe.size() * 2;
         // ================== 订阅任务类型数值 END ==================
         String missionTypeTitle = "订阅任务类型数值";
         combiner.setColor(redColor)
-                .setFont(mainFont)
+                .setFont(FONT)
                 .addCenteredText(missionTypeTitle, y);
 
-        y += TextUtils.getFortHeight(missionTypeTitle, mainFont) + MARGIN;
+        y += TextUtils.getFortHeight(missionTypeTitle, FONT) + MARGIN;
         j = drawTable(combiner, missionType, y, redColor);
-        y += j / 3 + missionType.size() * 2 - 50;
-        // ================== 底部署名 Start ==================
-        String footer = "Posted by: KingPrimes";
-        combiner.setColor(Color.GRAY)
-                .setFont(mainFont)
-                .addCenteredText(footer, y);
-        // ================== 底部署名 END ==================
+        y += j / 3 + missionType.size() * 2 - IMAGE_FOOTER_HEIGHT;
+
+        addFooter(combiner, y);
 
         // 合并图像
         combiner.combine();
@@ -235,7 +227,7 @@ final class DefaultDrawWarframeSubscribeImage {
         List<Map.Entry<Integer, String>> entries = new ArrayList<>(data.entrySet());
         entries.sort(Map.Entry.comparingByKey());
 
-        int itemWidth = WIDTH / 4;
+        int itemWidth = SUBSCRIBE_IMAGE_WIDTH / 4;
         int x = 20;
         int y = startY;
         int count = 0;

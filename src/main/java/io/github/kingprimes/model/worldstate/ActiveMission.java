@@ -66,7 +66,7 @@ public class ActiveMission extends BastWorldState {
      * @return 任务类型 String字符串
      */
     @JsonIgnore
-    public String getMissionType() {
+    public String getMissionTypeName() {
         if (missionType == null) return MissionTypeEnum.MT_DEFAULT.getName();
         return missionType.getName();
     }

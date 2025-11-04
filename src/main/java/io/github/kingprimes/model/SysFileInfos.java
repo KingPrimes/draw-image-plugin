@@ -22,7 +22,7 @@ public class SysFileInfos {
 
     @Data
     @Accessors(chain = true)
-    static class SysFileInfo {
+    public static class SysFileInfo {
         /**
          * 盘符路径
          */

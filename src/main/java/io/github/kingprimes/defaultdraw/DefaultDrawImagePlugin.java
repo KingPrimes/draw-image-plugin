@@ -47,7 +47,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawAllInfoImage(AllInfo allInfo) {
-        return new byte[0];
+        return DefaultDrawAllInfoImage.drawAllInfoImage(allInfo);
     }
 
     /**

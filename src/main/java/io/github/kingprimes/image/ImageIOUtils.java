@@ -105,7 +105,8 @@ public final class ImageIOUtils {
      */
     public static BufferedImage getRandomXiaoMeiWangImage() {
         double random = Math.random();
-        if (random < 0.0019) {
+        // 根据规范要求，getXiaoMeiWangKneelingLaceImage()方法的调用概率应设置为0.01%
+        if (random < 0.0001) {
             return getXiaoMeiWangKneelingLaceImage();
         } else if (random < 0.1) {
             return getXiaoMeiWangKneelingImage();

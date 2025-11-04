@@ -42,4 +42,11 @@ public class AllInfo {
      * @see SysFileInfos
      */
     SysFileInfos sysFileInfos;
+    /**
+     * 项目版本
+     */
+    PackageVersion packageVersion;
+
+    public record PackageVersion(String name, String version) {
+    }
 }
