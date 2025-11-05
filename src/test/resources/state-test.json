@@ -1838,109 +1838,109 @@
   ],
   "Alerts": [
     {
+      "Activation": {
+        "$date": {
+          "$numberLong": "2025-10-01T14:00:00Z"
+        }
+      },
+      "Expiry": {
+        "$date": {
+          "$numberLong": "2025-10-31T18:00:00Z"
+        }
+      },
+      "ForceUnlock": true,
+      "MissionInfo": {
+        "descText": "/Lotus/Language/Alerts/TennoUnitedAlert",
+        "difficulty": 1,
+        "enemySpec": "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSurvivalA",
+        "faction": "FC_CORPUS",
+        "levelOverride": "/Lotus/Levels/Proc/Corpus/CorpusShipSurvivalRaid",
+        "location": "V Prime(金星)",
+        "maxEnemyLevel": 30,
+        "maxWaveNum": 5,
+        "minEnemyLevel": 20,
+        "missionReward": {
+          "credits": 10000,
+          "items": [
+            "征服库阿卡玩偶"
+          ]
+        },
+        "missionType": "MT_SURVIVAL"
+      },
+      "Tag": "LotusGift",
       "_id": {
         "$oid": "68dc23c42e9d3acfa708ff3b"
-      },
+      }
+    },
+    {
       "Activation": {
         "$date": {
-          "$numberLong": "1759327200000"
+          "$numberLong": "2025-10-01T14:00:00Z"
         }
       },
       "Expiry": {
         "$date": {
-          "$numberLong": "1761933600000"
+          "$numberLong": "2025-10-31T18:00:00Z"
         }
       },
+      "ForceUnlock": true,
       "MissionInfo": {
-        "location": "SolNode123",
-        "missionType": "MT_SURVIVAL",
-        "faction": "FC_CORPUS",
+        "descText": "/Lotus/Language/Alerts/TennoUnitedAlert",
         "difficulty": 1,
+        "enemySpec": "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA",
+        "faction": "FC_GRINEER",
+        "levelOverride": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsDefense",
+        "location": "Casta(谷神星)",
+        "maxEnemyLevel": 30,
+        "maxWaveNum": 3,
+        "minEnemyLevel": 20,
         "missionReward": {
           "credits": 10000,
           "items": [
-            "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/Plushy2021QTCC"
+            "征服梭歌玩偶"
           ]
         },
-        "levelOverride": "/Lotus/Levels/Proc/Corpus/CorpusShipSurvivalRaid",
-        "enemySpec": "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSurvivalA",
-        "minEnemyLevel": 20,
-        "maxEnemyLevel": 30,
-        "descText": "/Lotus/Language/Alerts/TennoUnitedAlert",
-        "maxWaveNum": 5
+        "missionType": "MT_DEFENSE"
       },
       "Tag": "LotusGift",
-      "ForceUnlock": true
-    },
-    {
       "_id": {
         "$oid": "68dc2466e298b4f04206687a"
-      },
-      "Activation": {
-        "$date": {
-          "$numberLong": "1759327200000"
-        }
-      },
-      "Expiry": {
-        "$date": {
-          "$numberLong": "1761933600000"
-        }
-      },
-      "MissionInfo": {
-        "location": "SolNode149",
-        "missionType": "MT_DEFENSE",
-        "faction": "FC_GRINEER",
-        "difficulty": 1,
-        "missionReward": {
-          "credits": 10000,
-          "items": [
-            "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/Plushy2022QTCC"
-          ]
-        },
-        "levelOverride": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsDefense",
-        "enemySpec": "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA",
-        "minEnemyLevel": 20,
-        "maxEnemyLevel": 30,
-        "descText": "/Lotus/Language/Alerts/TennoUnitedAlert",
-        "maxWaveNum": 3
-      },
-      "Tag": "LotusGift",
-      "ForceUnlock": true
+      }
     },
     {
-      "_id": {
-        "$oid": "68dc26865e7cb56b820b4252"
-      },
       "Activation": {
         "$date": {
-          "$numberLong": "1759327200000"
+          "$numberLong": "2025-10-01T14:00:00Z"
         }
       },
       "Expiry": {
         "$date": {
-          "$numberLong": "1761933600000"
+          "$numberLong": "2025-10-31T18:00:00Z"
         }
       },
+      "ForceUnlock": true,
       "MissionInfo": {
-        "location": "SolNode39",
-        "missionType": "MT_EXCAVATE",
-        "faction": "FC_GRINEER",
+        "descText": "/Lotus/Language/Alerts/TennoUnitedAlert",
         "difficulty": 1,
+        "enemySpec": "/Lotus/Types/Game/EnemySpecs/ForestGrineerExcavationA",
+        "faction": "FC_GRINEER",
+        "levelOverride": "/Lotus/Levels/Proc/Grineer/GrineerForestExcavation",
+        "location": "Everest(地球)",
+        "maxEnemyLevel": 30,
+        "maxWaveNum": 5,
+        "minEnemyLevel": 20,
         "missionReward": {
           "credits": 10000,
           "items": [
-            "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyVirminkQTCC"
+            "征服弗鸣克玩偶"
           ]
         },
-        "levelOverride": "/Lotus/Levels/Proc/Grineer/GrineerForestExcavation",
-        "enemySpec": "/Lotus/Types/Game/EnemySpecs/ForestGrineerExcavationA",
-        "minEnemyLevel": 20,
-        "maxEnemyLevel": 30,
-        "descText": "/Lotus/Language/Alerts/TennoUnitedAlert",
-        "maxWaveNum": 5
+        "missionType": "MT_EXCAVATE"
       },
       "Tag": "LotusGift",
-      "ForceUnlock": true
+      "_id": {
+        "$oid": "68dc26865e7cb56b820b4252"
+      }
     }
   ],
   "Sorties": [
@@ -7445,433 +7445,282 @@
   },
   "Invasions": [
     {
+      "Activation": {
+        "$date": {
+          "$numberLong": "2025-11-05T02:27:05.106Z"
+        }
+      },
+      "AttackerMissionInfo": {
+        "faction": "FC_CORPUS",
+        "seed": 832000
+      },
+      "AttackerReward": [
+        {
+          "countedItems": [
+            {
+              "ItemCount": 3,
+              "ItemType": "爆燃喷射器"
+            }
+          ]
+        }
+      ],
+      "ChainID": {
+        "$oid": "68fdd886c5ad2610edce5f48"
+      },
+      "Completed": false,
+      "Count": -6632.0,
+      "DefenderFaction": "FC_CORPUS",
+      "DefenderMissionInfo": {
+        "faction": "FC_GRINEER",
+        "seed": 644915
+      },
+      "DefenderReward": {
+        "countedItems": [
+          {
+            "ItemCount": 3,
+            "ItemType": "电磁力场装置"
+          }
+        ]
+      },
+      "Faction": "FC_GRINEER",
+      "Goal": 45000.0,
+      "LocTag": "/Lotus/Language/Menu/GrineerInvasionGeneric",
+      "Node": "Ose(欧罗巴)",
       "_id": {
-        "$oid": "68fda74e410950a99dce5f4a"
+        "$oid": "690ab4528635165cb4ce5f49"
+      }
+    },
+    {
+      "Activation": {
+        "$date": {
+          "$numberLong": "2025-11-04T16:32:53.090Z"
+        }
+      },
+      "AttackerMissionInfo": {
+        "faction": "FC_GRINEER",
+        "seed": 314724
+      },
+      "AttackerReward": [
+        {
+          "countedItems": [
+            {
+              "ItemCount": 1,
+              "ItemType": "狙击特昂·破坏者 枪机"
+            }
+          ]
+        }
+      ],
+      "ChainID": {
+        "$oid": "690977ea107b5d9017ce5f49"
+      },
+      "Completed": false,
+      "Count": -20690.0,
+      "DefenderFaction": "FC_GRINEER",
+      "DefenderMissionInfo": {
+        "faction": "FC_CORPUS",
+        "seed": 466632
+      },
+      "DefenderReward": {
+        "countedItems": [
+          {
+            "ItemCount": 1,
+            "ItemType": "卡拉克·亡魂 枪托"
+          }
+        ]
       },
       "Faction": "FC_CORPUS",
-      "DefenderFaction": "FC_GRINEER",
-      "Node": "SolNode196",
-      "Count": 28595,
-      "Goal": 46000,
+      "Goal": 46000.0,
       "LocTag": "/Lotus/Language/Menu/CorpusInvasionGeneric",
-      "Completed": false,
-      "ChainID": {
-        "$oid": "68fda74e410950a99dce5f4a"
-      },
-      "AttackerReward": {
-        "countedItems": [
-          {
-            "ItemType": "/Lotus/Types/Items/Research/EnergyComponent",
-            "ItemCount": 3
-          }
-        ]
-      },
-      "AttackerMissionInfo": {
-        "seed": 862371,
-        "faction": "FC_GRINEER"
-      },
-      "DefenderReward": {
-        "countedItems": [
-          {
-            "ItemType": "/Lotus/Types/Items/Research/ChemComponent",
-            "ItemCount": 3
-          }
-        ]
-      },
-      "DefenderMissionInfo": {
-        "seed": 127704,
-        "faction": "FC_CORPUS"
-      },
-      "Activation": {
-        "$date": {
-          "$numberLong": "1761524331949"
-        }
+      "Node": "Kelpie(赛德娜)",
+      "_id": {
+        "$oid": "690977ea107b5d9017ce5f49"
       }
     },
     {
-      "_id": {
-        "$oid": "68fdd886c5ad2610edce5f48"
-      },
-      "Faction": "FC_GRINEER",
-      "DefenderFaction": "FC_CORPUS",
-      "Node": "SolNode212",
-      "Count": 46110,
-      "Goal": 46000,
-      "LocTag": "/Lotus/Language/Menu/GrineerInvasionGeneric",
-      "Completed": true,
-      "ChainID": {
-        "$oid": "68fdd886c5ad2610edce5f48"
-      },
-      "AttackerReward": {
-        "countedItems": [
-          {
-            "ItemType": "/Lotus/Types/Recipes/Weapons/TwinVipersWraithBlueprint",
-            "ItemCount": 1
-          }
-        ]
-      },
-      "AttackerMissionInfo": {
-        "seed": 38931,
-        "faction": "FC_CORPUS"
-      },
-      "DefenderReward": {
-        "countedItems": [
-          {
-            "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/SnipetronVandalReceiver",
-            "ItemCount": 1
-          }
-        ]
-      },
-      "DefenderMissionInfo": {
-        "seed": 315582,
-        "faction": "FC_GRINEER"
-      },
       "Activation": {
         "$date": {
-          "$numberLong": "1761514781246"
+          "$numberLong": "2025-11-04T13:50:02.420Z"
         }
-      }
-    },
-    {
-      "_id": {
-        "$oid": "6900747e0e6567c138ce5f49"
-      },
-      "Faction": "FC_GRINEER",
-      "DefenderFaction": "FC_CORPUS",
-      "Node": "SolNode214",
-      "Count": 1152,
-      "Goal": 34000,
-      "LocTag": "/Lotus/Language/Menu/GrineerInvasionGeneric",
-      "Completed": false,
-      "ChainID": {
-        "$oid": "68fdd886c5ad2610edce5f48"
-      },
-      "AttackerReward": {
-        "countedItems": [
-          {
-            "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/KarakWraithReceiver",
-            "ItemCount": 1
-          }
-        ]
       },
       "AttackerMissionInfo": {
-        "seed": 779106,
-        "faction": "FC_CORPUS"
-      },
-      "DefenderReward": {
-        "countedItems": [
-          {
-            "ItemType": "/Lotus/Types/Recipes/Weapons/SnipetronVandalBlueprint",
-            "ItemCount": 1
-          }
-        ]
-      },
-      "DefenderMissionInfo": {
-        "seed": 682300,
-        "faction": "FC_GRINEER"
-      },
-      "Activation": {
-        "$date": {
-          "$numberLong": "1761638297655"
-        }
-      }
-    },
-    {
-      "_id": {
-        "$oid": "68feaa4afe79a13468ce5f48"
-      },
-      "Faction": "FC_INFESTATION",
-      "DefenderFaction": "FC_CORPUS",
-      "Node": "SolNode51",
-      "Count": -26164,
-      "Goal": 30000,
-      "LocTag": "/Lotus/Language/Menu/InfestedInvasionBoss",
-      "Completed": false,
-      "ChainID": {
-        "$oid": "68fe7b6ad7208672eace5f48"
+        "faction": "FC_CORPUS",
+        "seed": 477310
       },
       "AttackerReward": [],
-      "AttackerMissionInfo": {
-        "seed": 355825,
-        "faction": "FC_CORPUS"
+      "ChainID": {
+        "$oid": "6909ddde0741325b84ce5f48"
       },
-      "DefenderReward": {
-        "countedItems": [
-          {
-            "ItemType": "/Lotus/Types/Items/MiscItems/InfestedAladCoordinate",
-            "ItemCount": 1
-          }
-        ]
-      },
+      "Completed": false,
+      "Count": -22608.0,
+      "DefenderFaction": "FC_CORPUS",
       "DefenderMissionInfo": {
-        "seed": 745387,
         "faction": "FC_INFESTATION",
-        "missionReward": []
-      },
-      "Activation": {
-        "$date": {
-          "$numberLong": "1761520201680"
-        }
-      }
-    },
-    {
-      "_id": {
-        "$oid": "68ffb1f730101a68fece5f48"
-      },
-      "Faction": "FC_INFESTATION",
-      "DefenderFaction": "FC_GRINEER",
-      "Node": "SolNode132",
-      "Count": -41063,
-      "Goal": 41000,
-      "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
-      "Completed": true,
-      "ChainID": {
-        "$oid": "68ffb1f730101a68fece5f48"
-      },
-      "AttackerReward": [],
-      "AttackerMissionInfo": {
-        "seed": 21819,
-        "faction": "FC_GRINEER"
+        "missionReward": [],
+        "seed": 676543
       },
       "DefenderReward": {
         "countedItems": [
           {
-            "ItemType": "/Lotus/Types/Items/Research/ChemComponent",
-            "ItemCount": 3
+            "ItemCount": 1,
+            "ItemType": "异融 Alad V 导航坐标"
           }
         ]
       },
-      "DefenderMissionInfo": {
-        "seed": 152379,
-        "faction": "FC_INFESTATION"
-      },
-      "Activation": {
-        "$date": {
-          "$numberLong": "1761593667431"
-        }
-      }
-    },
-    {
-      "_id": {
-        "$oid": "68ffde7fad3eb459b1ce5f48"
-      },
       "Faction": "FC_INFESTATION",
-      "DefenderFaction": "FC_GRINEER",
-      "Node": "SolNode131",
-      "Count": -37072,
-      "Goal": 37000,
-      "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
-      "Completed": true,
-      "ChainID": {
-        "$oid": "68ffb1f730101a68fece5f48"
-      },
-      "AttackerReward": [],
-      "AttackerMissionInfo": {
-        "seed": 189403,
-        "faction": "FC_GRINEER"
-      },
-      "DefenderReward": {
-        "countedItems": [
-          {
-            "ItemType": "/Lotus/Types/Items/Research/ChemComponent",
-            "ItemCount": 3
-          }
-        ]
-      },
-      "DefenderMissionInfo": {
-        "seed": 851341,
-        "faction": "FC_INFESTATION"
-      },
-      "Activation": {
-        "$date": {
-          "$numberLong": "1761599102601"
-        }
-      }
-    },
-    {
-      "_id": {
-        "$oid": "68ffde7fad3eb459b1ce5f49"
-      },
-      "Faction": "FC_INFESTATION",
-      "DefenderFaction": "FC_GRINEER",
-      "Node": "SolNode137",
-      "Count": -48474,
-      "Goal": 48000,
-      "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
-      "Completed": true,
-      "ChainID": {
-        "$oid": "68ffb1f730101a68fece5f48"
-      },
-      "AttackerReward": [],
-      "AttackerMissionInfo": {
-        "seed": 845447,
-        "faction": "FC_GRINEER"
-      },
-      "DefenderReward": {
-        "countedItems": [
-          {
-            "ItemType": "/Lotus/Types/Items/Research/ChemComponent",
-            "ItemCount": 3
-          }
-        ]
-      },
-      "DefenderMissionInfo": {
-        "seed": 718805,
-        "faction": "FC_INFESTATION"
-      },
-      "Activation": {
-        "$date": {
-          "$numberLong": "1761599102601"
-        }
-      }
-    },
-    {
-      "_id": {
-        "$oid": "68fff397e48e0859dece5f48"
-      },
-      "Faction": "FC_INFESTATION",
-      "DefenderFaction": "FC_GRINEER",
-      "Node": "SolNode147",
-      "Count": -31542,
-      "Goal": 31000,
-      "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
-      "Completed": true,
-      "ChainID": {
-        "$oid": "68ffb1f730101a68fece5f48"
-      },
-      "AttackerReward": [],
-      "AttackerMissionInfo": {
-        "seed": 160095,
-        "faction": "FC_GRINEER"
-      },
-      "DefenderReward": {
-        "countedItems": [
-          {
-            "ItemType": "/Lotus/Types/Items/Research/ChemComponent",
-            "ItemCount": 3
-          }
-        ]
-      },
-      "DefenderMissionInfo": {
-        "seed": 256447,
-        "faction": "FC_INFESTATION"
-      },
-      "Activation": {
-        "$date": {
-          "$numberLong": "1761604502657"
-        }
-      }
-    },
-    {
-      "_id": {
-        "$oid": "68fff397e48e0859dece5f49"
-      },
-      "Faction": "FC_INFESTATION",
-      "DefenderFaction": "FC_GRINEER",
-      "Node": "SolNode144",
-      "Count": -10745,
-      "Goal": 30000,
+      "Goal": 30000.0,
       "LocTag": "/Lotus/Language/Menu/InfestedInvasionBoss",
+      "Node": "Psamathe(海王星)",
+      "_id": {
+        "$oid": "690a048bc09a0a0484ce5f48"
+      }
+    },
+    {
+      "Activation": {
+        "$date": {
+          "$numberLong": "2025-11-05T04:30:02.308Z"
+        }
+      },
+      "AttackerMissionInfo": {
+        "faction": "FC_GRINEER",
+        "seed": 851135
+      },
+      "AttackerReward": [],
+      "ChainID": {
+        "$oid": "690a9706ff32eb290cce5f48"
+      },
       "Completed": false,
-      "ChainID": {
-        "$oid": "68ffb1f730101a68fece5f48"
-      },
-      "AttackerReward": [],
-      "AttackerMissionInfo": {
-        "seed": 228176,
-        "faction": "FC_GRINEER"
-      },
-      "DefenderReward": {
-        "countedItems": [
-          {
-            "ItemType": "/Lotus/Types/Items/Research/ChemComponent",
-            "ItemCount": 3
-          }
-        ]
-      },
+      "Count": -9065.0,
+      "DefenderFaction": "FC_GRINEER",
       "DefenderMissionInfo": {
-        "seed": 480392,
         "faction": "FC_INFESTATION",
-        "missionReward": []
-      },
-      "Activation": {
-        "$date": {
-          "$numberLong": "1761604502657"
-        }
-      }
-    },
-    {
-      "_id": {
-        "$oid": "690009dac80f336e22ce5f48"
-      },
-      "Faction": "FC_INFESTATION",
-      "DefenderFaction": "FC_GRINEER",
-      "Node": "SolNode140",
-      "Count": -47422,
-      "Goal": 47000,
-      "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
-      "Completed": true,
-      "ChainID": {
-        "$oid": "68ffb1f730101a68fece5f48"
-      },
-      "AttackerReward": [],
-      "AttackerMissionInfo": {
-        "seed": 828780,
-        "faction": "FC_GRINEER"
+        "missionReward": [],
+        "seed": 627014
       },
       "DefenderReward": {
         "countedItems": [
           {
-            "ItemType": "/Lotus/Types/Items/Research/ChemComponent",
-            "ItemCount": 3
+            "ItemCount": 1,
+            "ItemType": "突变原聚合物"
           }
         ]
       },
-      "DefenderMissionInfo": {
-        "seed": 702139,
-        "faction": "FC_INFESTATION"
-      },
-      "Activation": {
-        "$date": {
-          "$numberLong": "1761610201855"
-        }
+      "Faction": "FC_INFESTATION",
+      "Goal": 30000.0,
+      "LocTag": "/Lotus/Language/Menu/InfestedInvasionBoss",
+      "Node": "Exta(谷神星)",
+      "_id": {
+        "$oid": "690ad2cafe031baa7dce5f48"
       }
     },
     {
-      "_id": {
-        "$oid": "69001ef2ccacbc25f0ce5f48"
+      "Activation": {
+        "$date": {
+          "$numberLong": "2025-11-05T04:30:02.308Z"
+        }
       },
-      "Faction": "FC_INFESTATION",
-      "DefenderFaction": "FC_GRINEER",
-      "Node": "SolNode135",
-      "Count": -46483,
-      "Goal": 46000,
-      "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
-      "Completed": true,
-      "ChainID": {
-        "$oid": "68ffb1f730101a68fece5f48"
+      "AttackerMissionInfo": {
+        "faction": "FC_GRINEER",
+        "seed": 425488
       },
       "AttackerReward": [],
-      "AttackerMissionInfo": {
-        "seed": 575222,
-        "faction": "FC_GRINEER"
+      "ChainID": {
+        "$oid": "690a9706ff32eb290cce5f48"
+      },
+      "Completed": false,
+      "Count": -40018.0,
+      "DefenderFaction": "FC_GRINEER",
+      "DefenderMissionInfo": {
+        "faction": "FC_INFESTATION",
+        "seed": 681562
       },
       "DefenderReward": {
         "countedItems": [
           {
-            "ItemType": "/Lotus/Types/Items/Research/ChemComponent",
-            "ItemCount": 3
+            "ItemCount": 3,
+            "ItemType": "爆燃喷射器"
           }
         ]
       },
-      "DefenderMissionInfo": {
-        "seed": 359589,
-        "faction": "FC_INFESTATION"
-      },
+      "Faction": "FC_INFESTATION",
+      "Goal": 41000.0,
+      "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
+      "Node": "Ker(谷神星)",
+      "_id": {
+        "$oid": "690ad2cafe031baa7dce5f49"
+      }
+    },
+    {
       "Activation": {
         "$date": {
-          "$numberLong": "1761615602279"
+          "$numberLong": "2025-11-05T06:55:02.355Z"
         }
+      },
+      "AttackerMissionInfo": {
+        "faction": "FC_GRINEER",
+        "seed": 941272
+      },
+      "AttackerReward": [],
+      "ChainID": {
+        "$oid": "690a9706ff32eb290cce5f48"
+      },
+      "Completed": false,
+      "Count": -12236.0,
+      "DefenderFaction": "FC_GRINEER",
+      "DefenderMissionInfo": {
+        "faction": "FC_INFESTATION",
+        "seed": 984897
+      },
+      "DefenderReward": {
+        "countedItems": [
+          {
+            "ItemCount": 3,
+            "ItemType": "爆燃喷射器"
+          }
+        ]
+      },
+      "Faction": "FC_INFESTATION",
+      "Goal": 44000.0,
+      "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
+      "Node": "Draco(谷神星)",
+      "_id": {
+        "$oid": "690af4c61e69344a0cce5f48"
+      }
+    },
+    {
+      "Activation": {
+        "$date": {
+          "$numberLong": "2025-11-05T06:55:02.355Z"
+        }
+      },
+      "AttackerMissionInfo": {
+        "faction": "FC_GRINEER",
+        "seed": 183736
+      },
+      "AttackerReward": [],
+      "ChainID": {
+        "$oid": "690a9706ff32eb290cce5f48"
+      },
+      "Completed": false,
+      "Count": -22287.0,
+      "DefenderFaction": "FC_GRINEER",
+      "DefenderMissionInfo": {
+        "faction": "FC_INFESTATION",
+        "seed": 142485
+      },
+      "DefenderReward": {
+        "countedItems": [
+          {
+            "ItemCount": 3,
+            "ItemType": "爆燃喷射器"
+          }
+        ]
+      },
+      "Faction": "FC_INFESTATION",
+      "Goal": 34000.0,
+      "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
+      "Node": "Kiste(谷神星)",
+      "_id": {
+        "$oid": "690af4c61e69344a0cce5f49"
       }
     }
   ],
@@ -9178,22 +9027,22 @@
   "PrimeTokenAvailability": true,
   "DailyDeals": [
     {
-      "StoreItem": "/Lotus/StoreItems/Weapons/Tenno/Pistol/CrossBow",
       "Activation": {
         "$date": {
-          "$numberLong": "1761577200000"
+          "$numberLong": "2025-11-05T07:00:00Z"
         }
       },
+      "AmountSold": 150,
+      "AmountTotal": 150,
+      "Discount": 50.0,
       "Expiry": {
         "$date": {
-          "$numberLong": "1761670800000"
+          "$numberLong": "2025-11-06T09:00:00Z"
         }
       },
-      "Discount": 40,
-      "OriginalPrice": 175,
-      "SalePrice": 105,
-      "AmountTotal": 250,
-      "AmountSold": 7
+      "OriginalPrice": 165,
+      "SalePrice": 82,
+      "StoreItem": "西伯利亚冰锤"
     }
   ],
   "LibraryInfo": {
@@ -9424,19 +9273,19 @@
     {
       "Category": "EXC_NORMAL",
       "Choices": [
-        "Gara",
-        "Khora",
-        "Revenant"
+        "Garuda",
+        "Baruuk",
+        "Hildryn"
       ]
     },
     {
       "Category": "EXC_HARD",
       "Choices": [
-        "Zylok",
-        "Sibear",
-        "Dread",
-        "Despair",
-        "Hate"
+        "德拉",
+        "锡斯特",
+        "翁",
+        "席芭莉丝",
+        "暗杀者"
       ]
     }
   ],

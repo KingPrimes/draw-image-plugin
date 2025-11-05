@@ -13,7 +13,7 @@ public class Constant {
 
     public static final String PNG = "png";
 
-    public static final String WORLD_STATUS_PATH = "/state-2025-10-28.json";
+    public static final String WORLD_STATUS_PATH = "/state-test.json";
     public static WorldState WORLD_STATE;
 
     static {
