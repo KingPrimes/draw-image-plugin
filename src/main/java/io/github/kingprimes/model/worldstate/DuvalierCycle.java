@@ -3,7 +3,6 @@ package io.github.kingprimes.model.worldstate;
 
 import io.github.kingprimes.model.WorldState;
 import io.github.kingprimes.utils.TimeUtils;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +17,6 @@ import java.util.List;
  * @author KingPrimes
  * @version 1.0.0
  */
-@Setter(AccessLevel.NONE)
 @Getter
 public final class DuvalierCycle {
 
@@ -42,7 +40,11 @@ public final class DuvalierCycle {
     String state;
     /**
      * 具体内容
+     * -- SETTER --
+     *  设置可选内容
+     *
      */
+    @Setter
     List<EndlessXpChoices> choices;
     /**
      * 剩余时间

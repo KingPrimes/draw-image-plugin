@@ -58,7 +58,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawAlertsImage(List<Alert> alerts) {
-        return new byte[0];
+        return DefaultDrawAlertsImage.drawAlertsImage(alerts);
     }
 
     /**
@@ -91,7 +91,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawDailyDealsImage(DailyDeals dailyDeal) {
-        return new byte[0];
+        return DefaultDrawDailyDealsImage.drawDailyDealsImage(dailyDeal);
     }
 
     /**
@@ -102,7 +102,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawDuviriCycleImage(DuvalierCycle duvalierCycle) {
-        return new byte[0];
+        return DefaultDrawDuviriCycleImage.drawDuviriCycleImage(duvalierCycle);
     }
 
     /**
