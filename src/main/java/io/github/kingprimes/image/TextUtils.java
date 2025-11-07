@@ -116,20 +116,20 @@ public final class TextUtils {
         }
 
         StringBuilder currentLine = new StringBuilder();
-        String[] words = text.split(" ");
+        String[] words = text.split("");
 
         for (String word : words) {
             // 测试当前行加单词是否超过最大宽度
             String testLine = currentLine + word + " ";
             if (metrics.stringWidth(testLine) <= maxWidth) {
-                currentLine.append(word).append(" ");
+                currentLine.append(word).append("");
             } else {
                 // 单个单词超过最大宽度，直接单独成行
                 if (currentLine.isEmpty()) {
                     lines.add(word);
                 } else {
                     lines.add(currentLine.toString().trim());
-                    currentLine = new StringBuilder(word + " ");
+                    currentLine = new StringBuilder(word);
                 }
             }
         }
@@ -138,6 +138,25 @@ public final class TextUtils {
             lines.add(currentLine.toString().trim());
         }
         return lines.toArray(new String[0]);
+    }
+
+    /**
+     * 计算自动换行后文本的总高度
+     *
+     * @param metrics  字体度量信息，用于计算文本尺寸
+     * @param text     需要计算高度的文本内容
+     * @param maxWidth 文本最大宽度，超过此宽度将自动换行
+     * @param spacing  行间距，相邻两行之间的垂直距离
+     * @return 自动换行后文本的总高度，包括所有行的高度和行间距的总和
+     */
+    public static int calculateWrappedTextHeight(FontMetrics metrics, String text, int maxWidth, int spacing) {
+        if (metrics == null || text == null || maxWidth <= 0) return 0;
+
+        // 使用wrapText方法获取换行后的文本行数组
+        String[] lines = wrapText(metrics, text, maxWidth);
+
+        // 使用现有的calculateMultilineHeight方法计算总高度
+        return calculateMultilineHeight(metrics, lines, spacing);
     }
 
     // ---------------------- 文本高度计算 ----------------------

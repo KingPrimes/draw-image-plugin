@@ -523,6 +523,30 @@ public class ImageCombiner {
     }
 
     /**
+     * 添加多行文字（手动换行\n，指定起始X、起始Y、行高、行间距）
+     * <p>实现逻辑：先将输入文本按换行符分割为多行，最后调用{@link #addText(String, int, int)}方法绘制文本</p>
+     * <p>参数校验：若输入文本为null，则直接返回当前实例，不执行任何绘制操作</p>
+     *
+     * @param text       待绘制的多行文本内容（null时不绘制并直接返回当前实例），支持手动换行（\n）
+     * @param startX     X坐标
+     * @param startY     第一行文字基线的起始Y坐标（基于Graphics2D坐标系）
+     * @param lineHeight 每一行文字的高度（像素）
+     * @param spacing    每一行文字之间的垂直间距（像素）
+     * @return 当前ImageCombiner实例，支持后续方法链式调用
+     */
+    public ImageCombiner addMultilineText(String text, int startX, int startY, int lineHeight, int spacing) {
+        if (text == null)
+            return this;
+        String[] lines = text.split("\n");
+        int currentY = startY;
+        for (String line : lines) {
+            addText(line, startX, currentY);
+            currentY += lineHeight + spacing;
+        }
+        return this;
+    }
+
+    /**
      * 添加多行居中文字（自动垂直居中，指定行高、行间距）
      * <p>实现逻辑：先将输入文本按换行符分割为多行，然后根据当前Graphics2D上下文的字体和行高、间距计算总高度，最后调用{@link #addMultilineCenteredText(String, int, int, int)}方法绘制文本</p>
      * <p>参数校验：若输入文本为null，则直接返回当前实例，不执行任何绘制操作</p>
@@ -539,7 +563,7 @@ public class ImageCombiner {
         FontMetrics metrics = g2.getFontMetrics(currentFont != null ? currentFont : g2.getFont());
         // 计算总高度（用TextUtils工具方法）
         int totalHeight = TextUtils.calculateMultilineHeight(metrics, lines, spacing);
-        // 垂直居中起始Y
+        // 垍直居中起始Y
         int startY = (target.getHeight() - totalHeight) / 2 + lineHeight;
         return addMultilineCenteredText(text, startY, lineHeight, spacing);
     }
@@ -1045,6 +1069,79 @@ public class ImageCombiner {
         return this;
     }
 
+    /**
+     * 添加多行文字（自动换行，指定起始X、起始Y、最大宽度、行高、行间距）
+     * <p>实现逻辑：先根据最大宽度对输入文本进行自动换行处理，然后逐行绘制文本</p>
+     * <p>参数校验：若输入文本为null，则直接返回当前实例，不执行任何绘制操作</p>
+     *
+     * @param text       待绘制的多行文本内容（null时不绘制并直接返回当前实例）
+     * @param startX     起始X坐标
+     * @param startY     起始Y坐标
+     * @param maxWidth   文本最大宽度，超过此宽度将自动换行
+     * @param lineHeight 每一行文字的高度（像素）
+     * @param spacing    每一行文字之间的垂直间距（像素）
+     * @return 当前ImageCombiner实例，支持后续方法链式调用
+     */
+    public ImageCombiner addMultilineTextWithWrap(String text, int startX, int startY, int maxWidth, int lineHeight, int spacing) {
+        if (text == null)
+            return this;
+
+        // 使用TextUtils工具类根据最大宽度对文本进行自动换行处理
+        String[] lines = wrapText(text, maxWidth);
+        int currentY = startY;
+
+        // 逐行绘制文本
+        for (String line : lines) {
+            addText(line, startX, currentY);
+            currentY += lineHeight + spacing;
+        }
+        return this;
+    }
+
+    /**
+     * 添加多行文字（自动换行，指定起始X、起始Y、最大宽度、行高、行间距）
+     * <p>实现逻辑：先根据最大宽度对输入文本进行自动换行处理，然后逐行绘制文本</p>
+     * <p>参数校验：若输入文本为null，则直接返回当前实例，不执行任何绘制操作</p>
+     *
+     * @param text     待绘制的多行文本内容（null时不绘制并直接返回当前实例）
+     * @param startX   起始X坐标
+     * @param startY   起始Y坐标
+     * @param maxWidth 文本最大宽度，超过此宽度将自动换行
+     * @param spacing  每一行文字之间的垂直间距（像素）
+     * @return 当前ImageCombiner实例，支持后续方法链式调用
+     */
+    public ImageCombiner addMultilineTextWithWrap(String text, int startX, int startY, int maxWidth, int spacing) {
+        if (text == null)
+            return this;
+
+        // 使用TextUtils工具类根据最大宽度对文本进行自动换行处理
+        String[] lines = wrapText(text, maxWidth);
+        int currentY = startY;
+        FontMetrics metrics = g2.getFontMetrics(currentFont != null ? currentFont : g2.getFont());
+        int y = TextUtils.calculateMultilineHeight(metrics, lines, spacing);
+        // 逐行绘制文本
+        for (String line : lines) {
+            addText(line, startX, currentY);
+            currentY += y + spacing;
+        }
+        return this;
+    }
+
+    /**
+     * 计算指定宽度内自动换行文本的高度
+     * <p>实现逻辑：调用TextUtils.calculateWrappedTextHeight方法计算自动换行文本的高度</p>
+     * <p>参数校验：若输入文本为null，则直接返回0</p>
+     *
+     * @param text     待计算高度的文本内容（null时返回0）
+     * @param maxWidth 文本最大宽度，超过此宽度将自动换行
+     * @param spacing  行间距，相邻两行之间的垂直距离
+     * @return 自动换行后文本的总高度
+     */
+    public int calculateWrappedTextHeight(String text, int maxWidth, int spacing) {
+        if (text == null) return 0;
+        FontMetrics metrics = g2.getFontMetrics(currentFont != null ? currentFont : g2.getFont());
+        return TextUtils.calculateWrappedTextHeight(metrics, text, maxWidth, spacing);
+    }
 
     /**
      * 文本对齐方式

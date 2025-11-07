@@ -124,7 +124,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawInvasionImage(List<Invasion> invasions) {
-        return new byte[0];
+        return DefaultDrawInvasionImage.drawInvasionImage(invasions);
     }
 
     /**
@@ -135,7 +135,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawKnownCalendarSeasonsImage(List<KnownCalendarSeasons> knownCalendarSeasons) {
-        return new byte[0];
+        return DefaultDrawKnownCalendarSeasonsImage.drawKnownCalendarSeasonsImage(knownCalendarSeasons);
     }
 
     /**
