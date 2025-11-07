@@ -9561,213 +9561,291 @@
     {
       "Activation": {
         "$date": {
-          "$numberLong": "1761523200000"
+          "$numberLong": "2025-11-03T00:00:00Z"
         }
       },
       "Expiry": {
         "$date": {
-          "$numberLong": "1762128000000"
+          "$numberLong": "2025-11-10T00:00:00Z"
         }
       },
-      "Days": [
-        {
-          "day": 93,
-          "events": [
-            {
-              "type": "CET_CHALLENGE",
-              "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarDestroyPropsEasy"
-            }
-          ]
-        },
-        {
-          "day": 95,
-          "events": [
-            {
-              "type": "CET_REWARD",
-              "reward": "/Lotus/StoreItems/Types/BoosterPacks/CalendarArtifactPack"
-            },
-            {
-              "type": "CET_REWARD",
-              "reward": "/Lotus/Types/StoreItems/Packages/Calendar/CalendarKuvaBundleSmall"
-            }
-          ]
-        },
-        {
-          "day": 98,
-          "events": [
-            {
-              "type": "CET_UPGRADE",
-              "upgrade": "/Lotus/Upgrades/Calendar/AbilityStrength"
-            },
-            {
-              "type": "CET_UPGRADE",
-              "upgrade": "/Lotus/Upgrades/Calendar/MeleeCritChance"
-            },
-            {
-              "type": "CET_UPGRADE",
-              "upgrade": "/Lotus/Upgrades/Calendar/Armor"
-            }
-          ]
-        },
-        {
-          "day": 102,
-          "events": [
-            {
-              "type": "CET_CHALLENGE",
-              "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesEasy"
-            }
-          ]
-        },
-        {
-          "day": 108,
-          "events": [
-            {
-              "type": "CET_REWARD",
-              "reward": "/Lotus/Types/StoreItems/Boosters/ModDropChanceBooster3DayStoreItem"
-            },
-            {
-              "type": "CET_REWARD",
-              "reward": "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalOrange"
-            }
-          ]
-        },
-        {
-          "day": 131,
-          "events": [
-            {
-              "type": "CET_CHALLENGE",
-              "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillEximusEasy"
-            }
-          ]
-        },
-        {
-          "day": 135,
-          "events": [
-            {
-              "type": "CET_REWARD",
-              "reward": "/Lotus/StoreItems/Types/BoosterPacks/CalendarArtifactPack"
-            },
-            {
-              "type": "CET_REWARD",
-              "reward": "/Lotus/StoreItems/Types/BoosterPacks/CalendarRivenPack"
-            }
-          ]
-        },
-        {
-          "day": 137,
-          "events": [
-            {
-              "type": "CET_CHALLENGE",
-              "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesWithAbilitiesMedium"
-            }
-          ]
-        },
-        {
-          "day": 143,
-          "events": []
-        },
-        {
-          "day": 144,
-          "events": [
-            {
-              "type": "CET_UPGRADE",
-              "upgrade": "/Lotus/Upgrades/Calendar/MagnitizeWithinRangeEveryXCasts"
-            },
-            {
-              "type": "CET_UPGRADE",
-              "upgrade": "/Lotus/Upgrades/Calendar/CompanionsRadiationChance"
-            },
-            {
-              "type": "CET_UPGRADE",
-              "upgrade": "/Lotus/Upgrades/Calendar/GenerateOmniOrbsOnWeakKill"
-            }
-          ]
-        },
-        {
-          "day": 148,
-          "events": [
-            {
-              "type": "CET_REWARD",
-              "reward": "/Lotus/StoreItems/Types/BoosterPacks/CalendarMajorArtifactPack"
-            },
-            {
-              "type": "CET_REWARD",
-              "reward": "/Lotus/StoreItems/Types/Items/MiscItems/Forma"
-            }
-          ]
-        },
-        {
-          "day": 162,
-          "events": [
-            {
-              "type": "CET_CHALLENGE",
-              "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillScaldraEnemiesWithAbilitiesHard"
-            }
-          ]
-        },
-        {
-          "day": 164,
-          "events": [
-            {
-              "type": "CET_UPGRADE",
-              "upgrade": "/Lotus/Upgrades/Calendar/MeleeAttackSpeed"
-            },
-            {
-              "type": "CET_UPGRADE",
-              "upgrade": "/Lotus/Upgrades/Calendar/CompanionDamage"
-            },
-            {
-              "type": "CET_UPGRADE",
-              "upgrade": "/Lotus/Upgrades/Calendar/EnergyOrbToAbilityRange"
-            }
-          ]
-        },
-        {
-          "day": 165,
-          "events": [
-            {
-              "type": "CET_REWARD",
-              "reward": "/Lotus/Types/StoreItems/Packages/Calendar/CalendarKuvaBundleLarge"
-            },
-            {
-              "type": "CET_REWARD",
-              "reward": "/Lotus/Types/StoreItems/Boosters/AffinityBooster3DayStoreItem"
-            }
-          ]
-        },
-        {
-          "day": 166,
-          "events": []
-        },
-        {
-          "day": 169,
-          "events": [
-            {
-              "type": "CET_CHALLENGE",
-              "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillTechrotEnemiesHard"
-            }
-          ]
-        },
-        {
-          "day": 178,
-          "events": [
-            {
-              "type": "CET_REWARD",
-              "reward": "/Lotus/StoreItems/Types/Items/MiscItems/WeaponMeleeArcaneUnlocker"
-            },
-            {
-              "type": "CET_REWARD",
-              "reward": "/Lotus/StoreItems/Types/BoosterPacks/CalendarArtifactPack"
-            }
-          ]
-        }
-      ],
-      "Season": "CST_SPRING",
-      "YearIteration": 11,
-      "Version": 19,
+      "MonthDays": {
+        "7": [
+          {
+            "day": 6,
+            "events": [
+              {
+                "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillTechrotEnemiesWithMeleeEasy",
+                "challengeInfo": {
+                  "challenge": "使用近战武器击杀100名科腐者敌人。",
+                  "name": "电子垃圾处理"
+                },
+                "type": "CET_CHALLENGE"
+              }
+            ],
+            "month": 7
+          },
+          {
+            "day": 10,
+            "events": [],
+            "month": 7
+          },
+          {
+            "day": 13,
+            "events": [
+              {
+                "reward": "3 天资源掉落几率加成",
+                "type": "CET_REWARD"
+              },
+              {
+                "reward": "赋能助力：双重组合",
+                "type": "CET_REWARD"
+              }
+            ],
+            "month": 7
+          },
+          {
+            "day": 20,
+            "events": [
+              {
+                "type": "CET_UPGRADE",
+                "upgrade": "/Lotus/Upgrades/Calendar/AbilityStrength",
+                "upgradeInfo": {
+                  "name": "力量飙升",
+                  "upgrade": "增加25%技能强度。"
+                }
+              },
+              {
+                "type": "CET_UPGRADE",
+                "upgrade": "/Lotus/Upgrades/Calendar/PunchToPrimary",
+                "upgradeInfo": {
+                  "name": "打孔纸带",
+                  "upgrade": "主要武器穿透增加1.5米。"
+                }
+              },
+              {
+                "type": "CET_UPGRADE",
+                "upgrade": "/Lotus/Upgrades/Calendar/RadiationProcOnTakeDamage",
+                "upgradeInfo": {
+                  "name": "精神反击",
+                  "upgrade": "受到伤害时有10%的几率触发250伤害、5米范围的辐射爆炸。"
+                }
+              }
+            ],
+            "month": 7
+          },
+          {
+            "day": 22,
+            "events": [
+              {
+                "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillScaldraEnemiesWithMeleeMedium",
+                "challengeInfo": {
+                  "challenge": "使用近战武器击杀150名炽蛇军敌人。",
+                  "name": "私人恩怨"
+                },
+                "type": "CET_CHALLENGE"
+              }
+            ],
+            "month": 7
+          },
+          {
+            "day": 25,
+            "events": [
+              {
+                "reward": "赋能助力",
+                "type": "CET_REWARD"
+              },
+              {
+                "reward": "Forma 蓝图",
+                "type": "CET_REWARD"
+              }
+            ],
+            "month": 7
+          }
+        ],
+        "8": [
+          {
+            "day": 13,
+            "events": [
+              {
+                "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillScaldraEnemiesWithAbilitiesMedium",
+                "challengeInfo": {
+                  "challenge": "使用技能击杀150名炽蛇军敌人。",
+                  "name": "敲山震虎"
+                },
+                "type": "CET_CHALLENGE"
+              }
+            ],
+            "month": 8
+          },
+          {
+            "day": 15,
+            "events": [
+              {
+                "reward": "荧尘储藏箱",
+                "type": "CET_REWARD"
+              },
+              {
+                "reward": "3 天资源掉落几率加成",
+                "type": "CET_REWARD"
+              }
+            ],
+            "month": 8
+          },
+          {
+            "day": 20,
+            "events": [
+              {
+                "type": "CET_UPGRADE",
+                "upgrade": "/Lotus/Upgrades/Calendar/SharedFreeAbilityEveryXCasts",
+                "upgradeInfo": {
+                  "name": "有福同享",
+                  "upgrade": "每施放10次技能，玩家和友军获得一次不消耗能量的技能施放机会。"
+                }
+              },
+              {
+                "type": "CET_UPGRADE",
+                "upgrade": "/Lotus/Upgrades/Calendar/OrbsDuplicateOnPickup",
+                "upgradeInfo": {
+                  "name": "靶向治疗",
+                  "upgrade": "可通过射击生命球来拾取它们。生命球拾取后有25%的几率复制。"
+                }
+              },
+              {
+                "type": "CET_UPGRADE",
+                "upgrade": "/Lotus/Upgrades/Calendar/SpeedBuffsWhenAirborne",
+                "upgradeInfo": {
+                  "name": "航班常客",
+                  "upgrade": "在空中时，装填速度、射速、施放速度和近战攻击速度增加100%。"
+                }
+              }
+            ],
+            "month": 8
+          },
+          {
+            "day": 23,
+            "events": [
+              {
+                "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillEximusMedium",
+                "challengeInfo": {
+                  "challenge": "击杀20名卓越者",
+                  "name": "逝去卓越者"
+                },
+                "type": "CET_CHALLENGE"
+              }
+            ],
+            "month": 8
+          },
+          {
+            "day": 28,
+            "events": [
+              {
+                "reward": "裂罅Mod",
+                "type": "CET_REWARD"
+              },
+              {
+                "reward": "赋能助力",
+                "type": "CET_REWARD"
+              }
+            ],
+            "month": 8
+          }
+        ],
+        "9": [
+          {
+            "day": 5,
+            "events": [
+              {
+                "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesWithMeleeHard",
+                "challengeInfo": {
+                  "challenge": "使用近战武器击杀500名敌人。",
+                  "name": "游刃有余"
+                },
+                "type": "CET_CHALLENGE"
+              }
+            ],
+            "month": 9
+          },
+          {
+            "day": 6,
+            "events": [
+              {
+                "reward": "裂罅Mod",
+                "type": "CET_REWARD"
+              },
+              {
+                "reward": "赋能助力",
+                "type": "CET_REWARD"
+              }
+            ],
+            "month": 9
+          },
+          {
+            "day": 14,
+            "events": [
+              {
+                "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillScaldraEnemiesHard",
+                "challengeInfo": {
+                  "challenge": "击杀500名炽蛇军敌人",
+                  "name": "惩罚炽蛇军"
+                },
+                "type": "CET_CHALLENGE"
+              }
+            ],
+            "month": 9
+          },
+          {
+            "day": 28,
+            "events": [
+              {
+                "reward": "荧尘储藏箱",
+                "type": "CET_REWARD"
+              },
+              {
+                "reward": "Orokin 反应堆蓝图",
+                "type": "CET_REWARD"
+              }
+            ],
+            "month": 9
+          },
+          {
+            "day": 29,
+            "events": [
+              {
+                "type": "CET_UPGRADE",
+                "upgrade": "/Lotus/Upgrades/Calendar/HealingEffects",
+                "upgradeInfo": {
+                  "name": "应急特效药",
+                  "upgrade": "所有补给球拾取物提供的恢复效果提高25%。"
+                }
+              },
+              {
+                "type": "CET_UPGRADE",
+                "upgrade": "/Lotus/Upgrades/Calendar/ElectricStatusDamageAndChance",
+                "upgradeInfo": {
+                  "name": "瓶装闪电",
+                  "upgrade": "为所有武器增加25%的异常状态伤害和电击异常状态触发几率。"
+                }
+              },
+              {
+                "type": "CET_UPGRADE",
+                "upgrade": "/Lotus/Upgrades/Calendar/AbilityStrength",
+                "upgradeInfo": {
+                  "name": "力量飙升",
+                  "upgrade": "增加25%技能强度。"
+                }
+              }
+            ],
+            "month": 9
+          }
+        ]
+      },
+      "Season": "CST_SUMMER",
       "UpgradeAvaliabilityRequirements": [
         "/Lotus/Upgrades/Calendar/1999UpgradeApplicationRequirement"
-      ]
+      ],
+      "Version": 19,
+      "YearIteration": 11
     }
   ],
   "Conquests": [
