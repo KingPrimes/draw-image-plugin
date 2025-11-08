@@ -146,7 +146,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawLiteSoriteImage(LiteSorite liteSorite) {
-        return new byte[0];
+        return DefaultDrawLiteSoriteImage.drawLiteSoriteImage(liteSorite);
     }
 
     /**

@@ -34,7 +34,7 @@ public class Mission {
      * @return 任务类型 {@link MissionTypeEnum#name} String字符串
      */
     @JsonIgnore
-    public String getMissionType(){
+    public String getMissionTypeName() {
         return missionType.getName();
     }
 }
