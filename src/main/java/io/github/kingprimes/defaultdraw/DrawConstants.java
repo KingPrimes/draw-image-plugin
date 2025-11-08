@@ -234,7 +234,7 @@ final class DrawConstants {
      * @param y        底部署名的Y坐标
      */
     public static void addFooter(ImageCombiner combiner, int y) {
-        combiner.setColor(Color.GRAY).addCenteredText(FOOTER_TEXT, y);
+        combiner.setFont(FONT).setColor(Color.GRAY).addCenteredText(FOOTER_TEXT, y);
     }
 
     /**
@@ -245,6 +245,6 @@ final class DrawConstants {
      * @param y        底部署名的Y坐标
      */
     public static void addFooter(ImageCombiner combiner, Color color, int y) {
-        combiner.setColor(color).addCenteredText(FOOTER_TEXT, y);
+        combiner.setFont(FONT).setColor(color).addCenteredText(FOOTER_TEXT, y);
     }
 }

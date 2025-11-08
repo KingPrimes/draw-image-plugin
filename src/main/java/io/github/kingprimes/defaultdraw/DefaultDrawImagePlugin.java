@@ -157,7 +157,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawMarketGodDumpImage(Map<Ducats.DumpType, List<Ducats.Ducat>> dump) {
-        return new byte[0];
+        return DefaultDrawMarketDucatsImage.drawMarketDucatsImage(dump, "Market 市场 金垃圾");
     }
 
     /**
@@ -168,7 +168,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawMarketSilverDumpImage(Map<Ducats.DumpType, List<Ducats.Ducat>> dump) {
-        return new byte[0];
+        return DefaultDrawMarketDucatsImage.drawMarketDucatsImage(dump, "Market 市场 银垃圾");
     }
 
     /**
