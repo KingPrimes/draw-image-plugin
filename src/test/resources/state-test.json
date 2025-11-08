@@ -2006,15 +2006,15 @@
       "Missions": [
         {
           "missionType": "MT_RESCUE",
-          "node": "SolNode106"
+          "node": "Alator(火星)"
         },
         {
           "missionType": "MT_TERRITORY",
-          "node": "SolNode46"
+          "node": "Spear(火星)"
         },
         {
           "missionType": "MT_ASSASSINATION",
-          "node": "SolNode99"
+          "node": "War(火星)"
         }
       ]
     }

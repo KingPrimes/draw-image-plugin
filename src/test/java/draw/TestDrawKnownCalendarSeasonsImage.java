@@ -28,7 +28,7 @@ public class TestDrawKnownCalendarSeasonsImage {
         byte[] bytes = plugin.drawKnownCalendarSeasonsImage(knownCalendarSeasons);
         if (bytes.length > 0) {
             ImageIO.write(ImageIO.read(new java.io.ByteArrayInputStream(bytes)),
-                    Constant.PNG, new File(Constant.DRAW_PATH.formatted("known_calendar_seasons.png")));
+                    Constant.PNG, new File(Constant.DRAW_PATH.formatted("draw_known_calendar_seasons.png")));
         }
     }
 }
