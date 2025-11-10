@@ -30,6 +30,7 @@ public class Fonts {
     // 艺术字体
     public static final Font FONT_Q_TXIAOTU = createFont("fonts/QTxiaotu.ttf", Font.TRUETYPE_FONT, Font.PLAIN, DEFAULT_FONT_SIZE);
     public static final Font FONT_VERA_SE_BOLD = createFont("fonts/VeraSeBd.ttf", Font.TRUETYPE_FONT, Font.BOLD, SMALL_FONT_SIZE);
+    public static final Font FONT_ELEMENT = createFont("fonts/Elements.ttf", Font.TRUETYPE_FONT, Font.ITALIC, LARGE_FONT_SIZE);
 
     /**
      * 创建字体并缓存

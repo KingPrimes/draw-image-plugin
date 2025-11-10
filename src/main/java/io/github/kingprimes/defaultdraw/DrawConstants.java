@@ -25,6 +25,8 @@ final class DrawConstants {
      */
     public static final Font FONT = Fonts.FONT_TEXT;
 
+    public static final Font FONT_ELEMENT = Fonts.FONT_ELEMENT;
+
     public static final int FONT_SIZE = FONT.getSize();
     /**
      * 帮助图像每行高度

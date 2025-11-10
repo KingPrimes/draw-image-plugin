@@ -179,7 +179,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawMarketLichesImage(MarketLichSister marketLichs) {
-        return new byte[0];
+        return DefaultDrawMarketLichSisterImage.drawMarketLichesImage(marketLichs);
     }
 
     /**
@@ -190,7 +190,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawMarketSisterImage(MarketLichSister marketSister) {
-        return new byte[0];
+        return DefaultDrawMarketLichSisterImage.drawMarketLichesImage(marketSister);
     }
 
     /**

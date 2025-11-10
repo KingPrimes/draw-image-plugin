@@ -1,6 +1,7 @@
 package io.github.kingprimes.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.kingprimes.model.enums.ElementEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -40,6 +41,13 @@ public class MarketLichSister {
          */
         @JsonProperty("auctions")
         private List<Auctions> auctions;
+
+        /**
+         * 拍卖物品名称
+         * <p>当前查询条件下的所有拍卖物品名称</p>
+         */
+        @JsonProperty("item_name")
+        private String itemName;
 
         /**
          * 拍卖项目类
@@ -223,7 +231,7 @@ public class MarketLichSister {
                  * <p>武器的元素属性类型，如火焰、冰冻等</p>
                  */
                 @JsonProperty("element")
-                private String element;
+                private ElementEnum element;
 
             }
         }
