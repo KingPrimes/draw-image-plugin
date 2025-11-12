@@ -21,6 +21,8 @@ import static io.github.kingprimes.defaultdraw.DrawConstants.*;
  */
 final class DefaultDrawActiveMission {
 
+    final static Font FONT_FACTION = FONT_WARFRAME_ICON.deriveFont(Font.PLAIN, 48f);
+
     /**
      * 绘制裂隙任务图像
      *
@@ -64,10 +66,15 @@ final class DefaultDrawActiveMission {
 
             x += IMAGE_MARGIN + 60;
             // 任务类型和派系
-            String missionInfo = mission.getMissionTypeName() + "-" + mission.getFaction().getName();
+            String missionInfo = mission.getMissionTypeName();
             combiner.setColor(MissionTypeEnum.getColor(mission.getMissionType() == null ? MissionTypeEnum.MT_DEFAULT : mission.getMissionType()))
                     .addText(missionInfo, x, y);
-
+            combiner.setFont(FONT_FACTION)
+                    .setColor(mission.getFaction().getColor())
+                    .addText(mission.getFaction().getIcon(), x + 140, y + 8)
+                    .setFont(FONT)
+                    .addText(mission.getFaction().getName(), x + 190, y);
+            x += IMAGE_MARGIN + 60;
             // 节点位置
             x += IMAGE_MARGIN + 260;
             String node = mission.getNode();

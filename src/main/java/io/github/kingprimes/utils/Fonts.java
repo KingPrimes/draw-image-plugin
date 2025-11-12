@@ -28,9 +28,7 @@ public class Fonts {
     // 基础字体
     public static final Font FONT_TEXT = createFont("fonts/SourceHanSerifCN-Bold.ttf", Font.TRUETYPE_FONT, Font.PLAIN, LARGE_FONT_SIZE);
     // 艺术字体
-    public static final Font FONT_Q_TXIAOTU = createFont("fonts/QTxiaotu.ttf", Font.TRUETYPE_FONT, Font.PLAIN, DEFAULT_FONT_SIZE);
-    public static final Font FONT_VERA_SE_BOLD = createFont("fonts/VeraSeBd.ttf", Font.TRUETYPE_FONT, Font.BOLD, SMALL_FONT_SIZE);
-    public static final Font FONT_ELEMENT = createFont("fonts/Elements.ttf", Font.TRUETYPE_FONT, Font.ITALIC, LARGE_FONT_SIZE);
+    public static final Font FONT_WARFRAME_ICON = createFont("fonts/warframe_font_icon.ttf", Font.TRUETYPE_FONT, Font.PLAIN, LARGE_FONT_SIZE);
 
     /**
      * 创建字体并缓存

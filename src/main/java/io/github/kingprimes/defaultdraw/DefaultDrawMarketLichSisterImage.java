@@ -107,7 +107,7 @@ final class DefaultDrawMarketLichSisterImage {
 
             // 绘制行数据
             combiner.setColor(element.getCOLOR())
-                    .setFont(FONT_ELEMENT)
+                    .setFont(FONT_WARFRAME_ICON)
                     .addText(element.getICON(), IMAGE_MARGIN, currentY + ROW_HEIGHT / 2 + 8)
                     .setFont(FONT)
                     .addText(element.getNAME(), IMAGE_MARGIN + 40, currentY + ROW_HEIGHT / 2 + 8)

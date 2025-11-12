@@ -3,9 +3,11 @@ package io.github.kingprimes.defaultdraw;
 import io.github.kingprimes.image.ImageCombiner;
 import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.image.TextUtils;
+import io.github.kingprimes.model.enums.FactionEnum;
+import io.github.kingprimes.model.enums.StateIconEnum;
 import io.github.kingprimes.model.worldstate.AllCycle;
 
-import java.awt.image.BufferedImage;
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
@@ -18,6 +20,7 @@ import static io.github.kingprimes.defaultdraw.DrawConstants.*;
  */
 final class DefaultDrawAllCycleImage {
 
+    final static Font FONT_STATE = FONT_WARFRAME_ICON.deriveFont(Font.PLAIN, 120f);
 
     /**
      * 绘制所有循环图片
@@ -26,9 +29,6 @@ final class DefaultDrawAllCycleImage {
      * @return 生成的图片字节数组，格式为 PNG
      */
     public static byte[] drawAllCycleImage(AllCycle allCycle) {
-        BufferedImage coldImage = ImageIOUtils.getColdImage();
-        BufferedImage dayImage = ImageIOUtils.getDayImage();
-        BufferedImage nightImage = ImageIOUtils.getNightImage();
         // 创建画布
         ImageCombiner combiner = new ImageCombiner(IMAGE_WIDTH, ALL_CYCLE_HEIGHT, ImageCombiner.OutputFormat.PNG);
         // 填充背景色
@@ -63,86 +63,82 @@ final class DefaultDrawAllCycleImage {
         String cambionState = allCycle.getCambionCycle().getActive();
         String zarimanState = allCycle.getZarimanCycle().getState();
 
+        int imageY = stateY + 40 + FONT_SIZE + 120;
+        int earthImageX = 70, cetusImageX = 250, vallisImageX = 450, cambionImageX = 650, zarimanImageX = 850;
+
         // 设置地球状态颜色
         if (allCycle.getEarthCycle().isDay()) {
-            combiner.setColor(ALL_CYCLE_WARM_COLOR);
+            combiner.setColor(ALL_CYCLE_WARM_COLOR)
+                    .setFont(FONT_STATE)
+                    .addText(StateIconEnum.SUN.getICON(), earthImageX, imageY)
+                    .setFont(FONT);
         } else {
-            combiner.setColor(ALL_CYCLE_COLD_COLOR);
+            combiner.setColor(ALL_CYCLE_COLD_COLOR)
+                    .setFont(FONT_STATE)
+                    .addText(StateIconEnum.NIGHT.getICON(), earthImageX, imageY)
+                    .setFont(FONT);
         }
         combiner.addText(earthState, 100, stateY);
-
         // 设置夜灵平野状态颜色
         if (allCycle.getCetusCycle().getIsDay()) {
-            combiner.setColor(ALL_CYCLE_WARM_COLOR);
+            combiner.setColor(ALL_CYCLE_WARM_COLOR)
+                    .setFont(FONT_STATE)
+                    .addText(StateIconEnum.SUN.getICON(), cetusImageX, imageY)
+                    .setFont(FONT);
         } else {
-            combiner.setColor(ALL_CYCLE_COLD_COLOR);
+            combiner.setColor(ALL_CYCLE_COLD_COLOR)
+                    .setFont(FONT_STATE)
+                    .addText(StateIconEnum.NIGHT.getICON(), cetusImageX, imageY)
+                    .setFont(FONT);
         }
         combiner.addText(cetusState, 280, stateY);
 
         // 设置福尔图娜状态颜色
         if (allCycle.getVallisCycle().isWarm()) {
-            combiner.setColor(ALL_CYCLE_WARM_COLOR);
+            combiner.setColor(ALL_CYCLE_WARM_COLOR)
+                    .setFont(FONT_STATE)
+                    .addText(StateIconEnum.SUN.getICON(), vallisImageX, imageY)
+                    .setFont(FONT);
         } else {
-            combiner.setColor(ALL_CYCLE_COLD_COLOR);
+            combiner.setColor(ALL_CYCLE_COLD_COLOR)
+                    .setFont(FONT_STATE)
+                    .addText(StateIconEnum.COLD.getICON(), vallisImageX, imageY)
+                    .setFont(FONT);
         }
         combiner.addText(vallisState, 480, stateY);
 
         // 设置魔胎之境状态颜色
         if ("FASS".equals(allCycle.getCambionCycle().getActive())) {
             combiner.setColor(ALL_CYCLE_WARM_COLOR);
+            combiner.setColor(ALL_CYCLE_WARM_COLOR)
+                    .setFont(FONT_STATE)
+                    .addText(StateIconEnum.SUN.getICON(), cambionImageX, imageY)
+                    .setFont(FONT);
         } else {
-            combiner.setColor(ALL_CYCLE_COLD_COLOR);
+            combiner.setColor(ALL_CYCLE_COLD_COLOR)
+                    .setFont(FONT_STATE)
+                    .addText(StateIconEnum.NIGHT.getICON(), cambionImageX, imageY)
+                    .setFont(FONT);
         }
         combiner.addText(cambionState, 660, stateY);
 
         // 设置扎里曼状态颜色
         if (allCycle.getZarimanCycle().isCorpus()) {
-            combiner.setColor(ALL_CYCLE_WARM_COLOR);
+            combiner.setColor(ALL_CYCLE_WARM_COLOR)
+                    .setFont(FONT_STATE)
+                    .addText(FactionEnum.FC_GRINEER.getIcon(), zarimanImageX, imageY)
+                    .setFont(FONT);
         } else {
-            combiner.setColor(ALL_CYCLE_COLD_COLOR);
+            combiner.setColor(ALL_CYCLE_COLD_COLOR)
+                    .setFont(FONT_STATE)
+                    .addText(FactionEnum.FC_CORPUS.getIcon(), zarimanImageX, imageY)
+                    .setFont(FONT)
+            ;
         }
         combiner.addText(zarimanState, 850, stateY);
 
-        int imageY = stateY + 40 + FONT_SIZE;
-        // 绘制图片行
-        // 绘制地球图标 (太阳/月亮)
-        if (allCycle.getEarthCycle().isDay()) {
-            combiner.drawImage(dayImage, 70, imageY);
-        } else {
-            combiner.drawImage(nightImage, 70, imageY);
-        }
-
-        // 绘制夜灵平野图标 (太阳/月亮)
-        if (allCycle.getCetusCycle().getIsDay()) {
-            combiner.drawImage(dayImage, 250, imageY);
-
-        } else {
-            combiner.drawImage(nightImage, 250, imageY);
-        }
-
-        // 绘制福尔图娜图标 (太阳/雪花)
-        if (allCycle.getVallisCycle().isWarm()) {
-            combiner.drawImage(dayImage, 450, imageY);
-
-        } else {
-            combiner.drawImage(coldImage, 450, imageY);
-        }
-
-        // 绘制魔胎之境图标 (太阳/月亮)
-        if ("FASS".equals(allCycle.getCambionCycle().getActive())) {
-            combiner.drawImage(dayImage, 645, imageY);
-        } else {
-            combiner.drawImage(nightImage, 645, imageY);
-        }
-
-        if (!allCycle.getZarimanCycle().isCorpus()) {
-            combiner.drawImage(ImageIOUtils.getFC_CORPUS(), 850, imageY);
-        } else {
-            combiner.drawImage(ImageIOUtils.getFC_GRINEER(), 850, imageY);
-        }
-
         // 绘制时间行
-        int timeY = imageY + ALL_CYCLE_ROW_HEIGHT * 2 + FONT_SIZE;
+        int timeY = imageY + 130;
         String earthTime = allCycle.getEarthCycle().getTimeLeft();
         String cetusTime = allCycle.getCetusCycle().getTimeLeft();
         String vallisTime = allCycle.getVallisCycle().getTimeLeft();

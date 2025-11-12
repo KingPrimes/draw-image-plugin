@@ -25,7 +25,7 @@ final class DrawConstants {
      */
     public static final Font FONT = Fonts.FONT_TEXT;
 
-    public static final Font FONT_ELEMENT = Fonts.FONT_ELEMENT;
+    public static final Font FONT_WARFRAME_ICON = Fonts.FONT_WARFRAME_ICON;
 
     public static final int FONT_SIZE = FONT.getSize();
     /**
@@ -110,10 +110,6 @@ final class DrawConstants {
     public static final int ALL_CYCLE_TABLE_HEADER_HEIGHT = 50;
 
 
-    /**
-     * 循环图像行高度
-     */
-    public static final int ALL_CYCLE_ROW_HEIGHT = 100;
     /**
      * 循环图像高度
      */
