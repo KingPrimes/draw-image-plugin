@@ -1,11 +1,9 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.image.TextUtils;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,18 +38,8 @@ final class DefaultDrawWarframeSubscribeImage {
                 .fillRect(0, 0, SUBSCRIBE_IMAGE_WIDTH, SUBSCRIBE_IMAGE_HEIGHT); // 白色背景
 
         int borderPadding = 20;
-        int innerWidth = SUBSCRIBE_IMAGE_WIDTH - borderPadding * 2;
-        int innerHeight = SUBSCRIBE_IMAGE_HEIGHT - borderPadding * 2;
-        int backgroundY = SUBSCRIBE_IMAGE_MARGIN + borderPadding + SUBSCRIBE_IMAGE_TITLE_HEIGHT + 30; // 文字区域下方开始
-        BufferedImage backgroundImage = ImageIOUtils.getRandomXiaoMeiWangImage();
-        int maxImageWidth = innerWidth / 2 + 80;
-        int maxImageHeight = innerHeight - (backgroundY - SUBSCRIBE_IMAGE_MARGIN - borderPadding);
         combiner.drawTooRoundRect()
-                .drawImageWithAspectRatio(backgroundImage,
-                        SUBSCRIBE_IMAGE_WIDTH / 2 + borderPadding, // 右侧起始X坐标
-                        backgroundY,
-                        maxImageWidth,
-                        maxImageHeight);
+                .drawStandingDrawing();
 
         int y = SUBSCRIBE_IMAGE_MARGIN + borderPadding + SUBSCRIBE_IMAGE_TITLE_HEIGHT / 2;
         // ================== 标题 Start ==================

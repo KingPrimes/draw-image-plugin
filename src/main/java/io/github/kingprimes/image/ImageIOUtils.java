@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Random;
 
 /**
  * 图片IO工具类，提供了一些常用的图片操作方法
@@ -60,33 +61,6 @@ public final class ImageIOUtils {
     }
 
     /**
-     * 获取小美王角色向右方向的图像
-     *
-     * @return BufferedImage 返回小美王向右方向的图像对象
-     */
-    public static BufferedImage getXiaoMeiWangRightImage() {
-        return getResourcesImage("/image/XiaoMeiWang-right.png");
-    }
-
-    /**
-     * 获取小美王跪姿图片
-     *
-     * @return BufferedImage 返回小美王跪姿图片对象
-     */
-    public static BufferedImage getXiaoMeiWangKneelingImage() {
-        return getResourcesImage("/image/XiaoMeiWang-kneeling.png");
-    }
-
-    /**
-     * 获取小美王跪姿-蕾丝图片
-     *
-     * @return BufferedImage 返回小美王跪姿图片对象
-     */
-    public static BufferedImage getXiaoMeiWangKneelingLaceImage() {
-        return getResourcesImage("/image/XiaoMeiWang-kneeling-lace.png");
-    }
-
-    /**
      * 获取小美王插图图片
      *
      * @return BufferedImage 返回小美王插图的BufferedImage对象
@@ -97,24 +71,14 @@ public final class ImageIOUtils {
 
     /**
      * 随机获取 <br/>
-     * {@link #getXiaoMeiWangRightImage}、{@link #getXiaoMeiWangKneelingImage}<br/>
-     * {@link #getXiaoMeiWangIllustrationImage} {@link #getXiaoMeiWangKneelingLaceImage}<br/>
      * 这四张图片中的一张图片返回
      *
      * @return 随机返回的小美王图片
      */
     public static BufferedImage getRandomXiaoMeiWangImage() {
-        double random = Math.random();
-        // 根据规范要求，getXiaoMeiWangKneelingLaceImage()方法的调用概率应设置为0.01%
-        if (random < 0.0001) {
-            return getXiaoMeiWangKneelingLaceImage();
-        } else if (random < 0.1) {
-            return getXiaoMeiWangKneelingImage();
-        } else if (random < 0.2) {
-            return getXiaoMeiWangIllustrationImage();
-        } else {
-            return getXiaoMeiWangRightImage();
-        }
+        Random random = new Random();
+        int i = random.nextInt(1, 12);
+        return getResourcesImage("/image/%d.png".formatted(i));
     }
 
     /**

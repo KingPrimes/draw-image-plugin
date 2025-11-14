@@ -1,11 +1,9 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.model.worldstate.Alert;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
@@ -82,7 +80,7 @@ public final class DefaultDrawAlertsImage {
             combiner.addText(headers[i], x + columnWidths[i] / 2, tableY + rowHeight / 2 + 8);
             x += columnWidths[i];
         }
-
+        combiner.drawStandingDrawing();
         // 绘制表格内容
         int contentY = tableY + rowHeight;
         for (int i = 0; i < alerts.size(); i++) {
@@ -110,15 +108,6 @@ public final class DefaultDrawAlertsImage {
                 .setStroke(1)
                 .drawLine(IMAGE_MARGIN, tableY + tableHeight, IMAGE_MARGIN + tableWidth, tableY + tableHeight);
 
-        // 添加看板娘图片
-        BufferedImage xiaoMeiWangImage = ImageIOUtils.getRandomXiaoMeiWangImage();
-        combiner.drawImageWithAspectRatio(
-                xiaoMeiWangImage,
-                ALERTS_IMAGE_WIDTH - 300,
-                height - 300,
-                ALERTS_IMAGE_WIDTH / 3,
-                ALERTS_IMAGE_MIN_HEIGHT / 2
-        );
 
         // 添加底部署名
         addFooter(combiner, height - IMAGE_FOOTER_HEIGHT);

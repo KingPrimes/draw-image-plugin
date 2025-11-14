@@ -1,7 +1,6 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.image.TextUtils;
 import io.github.kingprimes.model.enums.FactionEnum;
 import io.github.kingprimes.model.enums.StateIconEnum;
@@ -42,7 +41,7 @@ final class DefaultDrawAllCycleImage {
         combiner.setColor(TITLE_COLOR)
                 .setFont(FONT)
                 .addCenteredText("平原查询结果", IMAGE_MARGIN + IMAGE_TITLE_HEIGHT / 2)
-                .drawImageWithAspectRatio(ImageIOUtils.getRandomXiaoMeiWangImage(), IMAGE_WIDTH / 2 + 120, 110, IMAGE_WIDTH / 2, ALL_CYCLE_HEIGHT - 150);
+                .drawStandingDrawing();
 
         // 绘制表头
         int tableY = IMAGE_MARGIN + IMAGE_TITLE_HEIGHT + ALL_CYCLE_TABLE_HEADER_HEIGHT;

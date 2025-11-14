@@ -1,13 +1,11 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.model.worldstate.KnownCalendarSeasons;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +74,9 @@ final class DefaultDrawKnownCalendarSeasonsImage {
         combiner.setFont(FONT)
                 .setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, IMAGE_WIDTH, height)
-                .drawTooRoundRect();
+                .drawTooRoundRect()
+                // 绘制看板娘
+                .drawStandingDrawing();
 
         // 绘制标题
         combiner.setColor(TITLE_COLOR)
@@ -131,18 +131,6 @@ final class DefaultDrawKnownCalendarSeasonsImage {
                 currentY += rowHeight + 30; // 30是行间距
             }
         }
-
-        // 添加看板娘图片，根据动态计算的图像宽高来确定位置和大小
-        BufferedImage xiaoMeiWangImage = ImageIOUtils.getRandomXiaoMeiWangImage();
-        int mascotX = IMAGE_WIDTH - IMAGE_WIDTH / 3 - 120;
-        int mascotY = height / 2; // 底部边距40像素
-        combiner.drawImageWithAspectRatio(
-                xiaoMeiWangImage,
-                mascotX,
-                mascotY,
-                IMAGE_WIDTH / 2,
-                height / 2
-        );
 
         // 添加底部署名
         addFooter(combiner.setFont(FONT), height - IMAGE_FOOTER_HEIGHT);

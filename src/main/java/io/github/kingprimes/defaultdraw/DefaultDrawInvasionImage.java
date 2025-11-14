@@ -1,12 +1,10 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.model.worldstate.Invasion;
 import io.github.kingprimes.model.worldstate.Reward;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
@@ -68,7 +66,9 @@ final class DefaultDrawInvasionImage {
         combiner.setFont(FONT)
                 .setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, IMAGE_WIDTH, height)
-                .drawTooRoundRect();
+                .drawTooRoundRect()
+                // 绘制看板娘
+                .drawStandingDrawing();
 
         // 绘制标题
         combiner.setColor(TITLE_COLOR)
@@ -90,21 +90,6 @@ final class DefaultDrawInvasionImage {
             // 绘制单个入侵任务行
             drawInvasionRow(combiner, invasion, rowY);
         }
-
-        // 添加看板娘图片，根据动态计算的图像宽高来确定位置和大小
-        BufferedImage xiaoMeiWangImage = ImageIOUtils.getRandomXiaoMeiWangImage();
-        // 增大看板娘尺寸，使其更显眼
-        int mascotSize = Math.min(400, Math.min(IMAGE_WIDTH, height) / 3);
-        // 调整看板娘位置，确保在右下角合适位置
-        int mascotX = IMAGE_WIDTH - mascotSize + 80;
-        int mascotY = height - mascotSize - 40; // 底部边距40像素
-        combiner.drawImageWithAspectRatio(
-                xiaoMeiWangImage,
-                mascotX,
-                mascotY,
-                mascotSize,
-                mascotSize
-        );
 
         // 添加底部署名
         addFooter(combiner.setFont(FONT), height - IMAGE_FOOTER_HEIGHT);

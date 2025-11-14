@@ -1,7 +1,6 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.model.MarketLichSister;
 import io.github.kingprimes.model.enums.ElementEnum;
 
@@ -49,20 +48,8 @@ final class DefaultDrawMarketLichSisterImage {
         // 设置背景色
         combiner.setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, IMAGE_WIDTH, totalHeight)
-                .drawTooRoundRect();
-        BufferedImage xiaoMeiWangImage = ImageIOUtils.getRandomXiaoMeiWangImage();
-        // 增大看板娘尺寸，使其更显眼
-        int mascotSize = Math.min(400, Math.min(IMAGE_WIDTH, totalHeight) / 2);
-        // 调整看板娘位置，确保在右下角合适位置
-        int mascotX = IMAGE_WIDTH - mascotSize + 80;
-        int mascotY = totalHeight - mascotSize - 40; // 底部边距40像素
-        combiner.drawImageWithAspectRatio(
-                xiaoMeiWangImage,
-                mascotX,
-                mascotY,
-                mascotSize,
-                mascotSize
-        );
+                .drawTooRoundRect()
+                .drawStandingDrawing();
         // 绘制标题
         int currentY = TITLE_HEIGHT;
         combiner.setColor(TITLE_COLOR)

@@ -1,13 +1,11 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.model.enums.MissionTypeEnum;
 import io.github.kingprimes.model.enums.VoidEnum;
 import io.github.kingprimes.model.worldstate.ActiveMission;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
@@ -49,11 +47,8 @@ final class DefaultDrawActiveMission {
 
         combiner.setColor(ACTIVE_MISSION_HEADER_COLOR)
                 .setFont(FONT)
-                .addCenteredText(activeMission.getFirst().getHard() ? "钢铁裂隙" : "虚空裂隙", IMAGE_MARGIN_TOP);
-        BufferedImage backgroundImage = ImageIOUtils.getRandomXiaoMeiWangImage();
-        int maxImageWidth = ACTIVE_MISSION_WIDTH / 2;
-        int maxImageHeight = height - IMAGE_MARGIN;
-        combiner.drawImageWithAspectRatio(backgroundImage, ACTIVE_MISSION_WIDTH / 2 + 78, IMAGE_MARGIN, maxImageWidth, maxImageHeight);
+                .addCenteredText(activeMission.getFirst().getHard() ? "钢铁裂隙" : "虚空裂隙", IMAGE_MARGIN_TOP)
+                .drawStandingDrawing();
         // 绘制内容区域
         int y = IMAGE_MARGIN + IMAGE_ROW_HEIGHT + IMAGE_ROW_HEIGHT;
 

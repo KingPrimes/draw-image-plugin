@@ -1,12 +1,10 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.model.worldstate.DuvalierCycle;
 import io.github.kingprimes.model.worldstate.EndlessXpChoices;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
@@ -53,7 +51,9 @@ final class DefaultDrawDuviriCycleImage {
                 .setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, DUVIRI_CYCLE_IMAGE_WIDTH, DUVIRI_CYCLE_IMAGE_HEIGHT)
                 // 绘制双层边框
-                .drawTooRoundRect();
+                .drawTooRoundRect()
+                // 绘制看板娘
+                .drawStandingDrawing();
 
         // 绘制标题
         combiner.setColor(TITLE_COLOR)
@@ -97,15 +97,6 @@ final class DefaultDrawDuviriCycleImage {
             drawChoices(combiner, duvalierCycle.getChoices(), tableY + headerHeight, cellWidth, contentHeight);
         }
 
-        // 添加看板娘图片
-        BufferedImage xiaoMeiWangImage = ImageIOUtils.getRandomXiaoMeiWangImage();
-        combiner.drawImageWithAspectRatio(
-                xiaoMeiWangImage,
-                DUVIRI_CYCLE_IMAGE_WIDTH - 280,
-                140,
-                320,
-                450
-        );
 
         // 添加底部署名
         addFooter(combiner, DUVIRI_CYCLE_IMAGE_HEIGHT - IMAGE_FOOTER_HEIGHT);

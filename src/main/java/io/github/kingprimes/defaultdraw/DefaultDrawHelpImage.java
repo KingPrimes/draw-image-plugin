@@ -1,11 +1,9 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.utils.Fonts;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +56,8 @@ final class DefaultDrawHelpImage {
                 .combine();
         combiner.addRoundedImage(roundedCombiner.getCombinedImage(), centerX, y - 5, 25);
         combiner.setColor(Color.WHITE)
-                .addCenteredText("指令", y += Fonts.FONT_TEXT.getSize() + 5);
-        int imageY = y;
+                .addCenteredText("指令", y += Fonts.FONT_TEXT.getSize() + 5)
+        ;
 
         // 预计算所有行的坐标和背景信息
         List<RowInfo> rowInfos = new ArrayList<>(helpInfo.size());
@@ -88,14 +86,12 @@ final class DefaultDrawHelpImage {
             }
         }
 
-        // 2. 绘制背景图片
-        BufferedImage backgroundImage = ImageIOUtils.getRandomXiaoMeiWangImage();
-        int maxImageWidth = IMAGE_WIDTH / 2;
-        int maxImageHeight = totalHeight - imageY - IMAGE_MARGIN;
-        combiner.drawImageWithAspectRatio(backgroundImage, IMAGE_WIDTH / 2 + 40, imageY + IMAGE_MARGIN, maxImageWidth, maxImageHeight);
 
+        combiner
+                // 绘制立绘图
+                .drawStandingDrawing()
+                .setColor(HELP_IMAGE_TEXT_COLOR);
         // 3. 绘制所有数据行文字（批量操作）
-        combiner.setColor(HELP_IMAGE_TEXT_COLOR);
         for (RowInfo info : rowInfos) {
             if (!info.command.isEmpty()) {
                 combiner.addText(info.command, info.x, info.y);

@@ -1,11 +1,9 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.model.Arbitration;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
@@ -49,16 +47,10 @@ final class DefaultDrawArbitrationImage {
         String title = "仲裁任务";
         combiner.setColor(TITLE_COLOR)
                 .setFont(FONT)
-                .addCenteredText(title, y + IMAGE_MARGIN_TOP / 2);
+                .addCenteredText(title, y + IMAGE_MARGIN_TOP / 2)
+                .drawStandingDrawing();
 
         y += IMAGE_MARGIN_TOP;
-
-        BufferedImage backgroundImage = ImageIOUtils.getRandomXiaoMeiWangImage();
-        combiner.drawImageWithAspectRatio(backgroundImage,
-                ARBITRATION_IMAGE_WIDTH - 260,
-                ARBITRATION_IMAGE_HEIGHT - 360,
-                280,
-                320);
         // 任务信息
         combiner.setFont(FONT);
 

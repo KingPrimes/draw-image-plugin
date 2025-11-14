@@ -1,12 +1,10 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.model.enums.MissionTypeEnum;
 import io.github.kingprimes.model.worldstate.LiteSorite;
 import io.github.kingprimes.model.worldstate.Mission;
 
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
@@ -43,7 +41,8 @@ final class DefaultDrawLiteSoriteImage {
         // 设置背景
         combiner.setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, LITE_SORITE_IMAGE_WIDTH, imageHeight)
-                .drawTooRoundRect();
+                .drawTooRoundRect()
+                .drawStandingDrawing();
 
         int y = IMAGE_MARGIN;
 
@@ -54,14 +53,6 @@ final class DefaultDrawLiteSoriteImage {
                 .addCenteredText(title, y + IMAGE_MARGIN_TOP / 2);
 
         y += IMAGE_MARGIN_TOP;
-
-        // 添加看板娘图片
-        BufferedImage backgroundImage = ImageIOUtils.getRandomXiaoMeiWangImage();
-        combiner.drawImageWithAspectRatio(backgroundImage,
-                LITE_SORITE_IMAGE_WIDTH - 260,
-                imageHeight - 360,
-                280,
-                320);
 
         // 执刑官信息
         combiner.setFont(FONT);

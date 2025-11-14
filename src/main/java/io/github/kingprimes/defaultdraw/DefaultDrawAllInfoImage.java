@@ -1,11 +1,9 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.model.*;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
@@ -88,7 +86,8 @@ final class DefaultDrawAllInfoImage {
                 .setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, IMAGE_WIDTH, height)
                 // 绘制双层边框
-                .drawTooRoundRect();
+                .drawTooRoundRect()
+                .drawStandingDrawing();
 
         // 绘制标题
         combiner.setColor(TITLE_COLOR)
@@ -122,16 +121,6 @@ final class DefaultDrawAllInfoImage {
             drawDiskInfo(combiner, allInfo.getSysFileInfos(), startY);
         }
 
-        // 添加背景图片
-        BufferedImage backgroundImage = ImageIOUtils.getRandomXiaoMeiWangImage();
-        int maxImageWidth = IMAGE_WIDTH / 3;
-        int maxImageHeight = height / 3;
-        combiner.drawImageWithAspectRatio(backgroundImage,
-                IMAGE_WIDTH - maxImageWidth + 80,
-                height - maxImageHeight - IMAGE_MARGIN,
-                maxImageWidth,
-                maxImageHeight);
-
         addFooter(combiner, height - 40);
 
         combiner.combine();
@@ -151,17 +140,12 @@ final class DefaultDrawAllInfoImage {
      * @return 更新后的Y坐标
      */
     private static int drawCpuInfo(ImageCombiner combiner, CpuInfo cpuInfo, int startY) {
-        // 绘制部分标题背景
-        combiner.setColor(CARD_BACKGROUND_COLOR)
-                .fillRect(IMAGE_MARGIN, startY, IMAGE_WIDTH - 2 * IMAGE_MARGIN, IMAGE_ROW_HEIGHT);
-
         combiner.setColor(TITLE_COLOR)
-                .drawLine(IMAGE_MARGIN, startY, IMAGE_WIDTH - IMAGE_MARGIN, startY)
                 .drawLine(IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT, IMAGE_WIDTH - IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT);
 
         combiner.setColor(TITLE_COLOR)
                 .setFont(FONT)
-                .addText("CPU 信息", IMAGE_MARGIN + 20, startY + IMAGE_ROW_HEIGHT - 10);
+                .addCenteredText("CPU 信息", startY + IMAGE_ROW_HEIGHT - 10);
 
         int y = startY + IMAGE_ROW_HEIGHT + 10 + FONT_SIZE;
 
@@ -200,16 +184,13 @@ final class DefaultDrawAllInfoImage {
     }
 
     private static int drawPackageVersion(ImageCombiner combiner, AllInfo.PackageVersion packageVersion, int startY) {
-        combiner.setColor(CARD_BACKGROUND_COLOR)
-                .fillRect(IMAGE_MARGIN, startY, IMAGE_WIDTH - 2 * IMAGE_MARGIN, IMAGE_ROW_HEIGHT);
 
         combiner.setColor(TITLE_COLOR)
-                .drawLine(IMAGE_MARGIN, startY, IMAGE_WIDTH - IMAGE_MARGIN, startY)
                 .drawLine(IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT, IMAGE_WIDTH - IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT);
 
         combiner.setColor(TITLE_COLOR)
                 .setFont(FONT)
-                .addText("版本 信息", IMAGE_MARGIN + 20, startY + IMAGE_ROW_HEIGHT - 10);
+                .addCenteredText("版本 信息", startY + IMAGE_ROW_HEIGHT - 10);
 
         int y = startY + IMAGE_ROW_HEIGHT + 10 + FONT_SIZE;
 
@@ -232,17 +213,13 @@ final class DefaultDrawAllInfoImage {
      * @return 更新后的Y坐标
      */
     private static int drawJvmInfo(ImageCombiner combiner, JvmInfo jvmInfo, int startY) {
-        // 绘制部分标题背景
-        combiner.setColor(CARD_BACKGROUND_COLOR)
-                .fillRect(IMAGE_MARGIN, startY, IMAGE_WIDTH - 2 * IMAGE_MARGIN, IMAGE_ROW_HEIGHT);
 
         combiner.setColor(TITLE_COLOR)
-                .drawLine(IMAGE_MARGIN, startY, IMAGE_WIDTH - IMAGE_MARGIN, startY)
                 .drawLine(IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT, IMAGE_WIDTH - IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT);
 
         combiner.setColor(TITLE_COLOR)
                 .setFont(FONT)
-                .addText("JVM 信息", IMAGE_MARGIN + 20, startY + IMAGE_ROW_HEIGHT - 10);
+                .addCenteredText("JVM 信息", startY + IMAGE_ROW_HEIGHT - 10);
 
         int y = startY + IMAGE_ROW_HEIGHT + 10 + FONT_SIZE;
 
@@ -283,17 +260,13 @@ final class DefaultDrawAllInfoImage {
      * @return 更新后的Y坐标
      */
     private static int drawSystemInfo(ImageCombiner combiner, SystemInfo systemInfo, int startY) {
-        // 绘制部分标题背景
-        combiner.setColor(CARD_BACKGROUND_COLOR)
-                .fillRect(IMAGE_MARGIN, startY, IMAGE_WIDTH - 2 * IMAGE_MARGIN, IMAGE_ROW_HEIGHT);
 
         combiner.setColor(TITLE_COLOR)
-                .drawLine(IMAGE_MARGIN, startY, IMAGE_WIDTH - IMAGE_MARGIN, startY)
                 .drawLine(IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT, IMAGE_WIDTH - IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT);
 
         combiner.setColor(TITLE_COLOR)
                 .setFont(FONT)
-                .addText("系统信息", IMAGE_MARGIN + 20, startY + IMAGE_ROW_HEIGHT - 10);
+                .addCenteredText("系统信息", startY + IMAGE_ROW_HEIGHT - 10);
 
         int y = startY + IMAGE_ROW_HEIGHT + 10 + FONT_SIZE;
 
@@ -334,17 +307,13 @@ final class DefaultDrawAllInfoImage {
             return;
         }
 
-        // 绘制部分标题背景
-        combiner.setColor(CARD_BACKGROUND_COLOR)
-                .fillRect(IMAGE_MARGIN, startY, IMAGE_WIDTH - 2 * IMAGE_MARGIN, IMAGE_ROW_HEIGHT);
 
         combiner.setColor(TITLE_COLOR)
-                .drawLine(IMAGE_MARGIN, startY, IMAGE_WIDTH - IMAGE_MARGIN, startY)
                 .drawLine(IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT, IMAGE_WIDTH - IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT);
 
         combiner.setColor(TITLE_COLOR)
                 .setFont(FONT)
-                .addText("磁盘信息", IMAGE_MARGIN + 20, startY + IMAGE_ROW_HEIGHT - 10);
+                .addCenteredText("磁盘信息", startY + IMAGE_ROW_HEIGHT - 10);
 
         int y = startY + IMAGE_ROW_HEIGHT + 10 + FONT_SIZE;
 

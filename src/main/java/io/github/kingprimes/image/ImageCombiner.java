@@ -1070,6 +1070,48 @@ public class ImageCombiner {
     }
 
     /**
+     * 在图片右下角绘制两寸立绘插图
+     * <br/>
+     * 默认尺寸: 413*625 <br/>
+     * 若图片高度小于两寸，则调用 drawOneInchStandingDrawing()方法 返回一寸尺寸的图像<br/>
+     * 尺寸: 240*360
+     *
+     * @return 返回当前ImageCombiner实例，支持链式调用
+     */
+    public ImageCombiner drawStandingDrawing() {
+        int width = this.target.getWidth();
+        int height = this.target.getHeight();
+        int imageWidth = 413, imageHeight = 625;
+        if (height <= imageHeight) {
+            return drawOneInchStandingDrawing();
+        }
+
+        return drawImageWithAspectRatio(ImageIOUtils.getRandomXiaoMeiWangImage(),
+                width - 433,
+                height - 645,
+                imageWidth,
+                imageHeight);
+    }
+
+    /**
+     * 在图片右下角绘制一寸立绘插图
+     * <br/>
+     * 尺寸: 240*360
+     *
+     * @return 返回当前ImageCombiner实例，支持链式调用
+     */
+    public ImageCombiner drawOneInchStandingDrawing() {
+        int width = this.target.getWidth();
+        int height = this.target.getHeight();
+        int imageWidth = 240, imageHeight = 360;
+        return drawImageWithAspectRatio(ImageIOUtils.getRandomXiaoMeiWangImage(),
+                width - 265,
+                height - 382,
+                imageWidth,
+                imageHeight);
+    }
+
+    /**
      * 添加多行文字（自动换行，指定起始X、起始Y、最大宽度、行高、行间距）
      * <p>实现逻辑：先根据最大宽度对输入文本进行自动换行处理，然后逐行绘制文本</p>
      * <p>参数校验：若输入文本为null，则直接返回当前实例，不执行任何绘制操作</p>

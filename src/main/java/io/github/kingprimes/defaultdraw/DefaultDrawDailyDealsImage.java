@@ -1,11 +1,9 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.model.worldstate.DailyDeals;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
@@ -51,12 +49,9 @@ final class DefaultDrawDailyDealsImage {
         // 填充背景色
         combiner.setFont(FONT).setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, DAILY_DEALS_IMAGE_WIDTH, DAILY_DEALS_IMAGE_HEIGHT)
                 // 绘制双层边框
-                .drawTooRoundRect();
-
-        BufferedImage backgroundImage = ImageIOUtils.getRandomXiaoMeiWangImage();
-        int maxImageWidth = DAILY_DEALS_IMAGE_WIDTH / 3;
-        int maxImageHeight = DAILY_DEALS_IMAGE_HEIGHT - IMAGE_MARGIN;
-        combiner.drawImageWithAspectRatio(backgroundImage, DAILY_DEALS_IMAGE_WIDTH / 2 + 160, 25, maxImageWidth, maxImageHeight);
+                .drawTooRoundRect()
+                // 绘制看板娘
+                .drawStandingDrawing();
 
         // 绘制标题
         combiner.setColor(TITLE_COLOR).addCenteredText("每日特惠", 80);
