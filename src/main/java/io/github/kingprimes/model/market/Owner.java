@@ -1,14 +1,14 @@
-package io.github.kingprimes.model;
+package io.github.kingprimes.model.market;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
- * Warframe Market 用户信息
+ * <h1>Warframe Market API v1版本 用户信息</h1>
  *
  * @author KingPrimes
  * @version 1.0.0
@@ -36,7 +36,7 @@ public class Owner {
      * 上次登录时间
      */
     @JsonProperty("last_seen")
-    private LocalDateTime lastSeen;
+    private Instant lastSeen;
     /**
      * 游戏内名称
      */

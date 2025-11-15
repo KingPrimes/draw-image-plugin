@@ -4,6 +4,9 @@ import com.sun.jna.Pointer;
 import io.github.kingprimes.DrawImagePlugin;
 import io.github.kingprimes.model.*;
 import io.github.kingprimes.model.enums.SyndicateEnum;
+import io.github.kingprimes.model.market.MarketLichSister;
+import io.github.kingprimes.model.market.MarketRiven;
+import io.github.kingprimes.model.market.Orders;
 import io.github.kingprimes.model.worldstate.*;
 
 import java.util.List;
@@ -201,7 +204,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawMarketOrdersImage(Orders orders) {
-        return new byte[0];
+        return DefaultDrawMarketOrdersImage.drawMarketOrdersImage(orders);
     }
 
     /**
@@ -212,7 +215,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawMarketOrdersImage(List<String> possibleItems) {
-        return new byte[0];
+        return DefaultDrawMarketOrdersImage.drawMarketOrdersImage(possibleItems);
     }
 
     /**

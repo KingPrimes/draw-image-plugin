@@ -3,7 +3,7 @@ package io.github.kingprimes.defaultdraw;
 import io.github.kingprimes.image.ImageCombiner;
 import io.github.kingprimes.image.TextUtils;
 import io.github.kingprimes.model.enums.FactionEnum;
-import io.github.kingprimes.model.enums.StateIconEnum;
+import io.github.kingprimes.model.enums.IconEnum;
 import io.github.kingprimes.model.worldstate.AllCycle;
 
 import java.awt.*;
@@ -69,12 +69,12 @@ final class DefaultDrawAllCycleImage {
         if (allCycle.getEarthCycle().isDay()) {
             combiner.setColor(ALL_CYCLE_WARM_COLOR)
                     .setFont(FONT_STATE)
-                    .addText(StateIconEnum.SUN.getICON(), earthImageX, imageY)
+                    .addText(IconEnum.SUN.getIcon(), earthImageX, imageY)
                     .setFont(FONT);
         } else {
             combiner.setColor(ALL_CYCLE_COLD_COLOR)
                     .setFont(FONT_STATE)
-                    .addText(StateIconEnum.NIGHT.getICON(), earthImageX, imageY)
+                    .addText(IconEnum.NIGHT.getIcon(), earthImageX, imageY)
                     .setFont(FONT);
         }
         combiner.addText(earthState, 100, stateY);
@@ -82,12 +82,12 @@ final class DefaultDrawAllCycleImage {
         if (allCycle.getCetusCycle().getIsDay()) {
             combiner.setColor(ALL_CYCLE_WARM_COLOR)
                     .setFont(FONT_STATE)
-                    .addText(StateIconEnum.SUN.getICON(), cetusImageX, imageY)
+                    .addText(IconEnum.SUN.getIcon(), cetusImageX, imageY)
                     .setFont(FONT);
         } else {
             combiner.setColor(ALL_CYCLE_COLD_COLOR)
                     .setFont(FONT_STATE)
-                    .addText(StateIconEnum.NIGHT.getICON(), cetusImageX, imageY)
+                    .addText(IconEnum.NIGHT.getIcon(), cetusImageX, imageY)
                     .setFont(FONT);
         }
         combiner.addText(cetusState, 280, stateY);
@@ -96,12 +96,12 @@ final class DefaultDrawAllCycleImage {
         if (allCycle.getVallisCycle().isWarm()) {
             combiner.setColor(ALL_CYCLE_WARM_COLOR)
                     .setFont(FONT_STATE)
-                    .addText(StateIconEnum.SUN.getICON(), vallisImageX, imageY)
+                    .addText(IconEnum.SUN.getIcon(), vallisImageX, imageY)
                     .setFont(FONT);
         } else {
             combiner.setColor(ALL_CYCLE_COLD_COLOR)
                     .setFont(FONT_STATE)
-                    .addText(StateIconEnum.COLD.getICON(), vallisImageX, imageY)
+                    .addText(IconEnum.COLD.getIcon(), vallisImageX, imageY)
                     .setFont(FONT);
         }
         combiner.addText(vallisState, 480, stateY);
@@ -111,12 +111,12 @@ final class DefaultDrawAllCycleImage {
             combiner.setColor(ALL_CYCLE_WARM_COLOR);
             combiner.setColor(ALL_CYCLE_WARM_COLOR)
                     .setFont(FONT_STATE)
-                    .addText(StateIconEnum.SUN.getICON(), cambionImageX, imageY)
+                    .addText(IconEnum.SUN.getIcon(), cambionImageX, imageY)
                     .setFont(FONT);
         } else {
             combiner.setColor(ALL_CYCLE_COLD_COLOR)
                     .setFont(FONT_STATE)
-                    .addText(StateIconEnum.NIGHT.getICON(), cambionImageX, imageY)
+                    .addText(IconEnum.NIGHT.getIcon(), cambionImageX, imageY)
                     .setFont(FONT);
         }
         combiner.addText(cambionState, 660, stateY);

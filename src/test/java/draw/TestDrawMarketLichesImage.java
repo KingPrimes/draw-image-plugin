@@ -3,7 +3,7 @@ package draw;
 import com.alibaba.fastjson2.JSON;
 import common.Constant;
 import io.github.kingprimes.defaultdraw.DefaultDrawImagePlugin;
-import io.github.kingprimes.model.MarketLichSister;
+import io.github.kingprimes.model.market.MarketLichSister;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;

@@ -1,8 +1,8 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.model.MarketLichSister;
 import io.github.kingprimes.model.enums.ElementEnum;
+import io.github.kingprimes.model.market.MarketLichSister;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -35,7 +35,7 @@ final class DefaultDrawMarketLichSisterImage {
             return new byte[0];
         }
 
-        List<MarketLichSister.Payload.Auctions> auctions = marketLichs.getPayload().getAuctions();
+        List<MarketLichSister.Auctions> auctions = marketLichs.getPayload().getAuctions();
 
         // 计算图像高度
         int contentHeight = HEADER_HEIGHT + auctions.size() * ROW_HEIGHT;
@@ -70,7 +70,7 @@ final class DefaultDrawMarketLichSisterImage {
         currentY += HEADER_HEIGHT + 5;
 
         // 绘制数据行
-        for (MarketLichSister.Payload.Auctions auction : auctions) {
+        for (MarketLichSister.Auctions auction : auctions) {
             // 获取物品信息
             ElementEnum element = auction.getItem().getElement();
             String damage = auction.getItem().getDamage() != null ?

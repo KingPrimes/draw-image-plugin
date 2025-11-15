@@ -1,0 +1,206 @@
+{
+  "name": "Nova Primes 一套",
+  "form": "PC",
+  "isBy": true,
+  "isMax": false,
+  "ducats": 175,
+  "vaulted": false,
+  "reqMasteryRank": 0,
+  "tradingTax": 8000,
+  "orders": [
+    {
+      "createdAt": "2025-11-13T19:50:25Z",
+      "id": "6916368182044299687b83a6",
+      "itemId": "56783f24cbfa8f0432dd89a5",
+      "perTrade": 1,
+      "platinum": 65,
+      "quantity": 1,
+      "type": "SELL",
+      "updatedAt": "2025-11-13T19:50:25Z",
+      "user": {
+        "activity": {
+          "details": "unknown",
+          "type": "UNKNOWN"
+        },
+        "id": "66f692ff218f7f0007eb0a7b",
+        "ingameName": "ledking",
+        "lastSeen": "2025-11-14T16:31:06Z",
+        "locale": "zh-hans",
+        "platform": "PC",
+        "reputation": 2,
+        "status": "ONLINE"
+      },
+      "visible": true
+    },
+    {
+      "createdAt": "2025-11-14T16:24:41Z",
+      "id": "691757c9bcb10f002bab7485",
+      "itemId": "56783f24cbfa8f0432dd89a5",
+      "perTrade": 1,
+      "platinum": 68,
+      "quantity": 1,
+      "type": "SELL",
+      "updatedAt": "2025-11-14T16:24:41Z",
+      "user": {
+        "activity": {
+          "details": "unknown",
+          "type": "UNKNOWN"
+        },
+        "id": "68b05aae2e323f000b95b9e6",
+        "ingameName": "Orinard",
+        "lastSeen": "2025-11-14T15:16:26Z",
+        "locale": "en",
+        "platform": "PC",
+        "reputation": 0,
+        "status": "INGAME"
+      },
+      "visible": true
+    },
+    {
+      "createdAt": "2025-11-09T00:45:45Z",
+      "id": "690fe439820442996877bb07",
+      "itemId": "56783f24cbfa8f0432dd89a5",
+      "perTrade": 1,
+      "platinum": 69,
+      "quantity": 5,
+      "type": "SELL",
+      "updatedAt": "2025-11-09T00:45:45Z",
+      "user": {
+        "activity": {
+          "details": "unknown",
+          "type": "UNKNOWN"
+        },
+        "id": "646caa7c3a1eb20fc72aa92d",
+        "ingameName": "ttdgm",
+        "lastSeen": "2025-11-14T16:43:14Z",
+        "locale": "zh-hans",
+        "platform": "PC",
+        "reputation": 14,
+        "status": "INGAME"
+      },
+      "visible": true
+    },
+    {
+      "createdAt": "2025-11-14T10:30:42Z",
+      "id": "691704d21c2cfa000aa4e47a",
+      "itemId": "56783f24cbfa8f0432dd89a5",
+      "perTrade": 1,
+      "platinum": 69,
+      "quantity": 1,
+      "type": "SELL",
+      "updatedAt": "2025-11-14T10:30:42Z",
+      "user": {
+        "activity": {
+          "details": "unknown",
+          "type": "UNKNOWN"
+        },
+        "id": "5784c268d3ffb610eab5418e",
+        "ingameName": "Karigent",
+        "lastSeen": "2025-11-14T15:43:28Z",
+        "locale": "en",
+        "platform": "PC",
+        "reputation": 6,
+        "status": "INGAME"
+      },
+      "visible": true
+    },
+    {
+      "createdAt": "2025-11-14T11:34:49Z",
+      "id": "691713d982044299687bfd0c",
+      "itemId": "56783f24cbfa8f0432dd89a5",
+      "perTrade": 1,
+      "platinum": 69,
+      "quantity": 1,
+      "type": "SELL",
+      "updatedAt": "2025-11-14T13:20:22Z",
+      "user": {
+        "activity": {
+          "details": "unknown",
+          "type": "UNKNOWN"
+        },
+        "id": "68a80a69c07d1e000860b93a",
+        "ingameName": "46287913",
+        "lastSeen": "2025-11-14T16:22:22Z",
+        "locale": "zh-hans",
+        "platform": "PC",
+        "reputation": 1,
+        "status": "INGAME"
+      },
+      "visible": true
+    },
+    {
+      "createdAt": "2023-08-19T13:28:50Z",
+      "id": "64e0c392b74901006ca5d60a",
+      "itemId": "56783f24cbfa8f0432dd89a5",
+      "perTrade": 1,
+      "platinum": 70,
+      "quantity": 1,
+      "type": "SELL",
+      "updatedAt": "2025-11-10T14:29:45Z",
+      "user": {
+        "activity": {
+          "details": "unknown",
+          "type": "UNKNOWN"
+        },
+        "avatar": "user/avatar/5fec11c667c46201a3ac697d.png?95edc78030c3105d15ce41d9cc5787fe",
+        "id": "5fec11c667c46201a3ac697d",
+        "ingameName": "S.aveYourHeartForMe",
+        "lastSeen": "2025-11-14T13:35:20Z",
+        "locale": "zh-hans",
+        "platform": "PC",
+        "reputation": 4,
+        "status": "ONLINE"
+      },
+      "visible": true
+    },
+    {
+      "createdAt": "2025-10-05T21:27:30Z",
+      "id": "68e2e2c227504ff738110b2f",
+      "itemId": "56783f24cbfa8f0432dd89a5",
+      "perTrade": 1,
+      "platinum": 70,
+      "quantity": 1,
+      "type": "SELL",
+      "updatedAt": "2025-10-05T21:27:30Z",
+      "user": {
+        "activity": {
+          "details": "unknown",
+          "type": "UNKNOWN"
+        },
+        "id": "66d36d43218f7f0007d5674a",
+        "ingameName": "Remzy.owo",
+        "lastSeen": "2025-11-14T16:13:55Z",
+        "locale": "en",
+        "platform": "PC",
+        "reputation": 2,
+        "status": "INGAME"
+      },
+      "visible": true
+    },
+    {
+      "createdAt": "2025-10-19T11:36:08Z",
+      "id": "68f4cd280901e581938ad395",
+      "itemId": "56783f24cbfa8f0432dd89a5",
+      "perTrade": 1,
+      "platinum": 70,
+      "quantity": 1,
+      "type": "SELL",
+      "updatedAt": "2025-11-08T18:49:40Z",
+      "user": {
+        "activity": {
+          "details": "unknown",
+          "type": "UNKNOWN"
+        },
+        "avatar": "user/avatar/605735002db2440033d28c90.f8c4d1e9.webp",
+        "id": "605735002db2440033d28c90",
+        "ingameName": "Mortyadella",
+        "lastSeen": "2025-11-14T16:32:48Z",
+        "locale": "en",
+        "platform": "PC",
+        "reputation": 1,
+        "status": "ONLINE"
+      },
+      "visible": true
+    }
+  ]
+}
