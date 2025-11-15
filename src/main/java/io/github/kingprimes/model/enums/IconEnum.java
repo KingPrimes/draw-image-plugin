@@ -40,6 +40,10 @@ public enum IconEnum {
      */
     PLATINUM("\ue309"),
     /**
+     * 刷新图标
+     */
+    REFRESH("\ue310"),
+    /**
      * 雪花图标
      */
     COLD("\ue100"),

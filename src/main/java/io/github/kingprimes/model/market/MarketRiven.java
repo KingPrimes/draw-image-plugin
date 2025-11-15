@@ -1,6 +1,7 @@
 package io.github.kingprimes.model.market;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.kingprimes.model.enums.PolarityEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -159,7 +160,7 @@ public class MarketRiven {
          * 紫卡极性
          */
         @JsonProperty("polarity")
-        private String polarity;
+        private PolarityEnum polarity;
         /**
          * 段位限制
          */

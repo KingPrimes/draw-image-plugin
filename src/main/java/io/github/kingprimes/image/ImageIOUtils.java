@@ -61,24 +61,23 @@ public final class ImageIOUtils {
     }
 
     /**
-     * 获取小美王插图图片
+     * 随机获取 看板娘插画图片
      *
-     * @return BufferedImage 返回小美王插图的BufferedImage对象
-     */
-    public static BufferedImage getXiaoMeiWangIllustrationImage() {
-        return getResourcesImage("/image/XiaoMeiWang-illustration.png");
-    }
-
-    /**
-     * 随机获取 <br/>
-     * 这四张图片中的一张图片返回
-     *
-     * @return 随机返回的小美王图片
+     * @return 返回随机的看板娘插画图片
      */
     public static BufferedImage getRandomXiaoMeiWangImage() {
         Random random = new Random();
         int i = random.nextInt(1, 12);
         return getResourcesImage("/image/%d.png".formatted(i));
+    }
+
+    /**
+     * 获取紫卡模板图片
+     *
+     * @return 返回紫卡模板图片
+     */
+    public static BufferedImage getRivenTemplate() {
+        return getResourcesImage("/image/riven/RivenTemplate.png");
     }
 
     /**

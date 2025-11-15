@@ -226,7 +226,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawMarketRivenImage(MarketRiven marketRiven) {
-        return new byte[0];
+        return DefaultDrawMarketRivenImage.drawMarketRivenImage(marketRiven);
     }
 
     /**

@@ -1,0 +1,521 @@
+{
+  "item_name": "绝路",
+  "payload": {
+    "auctions": [
+      {
+        "buyout_price": 15,
+        "closed": false,
+        "created": "2025-11-11 12:31:07",
+        "id": "6912bc0b1c2cfa006d4df317",
+        "is_direct_sell": true,
+        "item": {
+          "attributes": [
+            {
+              "positive": true,
+              "url_name": "电击伤害",
+              "value": 8.9
+            },
+            {
+              "positive": true,
+              "url_name": "弹匣容量",
+              "value": 4.7
+            }
+          ],
+          "mastery_level": 8,
+          "mod_rank": 8,
+          "name": "vexitin",
+          "polarity": "naramon",
+          "re_rolls": 5,
+          "type": "riven",
+          "weapon_url_name": "rubico"
+        },
+        "minimal_reputation": 0,
+        "note": "",
+        "note_raw": "",
+        "owner": {
+          "id": "6905b594b06cb8000804dc72",
+          "ingame_name": "suiyuwuyan",
+          "last_seen": "2025-11-15 16:42:13.455",
+          "locale": "zh-hans",
+          "region": "en",
+          "reputation": 0,
+          "status": "ingame"
+        },
+        "platform": "pc",
+        "private": false,
+        "starting_price": 15,
+        "updated": "2025-11-11 12:31:07",
+        "visible": true
+      },
+      {
+        "buyout_price": 15,
+        "closed": false,
+        "created": "2025-11-08 23:08:12",
+        "id": "690f5cdcbcb10f00498c86e6",
+        "is_direct_sell": true,
+        "item": {
+          "attributes": [
+            {
+              "positive": true,
+              "url_name": "火焰伤害",
+              "value": 81.6
+            },
+            {
+              "positive": true,
+              "url_name": "冰冻伤害",
+              "value": 84.8
+            },
+            {
+              "positive": true,
+              "url_name": "装填速度",
+              "value": 48.2
+            },
+            {
+              "positive": false,
+              "url_name": "对Infested伤害",
+              "value": 0.67
+            }
+          ],
+          "mastery_level": 11,
+          "mod_rank": 0,
+          "name": "feva-gelipha",
+          "polarity": "madurai",
+          "re_rolls": 0,
+          "type": "riven",
+          "weapon_url_name": "rubico"
+        },
+        "minimal_reputation": 0,
+        "note": "",
+        "note_raw": "",
+        "owner": {
+          "id": "690da84f0d1e0400550eee1e",
+          "ingame_name": "Merlot911",
+          "last_seen": "2025-11-15 18:08:43.116",
+          "locale": "zh-hans",
+          "region": "en",
+          "reputation": 0,
+          "status": "online"
+        },
+        "platform": "pc",
+        "private": false,
+        "starting_price": 15,
+        "updated": "2025-11-08 23:08:12",
+        "visible": true
+      },
+      {
+        "buyout_price": 20,
+        "closed": false,
+        "created": "2025-11-15 17:53:28",
+        "id": "69184d981c2cfa00086a3a5a",
+        "is_direct_sell": true,
+        "item": {
+          "attributes": [
+            {
+              "positive": true,
+              "url_name": "对Grineer伤害",
+              "value": 1.04
+            },
+            {
+              "positive": true,
+              "url_name": "后坐力",
+              "value": -6.7
+            },
+            {
+              "positive": true,
+              "url_name": "变焦",
+              "value": 5.0
+            }
+          ],
+          "mastery_level": 14,
+          "mod_rank": 0,
+          "name": "hera-argimag",
+          "polarity": "madurai",
+          "re_rolls": 0,
+          "type": "riven",
+          "weapon_url_name": "rubico"
+        },
+        "minimal_reputation": 0,
+        "note": "",
+        "note_raw": "",
+        "owner": {
+          "id": "681755d58e487d01b16ddd5a",
+          "ingame_name": "YaoSiXi",
+          "last_seen": "2025-11-15 17:32:42.970",
+          "locale": "zh-hans",
+          "region": "en",
+          "reputation": 1,
+          "status": "ingame"
+        },
+        "platform": "pc",
+        "private": false,
+        "starting_price": 20,
+        "updated": "2025-11-15 17:53:28",
+        "visible": true
+      },
+      {
+        "buyout_price": 20,
+        "closed": false,
+        "created": "2025-11-15 17:43:23",
+        "id": "69184b3ba450720007636af8",
+        "is_direct_sell": true,
+        "item": {
+          "attributes": [
+            {
+              "positive": true,
+              "url_name": "触发时间",
+              "value": 7.2
+            },
+            {
+              "positive": true,
+              "url_name": "冲击伤害",
+              "value": 10.4
+            },
+            {
+              "positive": true,
+              "url_name": "暴击率",
+              "value": 11.9
+            }
+          ],
+          "mastery_level": 14,
+          "mod_rank": 0,
+          "name": "magna-critades",
+          "polarity": "vazarin",
+          "re_rolls": 0,
+          "type": "riven",
+          "weapon_url_name": "rubico"
+        },
+        "minimal_reputation": 0,
+        "note": "",
+        "note_raw": "",
+        "owner": {
+          "avatar": "user/avatar/6452e2da6c031403aaad2715.png?29bd87444959cf245ea2f749161c38e0",
+          "id": "6452e2da6c031403aaad2715",
+          "ingame_name": "nska-_-",
+          "last_seen": "2025-11-15 17:41:34.313",
+          "locale": "en",
+          "region": "en",
+          "reputation": 11,
+          "status": "ingame"
+        },
+        "platform": "pc",
+        "private": false,
+        "starting_price": 20,
+        "updated": "2025-11-15 17:43:23",
+        "visible": true
+      },
+      {
+        "buyout_price": 20,
+        "closed": false,
+        "created": "2025-11-15 00:56:24",
+        "id": "69175f381c2cfa00086c8ee3",
+        "is_direct_sell": true,
+        "item": {
+          "attributes": [
+            {
+              "positive": true,
+              "url_name": "弹匣容量",
+              "value": 6.3
+            },
+            {
+              "positive": true,
+              "url_name": "弹药上限",
+              "value": 5.0
+            },
+            {
+              "positive": true,
+              "url_name": "变焦",
+              "value": 5.4
+            },
+            {
+              "positive": false,
+              "url_name": "触发几率",
+              "value": -7.2
+            }
+          ],
+          "mastery_level": 15,
+          "mod_rank": 8,
+          "name": "arma-herabin",
+          "polarity": "vazarin",
+          "re_rolls": 0,
+          "type": "riven",
+          "weapon_url_name": "rubico"
+        },
+        "minimal_reputation": 0,
+        "note": "",
+        "note_raw": "",
+        "owner": {
+          "avatar": "user/avatar/68d15002c2414c000a2c4c03.d474793c.webp",
+          "id": "68d15002c2414c000a2c4c03",
+          "ingame_name": "linteng2",
+          "last_seen": "2025-11-15 12:04:02.818",
+          "locale": "zh-hans",
+          "region": "en",
+          "reputation": 0,
+          "status": "ingame"
+        },
+        "platform": "pc",
+        "private": false,
+        "starting_price": 20,
+        "updated": "2025-11-15 00:56:24",
+        "visible": true
+      },
+      {
+        "buyout_price": 20,
+        "closed": false,
+        "created": "2025-11-03 16:33:34",
+        "id": "690868de4e759300060f07e3",
+        "is_direct_sell": true,
+        "item": {
+          "attributes": [
+            {
+              "positive": true,
+              "url_name": "火焰伤害",
+              "value": 9.0
+            },
+            {
+              "positive": true,
+              "url_name": "弹药上限",
+              "value": 5.6
+            }
+          ],
+          "mastery_level": 10,
+          "mod_rank": 0,
+          "name": "ignibin",
+          "polarity": "madurai",
+          "re_rolls": 0,
+          "type": "riven",
+          "weapon_url_name": "rubico"
+        },
+        "minimal_reputation": 0,
+        "note": "",
+        "note_raw": "",
+        "owner": {
+          "id": "68126f562dcd9900d24df023",
+          "ingame_name": "witgirt",
+          "last_seen": "2025-11-15 13:27:02.987",
+          "locale": "zh-hans",
+          "region": "en",
+          "reputation": 7,
+          "status": "ingame"
+        },
+        "platform": "pc",
+        "private": false,
+        "starting_price": 20,
+        "updated": "2025-11-03 16:33:34",
+        "visible": true
+      },
+      {
+        "buyout_price": 30,
+        "closed": false,
+        "created": "2025-11-15 04:29:04",
+        "id": "691791100d1e04002b8a9f33",
+        "is_direct_sell": true,
+        "item": {
+          "attributes": [
+            {
+              "positive": true,
+              "url_name": "对Corpus伤害",
+              "value": 1.05
+            },
+            {
+              "positive": true,
+              "url_name": "暴击率",
+              "value": 14.0
+            },
+            {
+              "positive": true,
+              "url_name": "弹药上限",
+              "value": 4.8
+            },
+            {
+              "positive": false,
+              "url_name": "变焦",
+              "value": -4.6
+            }
+          ],
+          "mastery_level": 11,
+          "mod_rank": 0,
+          "name": "manti-ampicron",
+          "polarity": "naramon",
+          "re_rolls": 0,
+          "type": "riven",
+          "weapon_url_name": "rubico"
+        },
+        "minimal_reputation": 0,
+        "note": "",
+        "note_raw": "",
+        "owner": {
+          "id": "5f34b01c86284f01613d7276",
+          "ingame_name": "00Daiking",
+          "last_seen": "2025-11-15 16:53:48.455",
+          "locale": "en",
+          "region": "en",
+          "reputation": 0,
+          "status": "ingame"
+        },
+        "platform": "pc",
+        "private": false,
+        "starting_price": 30,
+        "updated": "2025-11-15 16:12:34",
+        "visible": true
+      },
+      {
+        "buyout_price": 30,
+        "closed": false,
+        "created": "2025-11-14 19:50:14",
+        "id": "691717764e7593000ad6c7ca",
+        "is_direct_sell": true,
+        "item": {
+          "attributes": [
+            {
+              "positive": true,
+              "url_name": "对Corpus伤害",
+              "value": 1.04
+            },
+            {
+              "positive": true,
+              "url_name": "多重射击",
+              "value": 8.6
+            },
+            {
+              "positive": true,
+              "url_name": "暴击伤害",
+              "value": 12.8
+            },
+            {
+              "positive": false,
+              "url_name": "对Grineer伤害",
+              "value": 0.96
+            }
+          ],
+          "mastery_level": 10,
+          "mod_rank": 0,
+          "name": "acri-mantican",
+          "polarity": "vazarin",
+          "re_rolls": 20,
+          "type": "riven",
+          "weapon_url_name": "rubico"
+        },
+        "minimal_reputation": 0,
+        "note": "",
+        "note_raw": "",
+        "owner": {
+          "avatar": "user/avatar/67651250a8a4b1000856bc23.png?6bd082a3917c48b6816cdea6aade27e0",
+          "id": "67651250a8a4b1000856bc23",
+          "ingame_name": "Sair0",
+          "last_seen": "2025-11-15 13:38:57.366",
+          "locale": "en",
+          "region": "en",
+          "reputation": 9,
+          "status": "ingame"
+        },
+        "platform": "pc",
+        "private": false,
+        "starting_price": 30,
+        "updated": "2025-11-14 19:50:14",
+        "visible": true
+      },
+      {
+        "buyout_price": 30,
+        "closed": false,
+        "created": "2025-11-06 15:53:37",
+        "id": "690c5401e5207500678d2d09",
+        "is_direct_sell": true,
+        "item": {
+          "attributes": [
+            {
+              "positive": true,
+              "url_name": "火焰伤害",
+              "value": 7.7
+            },
+            {
+              "positive": true,
+              "url_name": "变焦",
+              "value": 5.1
+            },
+            {
+              "positive": true,
+              "url_name": "后坐力",
+              "value": -7.7
+            }
+          ],
+          "mastery_level": 10,
+          "mod_rank": 0,
+          "name": "zeti-ignilis",
+          "polarity": "madurai",
+          "re_rolls": 0,
+          "type": "riven",
+          "weapon_url_name": "rubico"
+        },
+        "minimal_reputation": 0,
+        "note": "",
+        "note_raw": "",
+        "owner": {
+          "id": "5c4ef6a41b46d80392ab383e",
+          "ingame_name": "CruKXzs",
+          "last_seen": "2025-11-15 16:44:37.964",
+          "locale": "en",
+          "region": "en",
+          "reputation": 8,
+          "status": "ingame"
+        },
+        "platform": "pc",
+        "private": false,
+        "starting_price": 30,
+        "updated": "2025-11-06 15:53:37",
+        "visible": true
+      },
+      {
+        "buyout_price": 30,
+        "closed": false,
+        "created": "2025-11-02 00:18:36",
+        "id": "690632dca45072000a028913",
+        "is_direct_sell": true,
+        "item": {
+          "attributes": [
+            {
+              "positive": true,
+              "url_name": "电击伤害",
+              "value": 11.6
+            },
+            {
+              "positive": true,
+              "url_name": "弹药上限",
+              "value": 6.2
+            },
+            {
+              "positive": false,
+              "url_name": "装填速度",
+              "value": -2.5
+            }
+          ],
+          "mastery_level": 16,
+          "mod_rank": 0,
+          "name": "vexibin",
+          "polarity": "naramon",
+          "re_rolls": 0,
+          "type": "riven",
+          "weapon_url_name": "rubico"
+        },
+        "minimal_reputation": 0,
+        "note": "",
+        "note_raw": "",
+        "owner": {
+          "avatar": "user/avatar/5c43609d1b46d8020fd31265.png?4562e342667f9486bbb74ff3e681848e",
+          "id": "5c43609d1b46d8020fd31265",
+          "ingame_name": "Shvartza",
+          "last_seen": "2025-11-15 17:53:59.414",
+          "locale": "en",
+          "region": "en",
+          "reputation": 94,
+          "status": "ingame"
+        },
+        "platform": "pc",
+        "private": false,
+        "starting_price": 30,
+        "updated": "2025-11-02 00:18:36",
+        "visible": true
+      }
+    ]
+  }
+}
