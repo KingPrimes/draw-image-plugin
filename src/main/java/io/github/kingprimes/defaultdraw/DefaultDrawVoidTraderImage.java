@@ -31,8 +31,6 @@ final class DefaultDrawVoidTraderImage {
     // 颜色常量定义
     private static final Color HEADER_BG_COLOR = new Color(0x2C3E50);
     private static final Color ITEM_NAME_COLOR = new Color(0x3498DB);
-    private static final Color DUCATS_COLOR = new Color(0xE67E22);
-    private static final Color CREDITS_COLOR = new Color(0xF39C12);
     private static final Color LOCATION_COLOR = new Color(0x9B59B6);
 
     /**
@@ -152,9 +150,6 @@ final class DefaultDrawVoidTraderImage {
      * @return 下一行的Y坐标
      */
     private static int drawTraderInfo(ImageCombiner combiner, VoidTrader voidTrader, int startY) {
-        // 绘制商人名称
-        String characterName = voidTrader.getCharacter() != null ? voidTrader.getCharacter() : "Baro Ki'Teer";
-
         // 绘制出现位置
         String location = voidTrader.getNode() != null ? voidTrader.getNode() : "未知位置";
         combiner.setColor(LOCATION_COLOR)

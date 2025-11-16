@@ -241,24 +241,22 @@ public final class DefaultDrawSeasonInfoImage {
     /**
      * 绘制挑战任务奖励声望
      *
-     * @param combiner 图像合成器
+     * @param combiner  图像合成器
      * @param challenge 挑战任务数据
-     * @param x X坐标
-     * @param y Y坐标
-     * @return 下一行的Y坐标
+     * @param x         X坐标
+     * @param y         Y坐标
      */
-    private static int drawChallengeStanding(ImageCombiner combiner, 
-                                            SeasonInfo.ActiveChallenges challenge, 
-                                            int x, 
-                                            int y) {
+    private static void drawChallengeStanding(ImageCombiner combiner,
+                                              SeasonInfo.ActiveChallenges challenge,
+                                              int x,
+                                              int y) {
         String standing = challenge.getStanding() != null ? 
                 "声望: " + challenge.getStanding() : "声望: 0";
         
         combiner.setColor(TEXT_COLOR)
                 .setFont(FONT)
                 .addText(standing, x, y + FONT_SIZE);
-        
-        return y + LINE_HEIGHT;
+
     }
 
     /**
