@@ -17,7 +17,7 @@ import static io.github.kingprimes.defaultdraw.DrawConstants.*;
  * @author KingPrimes
  * @version 1.0.3
  */
-public class DefaultDrawSortiesImage {
+final class DefaultDrawSortiesImage {
 
     private static final int SORTIE_IMAGE_WIDTH = 1200;
     private static final int SORTIE_IMAGE_MIN_HEIGHT = 600;

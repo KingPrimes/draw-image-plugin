@@ -14,7 +14,7 @@ import static io.github.kingprimes.defaultdraw.DrawConstants.*;
  * @author KingPrimes
  * @version 1.0.3
  */
-public class DefaultDrawSteelPathImage {
+final class DefaultDrawSteelPathImage {
 
     private static final int STEEL_PATH_IMAGE_WIDTH = 800;
     private static final int STEEL_PATH_IMAGE_MIN_HEIGHT = 400;
