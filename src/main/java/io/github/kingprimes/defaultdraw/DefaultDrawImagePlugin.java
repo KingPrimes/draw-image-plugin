@@ -270,7 +270,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawSortiesImage(List<Sortie> sorties) {
-        return new byte[0];
+        return DefaultDrawSortiesImage.drawSortiesImage(sorties);
     }
 
     /**
@@ -281,7 +281,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawSteelPath(SteelPathOffering steelPath) {
-        return new byte[0];
+        return DefaultDrawSteelPathImage.drawSteelPathImage(steelPath);
     }
 
     /**

@@ -47,7 +47,7 @@ public class Variant {
      * @return {@link MissionTypeEnum#name}
      */
     @JsonIgnore
-    public String getMissionType() {
+    public String getMissionTypeName() {
         return missionType.getName();
     }
 
@@ -57,7 +57,7 @@ public class Variant {
      * @return {@link ModifierTypeEnum#str}
      */
     @JsonIgnore
-    public String getModifierType() {
+    public String getModifierTypeStr() {
         return modifierType.getStr();
     }
 }

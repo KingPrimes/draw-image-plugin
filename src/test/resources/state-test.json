@@ -1945,44 +1945,43 @@
   ],
   "Sorties": [
     {
-      "_id": {
-        "$oid": "68ff937f04dd388dc7ce5f48"
-      },
       "Activation": {
         "$date": {
-          "$numberLong": "1761580800000"
+          "$numberLong": "2025-10-27T16:00:00Z"
         }
       },
+      "Boss": "SORTIE_BOSS_HEK",
       "Expiry": {
         "$date": {
-          "$numberLong": "1761667200000"
+          "$numberLong": "2025-10-28T16:00:00Z"
         }
       },
       "Reward": "/Lotus/Types/Game/MissionDecks/SortieRewards",
       "Seed": 17730,
-      "Boss": "SORTIE_BOSS_HEK",
-      "ExtraDrops": [],
+      "Twitter": true,
       "Variants": [
         {
           "missionType": "MT_TERRITORY",
           "modifierType": "SORTIE_MODIFIER_RIFLE_ONLY",
-          "node": "SolNode106",
+          "node": "Alator(火星)",
           "tileset": "GrineerSettlementTileset"
         },
         {
           "missionType": "MT_EXTERMINATION",
           "modifierType": "SORTIE_MODIFIER_EXIMUS",
-          "node": "SolNode195",
+          "node": "Hydron(赛德娜)",
           "tileset": "GrineerGalleonTileset"
         },
         {
           "missionType": "MT_ASSASSINATION",
           "modifierType": "SORTIE_MODIFIER_SECONDARY_ONLY",
-          "node": "SolNode24",
+          "node": "Oro(地球)",
           "tileset": "GrineerForestTileset"
         }
       ],
-      "Twitter": true
+      "_id": {
+        "$oid": "68ff937f04dd388dc7ce5f48"
+      }
     }
   ],
   "LiteSorties": [
