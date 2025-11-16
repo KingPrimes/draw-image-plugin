@@ -243,12 +243,12 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
     /**
      * 绘制 遗物 图像
      *
-     * @param relic 遗物数据
+     * @param relics 遗物数据
      * @return 图像流
      */
     @Override
-    public byte[] drawRelicsImage(Relics relic) {
-        return new byte[0];
+    public byte[] drawRelicsImage(List<Relics> relics) {
+        return DefaultDrawRelicsImage.drawRelicsImage(relics);
     }
 
     /**
@@ -306,7 +306,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawVoidTraderImage(List<VoidTrader> vt) {
-        return new byte[0];
+        return DefaultDrawVoidTraderImage.drawVoidTraderImage(vt);
     }
 
     /**

@@ -7816,21 +7816,209 @@
   ],
   "VoidTraders": [
     {
-      "_id": {
-        "$oid": "5d1e07a0a38e4a4fdd7cefca"
-      },
       "Activation": {
         "$date": {
-          "$numberLong": "1761915600000"
-        }
-      },
-      "Expiry": {
-        "$date": {
-          "$numberLong": "1762088400000"
+          "$numberLong": "2025-10-31T13:00:00Z"
         }
       },
       "Character": "EvilBaroWeek3",
-      "Node": "EarthHUB"
+      "Expiry": {
+        "$date": {
+          "$numberLong": "2025-11-02T13:00:00Z"
+        }
+      },
+      "Manifest": [
+        {
+          "ItemType": "终劫 Ki\u0027Teer 护胸",
+          "PrimePrice": 196,
+          "RegularPrice": 294000
+        },
+        {
+          "ItemType": "终劫 Ki\u0027Teer 护肩",
+          "PrimePrice": 109,
+          "RegularPrice": 278000
+        },
+        {
+          "ItemType": "终劫 Ki\u0027Teer 护膝",
+          "PrimePrice": 184,
+          "RegularPrice": 251000
+        },
+        {
+          "ItemType": "终劫 Ki\u0027Teer 幻纹",
+          "PrimePrice": 69,
+          "RegularPrice": 109000
+        },
+        {
+          "ItemType": "终劫魔典外观",
+          "PrimePrice": 227,
+          "RegularPrice": 302000
+        },
+        {
+          "ItemType": "席瓦 \u0026 神盾 终劫外观",
+          "PrimePrice": 132,
+          "RegularPrice": 298000
+        },
+        {
+          "ItemType": "伏打电能",
+          "PrimePrice": 300,
+          "RegularPrice": 150000
+        },
+        {
+          "ItemType": "稳定 Prime",
+          "PrimePrice": 300,
+          "RegularPrice": 220000
+        },
+        {
+          "ItemType": "爆发装填 Prime",
+          "PrimePrice": 375,
+          "RegularPrice": 120000
+        },
+        {
+          "ItemType": "棱晶 锦鲤守护尾部",
+          "PrimePrice": 200,
+          "RegularPrice": 200000
+        },
+        {
+          "ItemType": "棱晶·斩肉双刀",
+          "PrimePrice": 490,
+          "RegularPrice": 200000
+        },
+        {
+          "ItemType": "马谢特砍刀·亡魂",
+          "PrimePrice": 410,
+          "RegularPrice": 250000
+        },
+        {
+          "ItemType": "弱点专精 Prime",
+          "PrimePrice": 400,
+          "RegularPrice": 150000
+        },
+        {
+          "ItemType": "Prime Grineer 摇头娃娃",
+          "PrimePrice": 80,
+          "RegularPrice": 200000
+        },
+        {
+          "ItemType": "Scimitar 棱晶外观",
+          "PrimePrice": 210,
+          "RegularPrice": 450000
+        },
+        {
+          "ItemType": "Mantis 棱晶外观",
+          "PrimePrice": 230,
+          "RegularPrice": 375000
+        },
+        {
+          "ItemType": "Ki\u0027Teer 披饰",
+          "PrimePrice": 500,
+          "RegularPrice": 500000
+        },
+        {
+          "ItemType": "曙光女神 Prime 护甲套装",
+          "PrimePrice": 285,
+          "RegularPrice": 260000
+        },
+        {
+          "ItemType": "Ki\u0027Teer 大气权冠",
+          "PrimePrice": 525,
+          "RegularPrice": 375000
+        },
+        {
+          "ItemType": "Tenno 血缘小地毯",
+          "PrimePrice": 225,
+          "RegularPrice": 100000
+        },
+        {
+          "ItemType": "Lotus 幻纹",
+          "PrimePrice": 250,
+          "RegularPrice": 450000
+        },
+        {
+          "ItemType": "冷冻光束步枪·破坏者",
+          "PrimePrice": 475,
+          "RegularPrice": 250000
+        },
+        {
+          "ItemType": "火卫二三尾额叶鲤 Prex 卡牌",
+          "PrimePrice": 75,
+          "RegularPrice": 100000
+        },
+        {
+          "ItemType": "牛迎新春纹章",
+          "PrimePrice": 55,
+          "RegularPrice": 45000
+        },
+        {
+          "ItemType": "双剑浮萍外观",
+          "PrimePrice": 350,
+          "RegularPrice": 300000
+        },
+        {
+          "ItemType": "特拉蒙的死亡之舞",
+          "PrimePrice": 125,
+          "RegularPrice": 100000
+        },
+        {
+          "ItemType": "Ki\u0027Teer 尊崇幻纹",
+          "PrimePrice": 250,
+          "RegularPrice": 350000
+        },
+        {
+          "ItemType": "后纪 M5 遗物",
+          "PrimePrice": 125,
+          "RegularPrice": 55000
+        },
+        {
+          "ItemType": "《九重天》 登录音乐",
+          "PrimePrice": 160,
+          "RegularPrice": 155000
+        },
+        {
+          "ItemType": "《扎里曼的天使》登录音乐",
+          "PrimePrice": 160,
+          "RegularPrice": 180000
+        },
+        {
+          "ItemType": "维萨亡灵节库娃护甲",
+          "PrimePrice": 400,
+          "RegularPrice": 175000
+        },
+        {
+          "ItemType": "暗黑长剑亡灵节外观",
+          "PrimePrice": 320,
+          "RegularPrice": 250000
+        },
+        {
+          "ItemType": "恐惧亡灵节外观",
+          "PrimePrice": 300,
+          "RegularPrice": 275000
+        },
+        {
+          "ItemType": "在我腹中浮印",
+          "PrimePrice": 80,
+          "RegularPrice": 50000
+        },
+        {
+          "ItemType": "Inaros 之沙 蓝图",
+          "PrimePrice": 100,
+          "RegularPrice": 25000
+        },
+        {
+          "ItemType": "仙子之径幻纹",
+          "PrimePrice": 15,
+          "RegularPrice": 1000
+        },
+        {
+          "ItemType": "虚空余货",
+          "Limit": 1,
+          "PrimePrice": 0,
+          "RegularPrice": 50000
+        }
+      ],
+      "Node": "Strata 中继站(地球)",
+      "_id": {
+        "$oid": "5d1e07a0a38e4a4fdd7cefca"
+      }
     }
   ],
   "PrimeVaultTraders": [

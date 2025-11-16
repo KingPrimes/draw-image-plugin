@@ -1,0 +1,1094 @@
+[
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "中纪 A1 遗物",
+    "rewards": [
+      {
+        "id": "e2a7996d-0e7b-4a4c-ba88-06076f6625a5",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "史提托双枪 Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "80ba0e00-d207-4c6b-b0a6-d002cff9da9b",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "西诺斯 Prime 弓弦",
+        "tier": 0
+      },
+      {
+        "id": "4126b431-9129-4998-8f2b-cb7314f5cf3d",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "守望者 Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "0edb6e82-4fef-42be-a3b5-8a40c1df00e9",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "搬运者 Prime 系统",
+        "tier": 0
+      },
+      {
+        "id": "f43892ee-09a0-4a6d-8114-4664a07bc4ff",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "布莱顿 Prime 枪管",
+        "tier": 0
+      },
+      {
+        "id": "ced54041-0dc5-4437-9d8a-f9df6cf68a14",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Forma 蓝图",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T3VoidProjectionMSilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "中纪 A10 遗物",
+    "rewards": [
+      {
+        "id": "0aa60183-55fc-4eee-8908-82e149c58a68",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "Ash Prime 系统 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "08059420-6341-4b71-9c19-3d2fc9f1a9d7",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Inaros Prime 机体 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "d8acbb98-62e5-4d1f-8800-4cf230187690",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "猎豹 Prime 枪机",
+        "tier": 0
+      },
+      {
+        "id": "3c374365-da31-4ba9-bd11-32d7c36670c9",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "伯斯顿 Prime 枪托",
+        "tier": 0
+      },
+      {
+        "id": "32c6a82a-9bef-47e1-af4e-6de8bc79f947",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "狼牙 Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "5001056d-33bd-4927-aa28-8fa6d6792c05",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Forma 蓝图",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T3VoidProjectionInarosAshVaultASilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "中纪 A11 遗物",
+    "rewards": [
+      {
+        "id": "9f6e50b7-f5e0-47e6-ac78-7c474a7c75df",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "阿利乌双枪 Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "262c22cd-7711-43de-a688-26b82bad97f1",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "伯斯顿 Prime 枪管",
+        "tier": 0
+      },
+      {
+        "id": "c8f250d3-a443-44db-855b-9227d65e8941",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "布莱顿 Prime 枪机",
+        "tier": 0
+      },
+      {
+        "id": "4f6f27d6-03e1-4b02-be42-3a001eabf261",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Forma 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "52d4a1dc-c358-4f63-8b89-e08145df3473",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Revenant Prime 机体 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "d01e9bf9-a89c-4fa7-8896-14c34ecc12d9",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "雷克斯 Prime 蓝图",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T3VoidProjectionGaussPrimeCSilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "中纪 A12 遗物",
+    "rewards": [
+      {
+        "id": "7e6a542d-4ff6-4c28-9bc6-61491f37a78b",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "迅发电浆炮 Prime 枪管",
+        "tier": 0
+      },
+      {
+        "id": "ab144167-9211-415b-bb8e-4a0046a1583d",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "翠雀 Prime 枪托",
+        "tier": 0
+      },
+      {
+        "id": "e63e78e9-63bc-4fa7-aba0-7c15b3579642",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Revenant Prime 头部神经光元 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "85e88251-2322-4f7b-a491-303e9bb7adda",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "帕里斯 Prime 弓弦",
+        "tier": 0
+      },
+      {
+        "id": "3d29b228-1829-4b18-8a3d-04c0734c01d3",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "欧特鲁斯 Prime 握柄",
+        "tier": 0
+      },
+      {
+        "id": "990ea015-c7e8-46a0-a36a-5f055d1c04ad",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "阿利乌双枪 Prime 枪管",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T3VoidProjectionProteaPrimeCSilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "中纪 A13 遗物",
+    "rewards": [
+      {
+        "id": "fb6bdfc7-cea8-4c0f-b908-6ab4cb6bda99",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "迅发电浆炮 Prime 枪管",
+        "tier": 0
+      },
+      {
+        "id": "60272c45-24c4-495e-b7f4-3e17dda8d7d7",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Sevagoth Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "fb6945be-aebb-4f07-bc06-183db3a9d382",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Wisp Prime 头部神经光元 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "ca2395cc-6e89-4473-9ad7-e762a838d195",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Forma 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "af64da12-b146-405f-bc7d-86ca655bf2cb",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "雷克斯 Prime 枪管",
+        "tier": 0
+      },
+      {
+        "id": "6d2c980e-a5de-4ed3-bbc7-fb9eb0af5e95",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "阿利乌双枪 Prime 枪管",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T3VoidProjectionSevagothPrimeBSilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "中纪 A14 遗物",
+    "rewards": [
+      {
+        "id": "6a62ab68-4260-4f8d-8383-4291d3908e1c",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "迅发电浆炮 Prime 枪管",
+        "tier": 0
+      },
+      {
+        "id": "da3361ba-0e2b-4d12-8b9c-fdd795e126d5",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Yareli Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "37c91d6f-14f2-430b-9a43-aa3fd5a4449e",
+        "itemCount": 2,
+        "rarity": "UNCOMMON",
+        "name": "Forma 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "433a5637-58c9-44bf-a46a-1497f35b98bb",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "塞多 Prime 枪托",
+        "tier": 0
+      },
+      {
+        "id": "35926eee-f02b-4657-bf85-e00865ec57d2",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Gauss Prime 机体 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "4cc599ff-8085-4c43-9968-ffac4b2bb1bf",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "野马 Prime 蓝图",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T3VoidProjectionYareliPrimeASilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "中纪 A15 遗物",
+    "rewards": [
+      {
+        "id": "02688076-2843-421a-96bf-c2dae2e0820d",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "迅发电浆炮 Prime 枪管",
+        "tier": 0
+      },
+      {
+        "id": "8200c111-4b66-4abb-ae28-3d2a6819e509",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "瓦德雅 Prime 枪管",
+        "tier": 0
+      },
+      {
+        "id": "8ef7842f-d7e8-435d-b254-39c617071e52",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "威震武扇 Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "47d96b85-d0e5-4216-865b-76221ac43ce9",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Forma 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "1fd585b8-7bd5-4b82-aea9-aff33fd84756",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "大久和弓 Prime 弓弦",
+        "tier": 0
+      },
+      {
+        "id": "32bf7acd-32b6-4fa9-8217-aff02fe78130",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Gauss Prime 蓝图",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T3VoidProjectionCalibanPrimeASilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "前纪 A1 遗物",
+    "rewards": [
+      {
+        "id": "a66a0bdf-b47c-4e07-90d0-7c1fca9dc2ed",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "觉醒双枪 Prime 枪管",
+        "tier": 0
+      },
+      {
+        "id": "550f0f4c-74be-472b-8b9b-63ba339fcf87",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "皇家拐刃 Prime 握柄",
+        "tier": 0
+      },
+      {
+        "id": "02eb9bbe-db7e-4ac2-832a-760bc649ea76",
+        "itemCount": 2,
+        "rarity": "UNCOMMON",
+        "name": "Forma 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "02c61eb7-bf5d-429c-ab55-977043782ef9",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "席芭莉丝 Prime 枪托",
+        "tier": 0
+      },
+      {
+        "id": "f92dd1a1-ae4b-42aa-9617-c60c9eb875bf",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "布里斯提卡 Prime 下弓臂",
+        "tier": 0
+      },
+      {
+        "id": "bcce86d6-189e-412c-8144-5fea4d2bc706",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "欧特鲁斯 Prime 握柄",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T2VoidProjectionMesaPrimeCSilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "古纪 A1 遗物",
+    "rewards": [
+      {
+        "id": "de9cbf8f-58ed-4f18-ac9c-214dc7deefc9",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Saryn Prime 头部神经光元 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "440824b9-0829-4fcb-9731-9f2ca1bccc61",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "守望者 Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "6702e70e-389f-4481-b313-e2ffc70022a2",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "布莱顿 Prime 枪管",
+        "tier": 0
+      },
+      {
+        "id": "d1cfe154-58f4-466a-9765-b5bf722d9c81",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "史提托双枪 Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "63473cae-0891-4d41-882b-8fc95e80ed83",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Forma 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "fab1d3ad-cd5d-44eb-a7e8-812e01095e03",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "瓦斯托 Prime 枪机",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T1VoidProjectionGSilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "古纪 A10 遗物",
+    "rewards": [
+      {
+        "id": "d40daf16-8a80-4866-92fe-1dea293f6a5a",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "阿利乌双枪 Prime 枪机",
+        "tier": 0
+      },
+      {
+        "id": "3ecf5724-6a45-4ebf-8a69-98aef10e19c9",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "帕里斯 Prime 弓身",
+        "tier": 0
+      },
+      {
+        "id": "e06458f3-715c-4bcc-a1e0-11e99c8fb31e",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Xaku Prime 系统 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "1f539c26-f92a-4f70-9f81-d46ffc9d5735",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Forma 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "7c4cfb48-7b8b-4b8d-9aae-8e8733936876",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "伯斯顿 Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "2025b6fe-19e4-411a-ae95-61b28e84eeef",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Yareli Prime 机体 蓝图",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T1VoidProjectionCalibanPrimeESilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "后纪 A1 遗物",
+    "rewards": [
+      {
+        "id": "9306b584-03ee-4bfc-b47e-898924110387",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "史提托双枪 Prime 枪管",
+        "tier": 0
+      },
+      {
+        "id": "0b5c060d-6b65-45cd-98a9-16f53204cdbe",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Trinity Prime 系统 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "6689600e-1141-4d3a-9daa-eec02f1e8ac7",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "重击巨锤 Prime 锤头",
+        "tier": 0
+      },
+      {
+        "id": "12f9c150-695e-48c1-8762-f372e880c0dc",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "双短柄战镰 Prime 握柄",
+        "tier": 0
+      },
+      {
+        "id": "200a941e-bfcb-4397-8ec0-5a5c09e6f8f8",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "布莱顿 Prime 枪托",
+        "tier": 0
+      },
+      {
+        "id": "1816197a-2b34-4442-878b-0e6d3cb5a334",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "侍刃 Prime 蓝图",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T4VoidProjectionESilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "后纪 A10 遗物",
+    "rewards": [
+      {
+        "id": "8378c565-4356-4b3d-a94c-d11bf0a96353",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "轻灵月神双枪 Prime 连接器",
+        "tier": 0
+      },
+      {
+        "id": "c1dd8f86-32d6-4b03-a387-25c609d02fc2",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Wukong Prime 机体 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "5354a848-7d8b-41fb-8440-b9e76898d65a",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "帕里斯 Prime 弓身",
+        "tier": 0
+      },
+      {
+        "id": "326d4963-0730-4cf3-ab69-ef36cf3abc0f",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "野马双枪 Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "e33f728d-dc20-45a2-ae6b-e9f4afa7fbf9",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Forma 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "2e4ecc3a-95e2-4cc4-866e-60081e431b52",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "斯特拉迪瓦 Prime 枪机",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T4VoidProjectionTitaniaPrimeDSilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "后纪 A11 遗物",
+    "rewards": [
+      {
+        "id": "1c9d8407-b67c-41fc-bfc5-98fde3993de3",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "Atlas Prime 头部神经光元 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "1bed19f8-2ed5-4886-bf19-9ef03ed9cc6c",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "鲮鲤剑 Prime 刀刃",
+        "tier": 0
+      },
+      {
+        "id": "77211f72-cd0a-43cb-8ebf-ba3018b5dbdc",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Wukong Prime 系统 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "1ca5fd4b-5637-4d27-9199-e8d771fe007f",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "诸葛连弩 Prime 弓弦",
+        "tier": 0
+      },
+      {
+        "id": "653d2a44-f767-4865-988f-e30dc6b98346",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "狼牙 Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "446299b0-3555-4c03-bf38-638299ab88a0",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "伯斯顿 Prime 枪机",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T4VoidProjectionInarosPrimeASilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "后纪 A12 遗物",
+    "rewards": [
+      {
+        "id": "45c2317a-3855-4c48-8120-a4eeb01f3dba",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "螺钉双枪 Prime 枪机",
+        "tier": 0
+      },
+      {
+        "id": "fbfcd6e8-9c49-439f-8da7-7920fee381ae",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "赫利俄斯 Prime 系统",
+        "tier": 0
+      },
+      {
+        "id": "b95faf64-6e98-406f-a19c-8cb3adb2eb15",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Banshee Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "0d992755-0562-466b-819e-f7f86dd9ab50",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Forma 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "60d9cb5d-aa46-48a2-b281-05832eb09c98",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Mirage Prime 机体 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "ba946889-fda8-4905-8a1a-54c33e343a18",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "科加基 Prime 靴子",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T4VoidProjectionBansheeMirageVaultBSilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "后纪 A13 遗物",
+    "rewards": [
+      {
+        "id": "4db0dfa1-f2f3-4c99-a08c-2f36f570f958",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "轻灵月神双枪 Prime 连接器",
+        "tier": 0
+      },
+      {
+        "id": "8c5bfa27-e2c4-4246-aa81-6f2a834426d1",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "欧特鲁斯 Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "e3110d2f-bb22-4315-9f0f-e90974e8e16e",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "鲮鲤剑 Prime 刀刃",
+        "tier": 0
+      },
+      {
+        "id": "3aaee976-409f-4cbf-a7dc-28223e6058b0",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Forma 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "b9b72c0b-06bc-47ee-a751-468bb6720ee8",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "伯斯顿 Prime 枪机",
+        "tier": 0
+      },
+      {
+        "id": "abb70878-6cbb-433a-ab50-b1cd33e07d44",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Inaros Prime 系统 蓝图",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T4VoidProjectionOctaviaPrimeBSilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "后纪 A14 遗物",
+    "rewards": [
+      {
+        "id": "ed82f1a0-005b-4f4d-be95-2fd9f42aff68",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "轻灵月神双枪 Prime 连接器",
+        "tier": 0
+      },
+      {
+        "id": "31ff57c5-c515-4637-8c6e-580e813fe727",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "凯洛斯特 Prime 握柄",
+        "tier": 0
+      },
+      {
+        "id": "ceb210ab-d1a9-420e-a55b-d159acc7332e",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Nidus Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "d8ef53c3-e417-4203-b4d7-59ccc60c9eb9",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "毒芽 Prime 枪机",
+        "tier": 0
+      },
+      {
+        "id": "99383963-7e3b-4a26-b3bc-20c5f93f67c4",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "帕里斯 Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "5e626ff6-c1e7-41fe-ab5e-a5d16cd612bc",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "创伤 Prime 蓝图",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T4VoidProjectionNidusPrimeASilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "后纪 A15 遗物",
+    "rewards": [
+      {
+        "id": "b04027e8-8979-427a-98d5-ea8c00182c04",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "轻灵月神双枪 Prime 连接器",
+        "tier": 0
+      },
+      {
+        "id": "b56c637d-9798-4587-90aa-32be1cdcbfb6",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Oberon Prime 系统 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "45b8675e-d74a-43e9-84b3-822f3ee8f6dc",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Ivara Prime 系统 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "428f3e4e-b5fc-453f-9481-a98e703ef74e",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "苍鹰 Prime 枪机",
+        "tier": 0
+      },
+      {
+        "id": "3ce236a6-4e7b-4947-888c-1bc0e15d58f7",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Forma 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "f76b5eb8-25ee-4bfb-8df0-523b2e6bd5fa",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "席芭莉丝 Prime 枪托",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T4VoidProjectionIvaraOberonVaultASilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "后纪 A16 遗物",
+    "rewards": [
+      {
+        "id": "b6c9c6ba-ae39-41a2-97ca-e00d681585e3",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "盗贼双枪 Prime 枪机",
+        "tier": 0
+      },
+      {
+        "id": "7830f0a6-7972-4e7e-bc3b-b329a9d3706a",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Revenant Prime 系统 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "a70d509c-5662-4a7f-8a16-3feebfa02577",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Harrow Prime 头部神经光元 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "a8dcbbcf-94a2-45ed-a7f5-9d99ae3da8ad",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "祸根 Prime 刀刃",
+        "tier": 0
+      },
+      {
+        "id": "c62c1923-2362-43e5-8539-93f8b6527b30",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "布莱顿 Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "93fba292-1481-4b4d-b42e-32c7bbe96138",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "狼牙 Prime 握柄",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T4VoidProjectionHildrynPrimeBSilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "后纪 A17 遗物",
+    "rewards": [
+      {
+        "id": "abfdacbb-40f3-4512-916d-1c00cc93893d",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "盗贼双枪 Prime 枪机",
+        "tier": 0
+      },
+      {
+        "id": "1cb500c6-38cd-42b5-b6b6-4544db4588a5",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "欧特鲁斯 Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "91ef313b-87ca-4007-8c1b-ab829c97b765",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "阴影 Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "879c5508-6de6-4668-adda-d80e99c07152",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Forma 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "cea13bbc-415d-4987-aa80-adf90e358c8a",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Wisp Prime 系统 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "9ebf6e15-6379-4571-baf4-d7113b0d617d",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "布莱顿 Prime 枪管",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T4VoidProjectionGrendelPrimeDSilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "后纪 A18 遗物",
+    "rewards": [
+      {
+        "id": "f1c68597-3b09-42ba-80f9-c0f2d0b7d402",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "迅发电浆炮 Prime 枪托",
+        "tier": 0
+      },
+      {
+        "id": "1a0ca6e1-2a6e-4371-92f3-3df6bb6f9ad9",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "野马双枪 Prime 连接器",
+        "tier": 0
+      },
+      {
+        "id": "f67a22bb-0e7d-4237-8941-447d151c20a5",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Hildryn Prime 机体 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "1f3556ea-57c4-472e-8672-cc9f29bdace0",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "Forma 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "d77131cf-6eaf-43de-ae3e-74be08816ab5",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "帕里斯 Prime 下弓臂",
+        "tier": 0
+      },
+      {
+        "id": "d8da8ff2-9e33-4a9d-9870-91dfc4bf647a",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "眼镜蛇 \u0026 鹤 Prime 握柄",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T4VoidProjectionGaussPrimeDSilver"
+  },
+  {
+    "codexSecret": false,
+    "current": 1,
+    "description": "一个包含着 Orokin 秘密的神器。它只能通过虚空之力来打开。",
+    "name": "后纪 A19 遗物",
+    "rewards": [
+      {
+        "id": "5a43db50-f832-4c6c-99d5-e18eb0a62099",
+        "itemCount": 1,
+        "rarity": "RARE",
+        "name": "迅发电浆炮 Prime 枪托",
+        "tier": 0
+      },
+      {
+        "id": "05748bbc-f9ac-4b59-91cf-52a44718e776",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "Xaku Prime 系统 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "6ebbb5b9-44e8-4701-a89f-c05975b3acc4",
+        "itemCount": 1,
+        "rarity": "UNCOMMON",
+        "name": "翠雀 Prime 枪机",
+        "tier": 0
+      },
+      {
+        "id": "a93885e8-9c8f-4551-93d2-f8c78dc12446",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "帕里斯 Prime 蓝图",
+        "tier": 0
+      },
+      {
+        "id": "b3ab9446-c5be-40fb-a42e-12978598f101",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "野马 Prime 枪机",
+        "tier": 0
+      },
+      {
+        "id": "db5a836a-8e0d-40a0-b0a6-1429edd4c692",
+        "itemCount": 1,
+        "rarity": "COMMON",
+        "name": "葬铭 Prime 蓝图",
+        "tier": 0
+      }
+    ],
+    "size": 10,
+    "uniqueName": "/Lotus/Types/Game/Projections/T4VoidProjectionXakuPrimeDSilver"
+  }
+]

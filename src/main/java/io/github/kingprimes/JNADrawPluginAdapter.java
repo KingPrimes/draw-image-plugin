@@ -305,12 +305,12 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
     /**
      * 绘制 遗物 图像
      *
-     * @param relic 遗物数据
+     * @param relics 遗物数据
      * @return 图像流
      */
     @Override
-    public byte[] drawRelicsImage(Relics relic) {
-        Pointer pointer = convertToPointer(relic);
+    public byte[] drawRelicsImage(List<Relics> relics) {
+        Pointer pointer = convertToPointer(relics);
         return pointerToByteArray(library.nativeDrawRelicsImage(pointer));
     }
 

@@ -185,10 +185,10 @@ public interface DrawImagePlugin {
     /**
      * 绘制 遗物 图像
      *
-     * @param relic 遗物数据
+     * @param relics 遗物数据
      * @return 图像流
      */
-    byte[] drawRelicsImage(Relics relic);
+    byte[] drawRelicsImage(List<Relics> relics);
 
     /**
      * 绘制 紫卡分析 图像

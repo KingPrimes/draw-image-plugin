@@ -41,3 +41,4 @@ build/
 ### Flattened Maven ###
 .lingma
 .flattened-pom.xml
+.kilocode/mcp.json
