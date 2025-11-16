@@ -9395,166 +9395,231 @@
   "SeasonInfo": {
     "Activation": {
       "$date": {
-        "$numberLong": "1761589199000"
+        "$numberLong": "2025-10-27T18:19:59Z"
       }
     },
-    "Expiry": {
-      "$date": {
-        "$numberLong": "1779667200000"
-      }
-    },
-    "AffiliationTag": "RadioLegionIntermission14Syndicate",
-    "Season": 16,
-    "Phase": 0,
-    "Params": "",
     "ActiveChallenges": [
       {
+        "Activation": {
+          "$date": {
+            "$numberLong": "2025-10-27T00:00:00Z"
+          }
+        },
+        "Challenge": "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyCompleteMissionMelee",
+        "Daily": true,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "2025-10-30T00:00:00Z"
+          }
+        },
         "_id": {
           "$oid": "001700010000000000000008"
         },
-        "Daily": true,
-        "Activation": {
-          "$date": {
-            "$numberLong": "1761523200000"
-          }
-        },
-        "Expiry": {
-          "$date": {
-            "$numberLong": "1761782400000"
-          }
-        },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyCompleteMissionMelee"
+        "daily": true,
+        "description": "仅装备近战武器来完成一场任务",
+        "eliteMissions": false,
+        "name": "剑客",
+        "required": 1,
+        "standing": 1000,
+        "weekly": false
       },
       {
+        "Activation": {
+          "$date": {
+            "$numberLong": "2025-10-28T00:00:00Z"
+          }
+        },
+        "Challenge": "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithGas",
+        "Daily": true,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "2025-10-31T00:00:00Z"
+          }
+        },
         "_id": {
           "$oid": "001700010000000000000009"
         },
-        "Daily": true,
-        "Activation": {
-          "$date": {
-            "$numberLong": "1761609600000"
-          }
-        },
-        "Expiry": {
-          "$date": {
-            "$numberLong": "1761868800000"
-          }
-        },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithGas"
+        "daily": true,
+        "description": "使用\u003cDT_GAS\u003e毒气伤害击杀 |COUNT| 名敌人。",
+        "eliteMissions": false,
+        "name": "生化危害",
+        "required": 150,
+        "standing": 1000,
+        "weekly": false
       },
       {
+        "Activation": {
+          "$date": {
+            "$numberLong": "2025-10-27T00:00:00Z"
+          }
+        },
+        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentCompleteMissions",
+        "Expiry": {
+          "$date": {
+            "$numberLong": "2025-11-03T00:00:00Z"
+          }
+        },
         "_id": {
           "$oid": "001700010000000000000001"
         },
-        "Activation": {
-          "$date": {
-            "$numberLong": "1761523200000"
-          }
-        },
-        "Expiry": {
-          "$date": {
-            "$numberLong": "1762128000000"
-          }
-        },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentCompleteMissions"
+        "daily": false,
+        "description": "完成 |COUNT| 项任务",
+        "eliteMissions": false,
+        "name": "任务完成",
+        "required": 15,
+        "standing": 4500,
+        "weekly": true
       },
       {
+        "Activation": {
+          "$date": {
+            "$numberLong": "2025-10-27T00:00:00Z"
+          }
+        },
+        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEximus",
+        "Expiry": {
+          "$date": {
+            "$numberLong": "2025-11-03T00:00:00Z"
+          }
+        },
         "_id": {
           "$oid": "001700010000000000000002"
         },
-        "Activation": {
-          "$date": {
-            "$numberLong": "1761523200000"
-          }
-        },
-        "Expiry": {
-          "$date": {
-            "$numberLong": "1762128000000"
-          }
-        },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEximus"
+        "daily": false,
+        "description": "击杀 |COUNT| 名卓越者。",
+        "eliteMissions": false,
+        "name": "卓越歼灭者",
+        "required": 30,
+        "standing": 4500,
+        "weekly": true
       },
       {
+        "Activation": {
+          "$date": {
+            "$numberLong": "2025-10-27T00:00:00Z"
+          }
+        },
+        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEnemies",
+        "Expiry": {
+          "$date": {
+            "$numberLong": "2025-11-03T00:00:00Z"
+          }
+        },
         "_id": {
           "$oid": "001700010000000000000003"
         },
-        "Activation": {
-          "$date": {
-            "$numberLong": "1761523200000"
-          }
-        },
-        "Expiry": {
-          "$date": {
-            "$numberLong": "1762128000000"
-          }
-        },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEnemies"
+        "daily": false,
+        "description": "击杀 |COUNT| 名敌人。",
+        "eliteMissions": false,
+        "name": "这不是警告射击",
+        "required": 500,
+        "standing": 4500,
+        "weekly": true
       },
       {
+        "Activation": {
+          "$date": {
+            "$numberLong": "2025-10-27T00:00:00Z"
+          }
+        },
+        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyFeedHelminth",
+        "Expiry": {
+          "$date": {
+            "$numberLong": "2025-11-03T00:00:00Z"
+          }
+        },
         "_id": {
           "$oid": "001700010000000000000004"
         },
-        "Activation": {
-          "$date": {
-            "$numberLong": "1761523200000"
-          }
-        },
-        "Expiry": {
-          "$date": {
-            "$numberLong": "1762128000000"
-          }
-        },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyFeedHelminth"
+        "daily": false,
+        "description": "向 Helminth 饲喂任意资源。",
+        "eliteMissions": false,
+        "name": "喂饱野兽",
+        "required": 1,
+        "standing": 4500,
+        "weekly": true
       },
       {
+        "Activation": {
+          "$date": {
+            "$numberLong": "2025-10-27T00:00:00Z"
+          }
+        },
+        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyHighGround",
+        "Expiry": {
+          "$date": {
+            "$numberLong": "2025-11-03T00:00:00Z"
+          }
+        },
         "_id": {
           "$oid": "001700010000000000000005"
         },
-        "Activation": {
-          "$date": {
-            "$numberLong": "1761523200000"
-          }
-        },
-        "Expiry": {
-          "$date": {
-            "$numberLong": "1762128000000"
-          }
-        },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyHighGround"
+        "daily": false,
+        "description": "完成 |COUNT| 场虚空洪流任务。",
+        "eliteMissions": false,
+        "name": "制高点",
+        "required": 3,
+        "standing": 4500,
+        "weekly": true
       },
       {
+        "Activation": {
+          "$date": {
+            "$numberLong": "2025-10-27T00:00:00Z"
+          }
+        },
+        "Challenge": "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardFriendsSurvival",
+        "Expiry": {
+          "$date": {
+            "$numberLong": "2025-11-03T00:00:00Z"
+          }
+        },
         "_id": {
           "$oid": "001700010000000000000006"
         },
-        "Activation": {
-          "$date": {
-            "$numberLong": "1761523200000"
-          }
-        },
-        "Expiry": {
-          "$date": {
-            "$numberLong": "1762128000000"
-          }
-        },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardFriendsSurvival"
+        "daily": false,
+        "description": "完成一场至少 20 分钟的生存任务。",
+        "eliteMissions": true,
+        "name": "生存",
+        "required": 1,
+        "standing": 7000,
+        "weekly": false,
+        "elite": true
       },
       {
+        "Activation": {
+          "$date": {
+            "$numberLong": "2025-10-27T00:00:00Z"
+          }
+        },
+        "Challenge": "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardTheManyMadeWhole",
+        "Expiry": {
+          "$date": {
+            "$numberLong": "2025-11-03T00:00:00Z"
+          }
+        },
         "_id": {
           "$oid": "001700010000000000000007"
         },
-        "Activation": {
-          "$date": {
-            "$numberLong": "1761523200000"
-          }
-        },
-        "Expiry": {
-          "$date": {
-            "$numberLong": "1762128000000"
-          }
-        },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardTheManyMadeWhole"
+        "daily": false,
+        "description": "用 10 个裂罅碎块换取一张裂罅 Mod",
+        "eliteMissions": true,
+        "name": "聚沙成卡",
+        "required": 1,
+        "standing": 7000,
+        "weekly": false,
+        "elite": true
       }
-    ]
+    ],
+    "AffiliationTag": "RadioLegionIntermission14Syndicate",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "2026-05-25T00:00:00Z"
+      }
+    },
+    "Params": "",
+    "Phase": 0,
+    "Season": 16
   },
   "KnownCalendarSeasons": [
     {

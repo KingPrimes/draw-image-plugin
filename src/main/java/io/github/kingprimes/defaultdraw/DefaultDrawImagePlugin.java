@@ -237,7 +237,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawSeasonInfoImage(SeasonInfo seasonInfo) {
-        return new byte[0];
+        return DefaultDrawSeasonInfoImage.drawSeasonInfoImage(seasonInfo);
     }
 
     /**

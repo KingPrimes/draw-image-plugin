@@ -114,6 +114,10 @@ public class SeasonInfo extends BastWorldState {
          * <p>需要通过{@link #challenge} 标识符获取</p>
          */
         Boolean elite;
+
+        public String getDescription() {
+            return description.replace("|COUNT|", required.toString()).replaceAll("<.*?>","");
+        }
     }
 
 }
