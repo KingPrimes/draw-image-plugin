@@ -31,10 +31,14 @@ public class RewardPool {
         /**
          * 奖励数量
          */
-        String itemCount;
+        Integer itemCount;
         /**
          * 奖励稀有度
          */
         RarityEnum rarity;
+
+        public String getItem() {
+            return item.replace("|COUNT|", itemCount.toString());
+        }
     }
 }

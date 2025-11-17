@@ -5,7 +5,6 @@ import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import io.github.kingprimes.defaultdraw.DefaultDrawImagePlugin;
 import io.github.kingprimes.model.*;
-import io.github.kingprimes.model.enums.SyndicateEnum;
 import io.github.kingprimes.model.market.MarketLichSister;
 import io.github.kingprimes.model.market.MarketRiven;
 import io.github.kingprimes.model.market.Orders;
@@ -360,14 +359,12 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      * 绘制 赏金/集团 图像
      *
      * @param sm 赏金/集团 数据
-     * @param se 赏金/集团 枚举
      * @return 图像流
      */
     @Override
-    public byte[] drawSyndicateImage(SyndicateMission sm, SyndicateEnum se) {
-        Pointer smP = convertToPointer(sm);
-        Pointer seP = convertToPointer(se);
-        return pointerToByteArray(library.nativeDrawSyndicateImage(smP, seP));
+    public byte[] drawSyndicateImage(SyndicateMission sm) {
+        Pointer pointer = convertToPointer(sm);
+        return pointerToByteArray(library.nativeDrawSyndicateImage(pointer));
     }
 
 

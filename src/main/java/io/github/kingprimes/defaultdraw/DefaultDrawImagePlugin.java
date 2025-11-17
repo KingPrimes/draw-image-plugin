@@ -3,7 +3,6 @@ package io.github.kingprimes.defaultdraw;
 import com.sun.jna.Pointer;
 import io.github.kingprimes.DrawImagePlugin;
 import io.github.kingprimes.model.*;
-import io.github.kingprimes.model.enums.SyndicateEnum;
 import io.github.kingprimes.model.market.MarketLichSister;
 import io.github.kingprimes.model.market.MarketRiven;
 import io.github.kingprimes.model.market.Orders;
@@ -259,7 +258,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public byte[] drawRivenAnalyseTrendImage(List<RivenAnalyseTrend> rivenAnalyseTrend) {
-        return new byte[0];
+        return DefaultDrawRivenAnalyseTrendImage.drawRivenAnalyseTrendImage(rivenAnalyseTrend);
     }
 
     /**
@@ -290,12 +289,11 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      * 绘制 赏金/集团 图像
      *
      * @param sm 赏金/集团 数据
-     * @param se 赏金/集团 枚举
      * @return 图像流
      */
     @Override
-    public byte[] drawSyndicateImage(SyndicateMission sm, SyndicateEnum se) {
-        return new byte[0];
+    public byte[] drawSyndicateImage(SyndicateMission sm) {
+        return DefaultDrawSyndicateImage.drawSyndicateImage(sm);
     }
 
     /**

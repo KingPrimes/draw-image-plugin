@@ -160,7 +160,7 @@ final class DrawConstants {
     /**
      * 裂隙任务图像虚空T3颜色
      */
-    public static final Color ACTIVE_MISSION_VOID_T3_COLOR = new Color(0xB3B3B3);
+    public static final Color ACTIVE_MISSION_VOID_T3_COLOR = new Color(0x9F9E9E);
     /**
      * 裂隙任务图像虚空T4颜色
      */

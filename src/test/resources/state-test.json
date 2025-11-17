@@ -2626,36 +2626,270 @@
       "Nodes": [],
       "Jobs": [
         {
-          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosPurifyBounty",
-          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierATableARewards",
+          "desc": "探索火卫二来获取有价值的地质核心样本。",
+          "jobType": "核心样本",
           "masteryReq": 0,
-          "minEnemyLevel": 5,
           "maxEnemyLevel": 15,
+          "minEnemyLevel": 5,
+          "rewardPool": {
+            "rewards": [
+              {
+                "id": "ed6453a1-cdad-4e6b-ae32-296e114b9fb5",
+                "item": "1,500现金匣 X 3",
+                "itemCount": 3,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "04b7f87d-90b0-4a97-872b-a9c0013d1cf7",
+                "item": "150 内融核心",
+                "itemCount": 150,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "96aaffaf-a6e3-4667-840c-ac7b274ca074",
+                "item": "神经节嚢 X 15",
+                "itemCount": 15,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "91c12a4b-665a-4a72-845f-d4e59b8c461e",
+                "item": "250 内融核心",
+                "itemCount": 250,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "22744d50-739a-4f70-bf33-a50a0ba3c5ad",
+                "item": "250 内融核心",
+                "itemCount": 250,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "160f4429-a3de-4d20-b863-088aab02f81d",
+                "item": "3,000现金匣 X 2",
+                "itemCount": 2,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "624fe374-65a0-4a53-b2b3-06c8f441e763",
+                "item": "3,000现金匣 X 2",
+                "itemCount": 2,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "868cdc73-f812-430f-a57c-58d423c6b8f7",
+                "item": "阿耶精华",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "b8e26a05-b32f-4ff8-bfb9-b133079460fe",
+                "item": "闪烁体",
+                "itemCount": 1,
+                "rarity": "RARE"
+              }
+            ],
+            "uniqueName": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierATableARewards"
+          },
+          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierATableARewards",
           "xpAmounts": [
-            5,
-            5,
-            5
+            6,
+            6,
+            6
           ]
         },
         {
-          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosAreaDefenseBounty",
-          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierCTableARewards",
+          "desc": "一队被困在火卫二上的 Grineer 士兵启动了他们的求救信标。追踪他们，来看看你能提供什么帮助。",
+          "jobType": "蛮暴之力",
           "masteryReq": 1,
-          "minEnemyLevel": 15,
           "maxEnemyLevel": 25,
+          "minEnemyLevel": 15,
+          "rewardPool": {
+            "rewards": [
+              {
+                "id": "01a75e81-1256-445f-81bd-3cc4537e44a1",
+                "item": "600 内融核心",
+                "itemCount": 600,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "042535b7-74b6-4c53-bbe4-f741a785045f",
+                "item": "Madurai 晶体",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "c70aeeba-ec5c-4814-84de-75db0c1f99ad",
+                "item": "Zenurik 晶体",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "14974fdb-98b8-472a-ab79-c0039b0bdf4a",
+                "item": "触媒连动",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "124d83aa-c16f-459c-8b3b-b5fce5978c8c",
+                "item": "闪烁体",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "0f46e91d-ebe5-4441-b715-8034fe1d1630",
+                "item": "Xaku 头部神经光元 蓝图",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "35dcf781-9eb3-46ac-96cb-992f41b5b23e",
+                "item": "内置触媒",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "5aa075e1-f711-4d67-a6cd-4f66a301c10a",
+                "item": "创口溃烂",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "3815a798-0f69-4dfb-a792-35bf2ec62d3e",
+                "item": "阿耶精华",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "32ae2daf-3fe2-47bf-bc88-90664099cb2a",
+                "item": "纳米涂覆",
+                "itemCount": 1,
+                "rarity": "RARE"
+              }
+            ],
+            "uniqueName": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierCTableARewards"
+          },
+          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierCTableARewards",
           "xpAmounts": [
-            11,
-            11,
-            11
+            10,
+            10,
+            10
           ]
         },
         {
-          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessPurifyBounty",
-          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTableARewards",
-          "masteryReq": 5,
-          "minEnemyLevel": 25,
-          "maxEnemyLevel": 30,
+          "desc": "覆盖火卫二的感染者“表皮”之下有着任君取用的资源。挖掘就是胜利！在完成无尽赏金任务的一个回合以后，下回合中的每个阶段都会奖励+15%额外数量的“母亲”石印。",
           "endless": true,
+          "jobType": "露天开采",
+          "masteryReq": 5,
+          "maxEnemyLevel": 30,
+          "minEnemyLevel": 25,
+          "rewardPool": {
+            "rewards": [
+              {
+                "id": "d05025db-4924-44e2-b87e-cdb3613fed35",
+                "item": "250 内融核心",
+                "itemCount": 250,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "069f4dbf-1bdd-47fc-9f04-e2d316eeaf24",
+                "item": "喉骨刃者 倒刺",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "3ea87ad6-a4c7-4e0f-9dc6-d8a0b1aabd55",
+                "item": "肉碾虫 巨颚",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "99550f95-109a-454d-b584-eee7386bd408",
+                "item": "重岩者胸腔",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "7997b690-9ee9-4fa5-8a00-6e050f932acb",
+                "item": "阿耶檀识琥珀星",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "03c3749c-784d-47e0-850b-17db15c18900",
+                "item": "500 内融核心",
+                "itemCount": 500,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "d317c336-4f65-46a9-8c53-a9ac948207fc",
+                "item": "喉骨刃者 壳甲",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "ebb33765-0ddb-473a-9919-e8eab6b3fce1",
+                "item": "肉碾虫 壳甲",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "21379faf-906e-4f95-841a-f150555b3ac5",
+                "item": "重岩者 壳甲",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "bd272e7a-263b-4228-8a0a-9088daf6b201",
+                "item": "阿耶檀识琥珀星",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "b1703378-72b9-41ac-bdc7-1f28e5de2129",
+                "item": "阿耶精华",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "9d9ca0c0-5486-4791-8a7e-ae91340ebed8",
+                "item": "750 内融核心",
+                "itemCount": 750,
+                "rarity": "RARE"
+              },
+              {
+                "id": "ef931f7c-0b5f-4bb3-a6b1-86b3b442660d",
+                "item": "喉骨刃者 脊刺",
+                "itemCount": 1,
+                "rarity": "RARE"
+              },
+              {
+                "id": "f0acdef1-ae4c-4a86-a26e-643c32d32e29",
+                "item": "肉碾虫 针刺",
+                "itemCount": 1,
+                "rarity": "RARE"
+              },
+              {
+                "id": "3b208917-c296-4496-9478-2a9eeb2c20f7",
+                "item": "重岩者 唾液",
+                "itemCount": 1,
+                "rarity": "RARE"
+              },
+              {
+                "id": "b51d02cb-c8c5-4726-bbe3-6fd34d793595",
+                "item": "阿耶檀识琥珀星",
+                "itemCount": 1,
+                "rarity": "RARE"
+              },
+              {
+                "id": "56f78830-4412-49ba-8a1d-b9bb74ca6a90",
+                "item": "阿耶精华",
+                "itemCount": 1,
+                "rarity": "RARE"
+              }
+            ],
+            "uniqueName": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTableARewards"
+          },
+          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTableARewards",
           "xpAmounts": [
             14,
             14,
@@ -2663,38 +2897,123 @@
           ]
         },
         {
-          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosKeyPiecesBounty",
-          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierDTableARewards",
+          "desc": "一个强大的感染者生物吓到了火卫二上的队伍。找到它，并消灭它。",
+          "jobType": "清净之地",
           "masteryReq": 2,
-          "minEnemyLevel": 30,
           "maxEnemyLevel": 40,
+          "minEnemyLevel": 30,
+          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierDTableARewards",
           "xpAmounts": [
-            20,
-            20,
-            20,
-            29
+            19,
+            19,
+            19,
+            28
           ]
         },
         {
-          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosAssassinateBounty",
-          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETableARewards",
+          "desc": "在火卫二生物群落区寻找异常样本。",
+          "jobType": "异物取回",
           "masteryReq": 3,
-          "minEnemyLevel": 40,
           "maxEnemyLevel": 60,
+          "minEnemyLevel": 40,
+          "rewardPool": {
+            "rewards": [
+              {
+                "id": "049589c0-867d-41a0-ad41-5fa2bd90b355",
+                "item": "1000 内融核心",
+                "itemCount": 1000,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "ac246858-2546-48aa-baa0-5e4546a0b76e",
+                "item": "赤毒 X 750",
+                "itemCount": 750,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "cd3cc0bc-3d08-4141-8472-c295affe769f",
+                "item": "阿耶檀识琥珀星",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "4435a217-416c-4681-8a4e-db3e2eb0585d",
+                "item": "Xaku 机体 蓝图",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "41cd43e2-7dbc-4230-8f3e-464844179820",
+                "item": "阿耶精华",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "7ec87e64-0bc2-4f1f-ad94-9c39473ab4c1",
+                "item": "威震武扇 蓝图",
+                "itemCount": 1,
+                "rarity": "RARE"
+              }
+            ],
+            "uniqueName": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETableARewards"
+          },
+          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETableARewards",
           "xpAmounts": [
             20,
             20,
             20,
             20,
-            39
+            40
           ]
         },
         {
-          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosGrnSurvivorBounty",
-          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETableARewards",
+          "desc": "我们正试图重夺火卫二上的据点。我们需要夺回一些被感染者占据的旧基地。",
+          "jobType": "重夺领地",
           "masteryReq": 10,
-          "minEnemyLevel": 100,
           "maxEnemyLevel": 100,
+          "minEnemyLevel": 100,
+          "rewardPool": {
+            "rewards": [
+              {
+                "id": "049589c0-867d-41a0-ad41-5fa2bd90b355",
+                "item": "1000 内融核心",
+                "itemCount": 1000,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "ac246858-2546-48aa-baa0-5e4546a0b76e",
+                "item": "赤毒 X 750",
+                "itemCount": 750,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "cd3cc0bc-3d08-4141-8472-c295affe769f",
+                "item": "阿耶檀识琥珀星",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "4435a217-416c-4681-8a4e-db3e2eb0585d",
+                "item": "Xaku 机体 蓝图",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "41cd43e2-7dbc-4230-8f3e-464844179820",
+                "item": "阿耶精华",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "7ec87e64-0bc2-4f1f-ad94-9c39473ab4c1",
+                "item": "威震武扇 蓝图",
+                "itemCount": 1,
+                "rarity": "RARE"
+              }
+            ],
+            "uniqueName": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETableARewards"
+          },
+          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETableARewards",
           "xpAmounts": [
             25,
             25,
@@ -2704,46 +3023,337 @@
           ]
         },
         {
-          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/VaultBountyTierATableBRewards",
+          "desc": "探索一个隔离库。\n当身处魔胎之境中时：\n清理1个隔离库来解锁新的赏金任务。\n清理3个隔离库来获得最稀有的奖励！",
+          "isVault": true,
+          "jobType": "隔离库（等级1）",
+          "locationTag": "ChamberB",
           "masteryReq": 5,
-          "minEnemyLevel": 30,
           "maxEnemyLevel": 40,
+          "minEnemyLevel": 30,
+          "rewardPool": {
+            "rewards": [
+              {
+                "id": "78b94035-dbae-4b16-b1f9-6b2c2ad5b009",
+                "item": "Orokin 定向矩阵装置 X 2",
+                "itemCount": 2,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "cfb063d6-229f-43c7-96bf-f21ec3d0dd16",
+                "item": "前纪 T8 遗物",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "70f85b08-cf25-4c25-aefc-6dcfdb667873",
+                "item": "殁世机甲 蓄能重划",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "63626e83-d459-4d9a-9d7b-f0b245e102f0",
+                "item": "残差·恶嗅",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "1de87341-fd50-4884-8d23-c4f5e7d20c31",
+                "item": "Orokin 弹道矩阵装置 X 2",
+                "itemCount": 2,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "dcad5804-56f8-40d7-9753-c3665f119aac",
+                "item": "中纪 C6 遗物",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "87b77faa-3800-4629-8306-7335cbf00642",
+                "item": "殁世机甲 增效",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "4f428904-219a-4c4c-87c7-f1b1ad41c4d1",
+                "item": "残差·毒血",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "2327efab-abc3-4729-b880-2eb1fd330ce6",
+                "item": "Orokin 战意矩阵装置 X 2",
+                "itemCount": 2,
+                "rarity": "RARE"
+              },
+              {
+                "id": "3c955c80-503a-4019-99b3-426285f34291",
+                "item": "中纪 T9 遗物",
+                "itemCount": 1,
+                "rarity": "RARE"
+              },
+              {
+                "id": "83e297bd-b59d-4c52-9044-84b985c8c4e1",
+                "item": "定理·触染",
+                "itemCount": 1,
+                "rarity": "RARE"
+              },
+              {
+                "id": "2680dd5d-c0d6-4b25-8a46-18ee4158d901",
+                "item": "损坏的殁世机甲武器 枪机",
+                "itemCount": 1,
+                "rarity": "RARE"
+              },
+              {
+                "id": "60fea1b7-c2e5-428b-8802-dcb937ccd5c6",
+                "item": "殁世机甲 推进器",
+                "itemCount": 1,
+                "rarity": "RARE"
+              },
+              {
+                "id": "9dfa0956-c501-4681-a1b2-d68ceb524a5e",
+                "item": "闪烁体 X 3",
+                "itemCount": 3,
+                "rarity": "RARE"
+              }
+            ],
+            "uniqueName": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/VaultBountyTierATableBRewards"
+          },
+          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/VaultBountyTierATableBRewards",
           "xpAmounts": [
             2,
             2,
             2,
             4
-          ],
-          "locationTag": "ChamberB",
-          "isVault": true
+          ]
         },
         {
-          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/VaultBountyTierBTableBRewards",
+          "desc": "探索一个隔离库。\n当身处魔胎之境中时：\n清理1个隔离库来解锁新的赏金任务。\n清理3个隔离库来获得最稀有的奖励！",
+          "isVault": true,
+          "jobType": "隔离库（等级2）",
+          "locationTag": "ChamberA",
           "masteryReq": 5,
-          "minEnemyLevel": 40,
           "maxEnemyLevel": 50,
+          "minEnemyLevel": 40,
+          "rewardPool": {
+            "rewards": [
+              {
+                "id": "55c11bda-1b5b-47b7-a953-f376df6ac3f1",
+                "item": "Orokin 定向矩阵装置 X 3",
+                "itemCount": 3,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "5e9f24a3-9600-4632-bf25-65362d4ed481",
+                "item": "前纪 E6 遗物",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "7f2a7276-7f0a-4c3b-88f9-723519ece1c2",
+                "item": "殁世机甲 闪击",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "c33b3156-0736-41af-a4f4-9fc9d6a5994b",
+                "item": "残差·恶嗅",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "e86b4df1-8854-4b4a-8a5c-1c8df8ba9fd2",
+                "item": "疆南星刺 蓝图",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "a05abaa9-0c86-4e21-b159-452227ae274c",
+                "item": "Orokin 弹道矩阵装置 X 3",
+                "itemCount": 3,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "2829094e-2690-4b4e-9a24-74b3159c0f03",
+                "item": "中纪 D9 遗物",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "e326c48e-88b9-4c6d-bfbc-9a7d4da5983f",
+                "item": "殁世机甲 持久力",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "ff714bc2-7ee1-4c58-a4d9-f9085191dac1",
+                "item": "残差·毒血",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "b09a06ea-7afe-4c26-bb17-f4a494f97ab4",
+                "item": "疆南星刺 护手",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "5a3ffb1b-42ee-4129-a40b-80177d5072f9",
+                "item": "Orokin 战意矩阵装置 X 3",
+                "itemCount": 3,
+                "rarity": "RARE"
+              },
+              {
+                "id": "6e31f323-7736-4e62-b27d-b9b1064fe167",
+                "item": "中纪 A14 遗物",
+                "itemCount": 1,
+                "rarity": "RARE"
+              },
+              {
+                "id": "dc9b2027-f976-4844-a8b8-ae9268157b0c",
+                "item": "定理·触染",
+                "itemCount": 1,
+                "rarity": "RARE"
+              },
+              {
+                "id": "ff1ebd71-b344-45b8-b0ef-144b147d1f83",
+                "item": "损坏的殁世机甲武器 枪机",
+                "itemCount": 1,
+                "rarity": "RARE"
+              },
+              {
+                "id": "3f75304d-5b59-4940-9552-8a5b6c562fdc",
+                "item": "殁世机甲 震波",
+                "itemCount": 1,
+                "rarity": "RARE"
+              },
+              {
+                "id": "988163d0-d53d-4e22-a638-c215280c6c76",
+                "item": "疆南星刺 铆钉",
+                "itemCount": 1,
+                "rarity": "RARE"
+              }
+            ],
+            "uniqueName": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/VaultBountyTierBTableBRewards"
+          },
+          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/VaultBountyTierBTableBRewards",
           "xpAmounts": [
             4,
             4,
             4,
             5
-          ],
-          "locationTag": "ChamberA",
-          "isVault": true
+          ]
         },
         {
-          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/VaultBountyTierCTableBRewards",
+          "desc": "探索一个隔离库。\n当身处魔胎之境中时：\n清理1个隔离库来解锁新的赏金任务。\n清理3个隔离库来获得最稀有的奖励！",
+          "isVault": true,
+          "jobType": "隔离库（等级3）",
+          "locationTag": "ChamberC",
           "masteryReq": 5,
-          "minEnemyLevel": 50,
           "maxEnemyLevel": 60,
+          "minEnemyLevel": 50,
+          "rewardPool": {
+            "rewards": [
+              {
+                "id": "eab6992f-b402-4804-83ae-f06a9aa27c6a",
+                "item": "Orokin 定向矩阵装置 X 4",
+                "itemCount": 4,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "46c9a372-6b1b-4cf2-881b-8a7306c69c15",
+                "item": "孢丝感染枪 蓝图",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "20a8c2f9-7eef-4468-b6ee-aa5b0293d74f",
+                "item": "前纪 G8 遗物",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "c550509a-8710-4a07-aed4-6429c13b3fc4",
+                "item": "殁世机甲 狂暴",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "d1e35752-f2e2-4ee8-8d02-d323a37061ad",
+                "item": "残差·恶嗅",
+                "itemCount": 1,
+                "rarity": "COMMON"
+              },
+              {
+                "id": "553e0df6-b9cf-4811-8002-1e2caa2e3bed",
+                "item": "Orokin 弹道矩阵装置 X 4",
+                "itemCount": 4,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "ffae44df-c6cb-42ca-9529-dd9e9700eabb",
+                "item": "中纪 G9 遗物",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "8fd3d95d-fb6a-4d51-84db-a191a6de8c0d",
+                "item": "孢丝感染枪 枪机",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "471ee847-b026-4976-9197-63529088b825",
+                "item": "殁世机甲 液压",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "f8f02c98-28c0-413d-ab1f-8835b4d4e407",
+                "item": "残差·毒血",
+                "itemCount": 1,
+                "rarity": "UNCOMMON"
+              },
+              {
+                "id": "e87a7492-f129-498d-9e4f-bf23d4b0e2ca",
+                "item": "Orokin 战意矩阵装置 X 4",
+                "itemCount": 4,
+                "rarity": "RARE"
+              },
+              {
+                "id": "11986700-6d0f-4f14-9cb7-28eb1a6e3bae",
+                "item": "后纪 Y1 遗物",
+                "itemCount": 1,
+                "rarity": "RARE"
+              },
+              {
+                "id": "f0b5db20-4392-4bb3-a535-20bc77d9b8c2",
+                "item": "定理·触染",
+                "itemCount": 1,
+                "rarity": "RARE"
+              },
+              {
+                "id": "5e795c2d-a5a7-4bd6-a9b0-aad4148db357",
+                "item": "损坏的殁世机甲武器 枪机",
+                "itemCount": 1,
+                "rarity": "RARE"
+              },
+              {
+                "id": "6ac9b365-d541-4b25-a537-5fd7ab65c42e",
+                "item": "殁世机甲 简化",
+                "itemCount": 1,
+                "rarity": "RARE"
+              }
+            ],
+            "uniqueName": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/VaultBountyTierCTableBRewards"
+          },
+          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/VaultBountyTierCTableBRewards",
           "xpAmounts": [
             5,
             5,
             5,
             7
-          ],
-          "locationTag": "ChamberC",
-          "isVault": true
+          ]
         }
       ]
     },

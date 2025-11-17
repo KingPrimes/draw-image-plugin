@@ -7,7 +7,7 @@ import lombok.Getter;
  * <p>使用 Warframe_Font_Icon 字体图标</p>
  *
  * @author KingPrimes
- * @version 1.0.0
+ * @version 1.0.3
  */
 @Getter
 public enum SyndicateEnum {
@@ -75,7 +75,10 @@ public enum SyndicateEnum {
      * 通风小子
      */
     VentKidsSyndicate("通风小子", "\ue511"),
-
+    /**
+     * 夜帽
+     */
+    NightcapJournalSyndicate("夜帽", "\ue513"),
     /**
      * 英择谛
      */

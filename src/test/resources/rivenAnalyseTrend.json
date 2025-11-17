@@ -1,0 +1,68 @@
+[
+  {
+    "weaponName": "绝路",
+    "rivenName": "vexitin",
+    "dot": "●●●○○",
+    "num": 1.0,
+    "weaponType": "步枪",
+    "attributes": [
+      {
+        "name": "电击伤害",
+        "attributeName": "电击伤害",
+        "attr": 8.9,
+        "lowAttr": "7.5",
+        "highAttr": "10.3",
+        "attrDiff": "+1.4"
+      },
+      {
+        "name": "弹匣容量",
+        "attributeName": "弹匣容量",
+        "attr": 4.7,
+        "lowAttr": "3.5",
+        "highAttr": "5.9",
+        "attrDiff": "+1.2"
+      }
+    ]
+  },
+  {
+    "weaponName": "狙击枪",
+    "rivenName": "feva-gelipha",
+    "dot": "●●●●○",
+    "num": 1.2,
+    "weaponType": "狙击枪",
+    "attributes": [
+      {
+        "name": "火焰伤害",
+        "attributeName": "火焰伤害",
+        "attr": 81.6,
+        "lowAttr": "75.0",
+        "highAttr": "88.2",
+        "attrDiff": "+6.6"
+      },
+      {
+        "name": "冰冻伤害",
+        "attributeName": "冰冻伤害",
+        "attr": 84.8,
+        "lowAttr": "78.0",
+        "highAttr": "91.6",
+        "attrDiff": "+6.8"
+      },
+      {
+        "name": "装填速度",
+        "attributeName": "装填速度",
+        "attr": 48.2,
+        "lowAttr": "42.0",
+        "highAttr": "54.4",
+        "attrDiff": "+6.2"
+      },
+      {
+        "name": "对Infested伤害",
+        "attributeName": "对Infested伤害",
+        "attr": 0.67,
+        "lowAttr": "0.55",
+        "highAttr": "0.79",
+        "attrDiff": "-0.12"
+      }
+    ]
+  }
+]

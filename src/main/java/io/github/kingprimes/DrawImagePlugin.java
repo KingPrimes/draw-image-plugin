@@ -2,7 +2,6 @@ package io.github.kingprimes;
 
 import com.sun.jna.Pointer;
 import io.github.kingprimes.model.*;
-import io.github.kingprimes.model.enums.SyndicateEnum;
 import io.github.kingprimes.model.market.MarketLichSister;
 import io.github.kingprimes.model.market.MarketRiven;
 import io.github.kingprimes.model.market.Orders;
@@ -220,10 +219,9 @@ public interface DrawImagePlugin {
      * 绘制 赏金/集团 图像
      *
      * @param sm 赏金/集团 数据
-     * @param se 赏金/集团 枚举
      * @return 图像流
      */
-    byte[] drawSyndicateImage(SyndicateMission sm, SyndicateEnum se);
+    byte[] drawSyndicateImage(SyndicateMission sm);
 
     /**
      * 绘制 虚空商人 图像

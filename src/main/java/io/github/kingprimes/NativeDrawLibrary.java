@@ -227,10 +227,9 @@ public interface NativeDrawLibrary extends Library {
      * 绘制 赏金/集团 图像
      *
      * @param sm 赏金/集团 数据
-     * @param se 赏金/集团 枚举
      * @return 图像流
      */
-    Pointer nativeDrawSyndicateImage(Pointer sm, Pointer se);
+    Pointer nativeDrawSyndicateImage(Pointer sm);
 
     /**
      * 绘制 虚空商人 图像

@@ -61,6 +61,10 @@ public class RivenAnalyseTrend {
          */
         String name;
         /**
+         * 属性全称
+         */
+        String attributeName;
+        /**
          * 属性数值
          */
         Double attr;
