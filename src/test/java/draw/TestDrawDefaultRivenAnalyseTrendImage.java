@@ -11,13 +11,13 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.List;
 
-public class TestDefaultDrawRivenAnalyseTrendImage {
+public class TestDrawDefaultRivenAnalyseTrendImage {
 
     @Test
     public void testDrawRivenAnalyseTrendImage() throws Exception {
         // 从JSON文件中读取测试数据
         String jsonString = JSON.parseObject(
-                TestDefaultDrawRivenAnalyseTrendImage.class.getResourceAsStream("/rivenAnalyseTrend.json"),
+                TestDrawDefaultRivenAnalyseTrendImage.class.getResourceAsStream("/rivenAnalyseTrend.json"),
                 String.class);
         List<RivenAnalyseTrend> rivenAnalyseTrends = JSON.parseArray(jsonString, RivenAnalyseTrend.class);
 

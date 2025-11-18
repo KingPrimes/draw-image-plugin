@@ -12,11 +12,11 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 
 
-public class TestDefaultDrawMarketRivenImage {
+public class TestDrawDefaultMarketRivenImage {
 
     @Test
     public void testDrawMarketRivenImage() throws Exception {
-        MarketRiven marketRiven = JSON.parseObject(TestDefaultDrawMarketRivenImage.class.getResourceAsStream("/marketRiven.json"), MarketRiven.class);
+        MarketRiven marketRiven = JSON.parseObject(TestDrawDefaultMarketRivenImage.class.getResourceAsStream("/marketRiven.json"), MarketRiven.class);
 
         // 创建绘图插件实例
         DefaultDrawImagePlugin plugin = new DefaultDrawImagePlugin();
