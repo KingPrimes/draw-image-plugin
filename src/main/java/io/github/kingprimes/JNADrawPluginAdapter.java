@@ -82,8 +82,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawAllInfoImage(AllInfo allInfo) {
-        Pointer pointer = convertToPointer(allInfo);
-        return pointerToByteArray(library.nativeDrawAllInfoImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(allInfo);
+            byte[] bytes = pointerToByteArray(library.nativeDrawAllInfoImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawAllInfoImage(allInfo);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawAllInfoImage(allInfo);
+        }
     }
 
     /**
@@ -94,8 +102,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawAlertsImage(List<Alert> alerts) {
-        Pointer pointer = convertToPointer(alerts);
-        return pointerToByteArray(library.nativeDrawAlertsImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(alerts);
+            byte[] bytes = pointerToByteArray(library.nativeDrawAlertsImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawAlertsImage(alerts);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawAlertsImage(alerts);
+        }
     }
 
     /**
@@ -106,8 +122,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawArbitrationImage(Arbitration arbitration) {
-        Pointer pointer = convertToPointer(arbitration);
-        return pointerToByteArray(library.nativeDrawArbitrationImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(arbitration);
+            byte[] bytes = pointerToByteArray(library.nativeDrawArbitrationImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawArbitrationImage(arbitration);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawArbitrationImage(arbitration);
+        }
     }
 
     /**
@@ -118,8 +142,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawArbitrationsImage(List<Arbitration> arbitrations) {
-        Pointer pointer = convertToPointer(arbitrations);
-        return pointerToByteArray(library.nativeDrawArbitrationsImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(arbitrations);
+            byte[] bytes = pointerToByteArray(library.nativeDrawArbitrationsImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawArbitrationsImage(arbitrations);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawArbitrationsImage(arbitrations);
+        }
     }
 
     /**
@@ -130,8 +162,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawDailyDealsImage(DailyDeals dailyDeal) {
-        Pointer pointer = convertToPointer(dailyDeal);
-        return pointerToByteArray(library.nativeDrawDailyDealsImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(dailyDeal);
+            byte[] bytes = pointerToByteArray(library.nativeDrawDailyDealsImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawDailyDealsImage(dailyDeal);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawDailyDealsImage(dailyDeal);
+        }
     }
 
     /**
@@ -142,8 +182,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawDuviriCycleImage(DuvalierCycle duvalierCycle) {
-        Pointer pointer = convertToPointer(duvalierCycle);
-        return pointerToByteArray(library.nativeDrawDuviriCycleImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(duvalierCycle);
+            byte[] bytes = pointerToByteArray(library.nativeDrawDuviriCycleImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawDuviriCycleImage(duvalierCycle);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawDuviriCycleImage(duvalierCycle);
+        }
     }
 
     /**
@@ -154,8 +202,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawActiveMissionImage(List<ActiveMission> activeMission) {
-        Pointer pointer = convertToPointer(activeMission);
-        return pointerToByteArray(library.nativeDrawActiveMissionImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(activeMission);
+            byte[] bytes = pointerToByteArray(library.nativeDrawActiveMissionImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawActiveMissionImage(activeMission);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawActiveMissionImage(activeMission);
+        }
     }
 
     /**
@@ -166,8 +222,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawInvasionImage(List<Invasion> invasions) {
-        Pointer pointer = convertToPointer(invasions);
-        return pointerToByteArray(library.nativeDrawInvasionImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(invasions);
+            byte[] bytes = pointerToByteArray(library.nativeDrawInvasionImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawInvasionImage(invasions);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawInvasionImage(invasions);
+        }
     }
 
 
@@ -179,8 +243,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawKnownCalendarSeasonsImage(List<KnownCalendarSeasons> knownCalendarSeasons) {
-        Pointer pointer = convertToPointer(knownCalendarSeasons);
-        return pointerToByteArray(library.nativeDrawKnownCalendarSeasonsImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(knownCalendarSeasons);
+            byte[] bytes = pointerToByteArray(library.nativeDrawKnownCalendarSeasonsImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawKnownCalendarSeasonsImage(knownCalendarSeasons);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawKnownCalendarSeasonsImage(knownCalendarSeasons);
+        }
     }
 
 
@@ -192,8 +264,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawLiteSoriteImage(LiteSorite liteSorite) {
-        Pointer pointer = convertToPointer(liteSorite);
-        return pointerToByteArray(library.nativeDrawLiteSoriteImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(liteSorite);
+            byte[] bytes = pointerToByteArray(library.nativeDrawLiteSoriteImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawLiteSoriteImage(liteSorite);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawLiteSoriteImage(liteSorite);
+        }
     }
 
 
@@ -205,8 +285,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawMarketGodDumpImage(Map<Ducats.DumpType, List<Ducats.Ducat>> dump) {
-        Pointer pointer = convertToPointer(dump);
-        return pointerToByteArray(library.nativeDrawMarketGodDumpImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(dump);
+            byte[] bytes = pointerToByteArray(library.nativeDrawMarketGodDumpImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawMarketGodDumpImage(dump);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawMarketGodDumpImage(dump);
+        }
     }
 
 
@@ -218,8 +306,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawMarketSilverDumpImage(Map<Ducats.DumpType, List<Ducats.Ducat>> dump) {
-        Pointer pointer = convertToPointer(dump);
-        return pointerToByteArray(library.nativeDrawMarketSilverDumpImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(dump);
+            byte[] bytes = pointerToByteArray(library.nativeDrawMarketSilverDumpImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawMarketSilverDumpImage(dump);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawMarketSilverDumpImage(dump);
+        }
     }
 
 
@@ -231,8 +327,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawMarketLichesImage(MarketLichSister marketLichs) {
-        Pointer pointer = convertToPointer(marketLichs);
-        return pointerToByteArray(library.nativeDrawMarketLichesImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(marketLichs);
+            byte[] bytes = pointerToByteArray(library.nativeDrawMarketLichesImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawMarketLichesImage(marketLichs);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawMarketLichesImage(marketLichs);
+        }
     }
 
 
@@ -244,8 +348,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawMarketSisterImage(MarketLichSister marketSister) {
-        Pointer pointer = convertToPointer(marketSister);
-        return pointerToByteArray(library.nativeDrawMarketSisterImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(marketSister);
+            byte[] bytes = pointerToByteArray(library.nativeDrawMarketSisterImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawMarketSisterImage(marketSister);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawMarketSisterImage(marketSister);
+        }
     }
 
 
@@ -257,8 +369,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawMarketOrdersImage(Orders orders) {
-        Pointer pointer = convertToPointer(orders);
-        return pointerToByteArray(library.nativeDrawMarketOrdersImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(orders);
+            byte[] bytes = pointerToByteArray(library.nativeDrawMarketOrdersImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawMarketOrdersImage(orders);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawMarketOrdersImage(orders);
+        }
     }
 
 
@@ -270,8 +390,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawMarketOrdersImage(List<String> possibleItems) {
-        Pointer pointer = convertToPointer(possibleItems);
-        return pointerToByteArray(library.nativeDrawMarketOrdersImageList(pointer));
+        try {
+            Pointer pointer = convertToPointer(possibleItems);
+            byte[] bytes = pointerToByteArray(library.nativeDrawMarketOrdersImageList(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawMarketOrdersImage(possibleItems);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawMarketOrdersImage(possibleItems);
+        }
     }
 
 
@@ -283,8 +411,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawMarketRivenImage(MarketRiven marketRiven) {
-        Pointer pointer = convertToPointer(marketRiven);
-        return pointerToByteArray(library.nativeDrawMarketRivenImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(marketRiven);
+            byte[] bytes = pointerToByteArray(library.nativeDrawMarketRivenImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawMarketRivenImage(marketRiven);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawMarketRivenImage(marketRiven);
+        }
     }
 
 
@@ -296,8 +432,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawSeasonInfoImage(SeasonInfo seasonInfo) {
-        Pointer pointer = convertToPointer(seasonInfo);
-        return pointerToByteArray(library.nativeDrawSeasonInfoImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(seasonInfo);
+            byte[] bytes = pointerToByteArray(library.nativeDrawSeasonInfoImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawSeasonInfoImage(seasonInfo);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawSeasonInfoImage(seasonInfo);
+        }
     }
 
 
@@ -309,8 +453,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawRelicsImage(List<Relics> relics) {
-        Pointer pointer = convertToPointer(relics);
-        return pointerToByteArray(library.nativeDrawRelicsImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(relics);
+            byte[] bytes = pointerToByteArray(library.nativeDrawRelicsImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawRelicsImage(relics);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawRelicsImage(relics);
+        }
     }
 
 
@@ -322,8 +474,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawRivenAnalyseTrendImage(List<RivenAnalyseTrend> rivenAnalyseTrend) {
-        Pointer pointer = convertToPointer(rivenAnalyseTrend);
-        return pointerToByteArray(library.nativeDrawRivenAnalyseTrendImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(rivenAnalyseTrend);
+            byte[] bytes = pointerToByteArray(library.nativeDrawRivenAnalyseTrendImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawRivenAnalyseTrendImage(rivenAnalyseTrend);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawRivenAnalyseTrendImage(rivenAnalyseTrend);
+        }
     }
 
 
@@ -335,8 +495,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawSortiesImage(List<Sortie> sorties) {
-        Pointer pointer = convertToPointer(sorties);
-        return pointerToByteArray(library.nativeDrawSortiesImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(sorties);
+            byte[] bytes = pointerToByteArray(library.nativeDrawSortiesImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawSortiesImage(sorties);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawSortiesImage(sorties);
+        }
     }
 
 
@@ -348,8 +516,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawSteelPath(SteelPathOffering steelPath) {
-        Pointer pointer = convertToPointer(steelPath);
-        return pointerToByteArray(library.nativeDrawSteelPath(pointer));
+        try {
+            Pointer pointer = convertToPointer(steelPath);
+            byte[] bytes = pointerToByteArray(library.nativeDrawSteelPath(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawSteelPath(steelPath);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawSteelPath(steelPath);
+        }
     }
 
 
@@ -363,8 +539,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawSyndicateImage(SyndicateMission sm) {
-        Pointer pointer = convertToPointer(sm);
-        return pointerToByteArray(library.nativeDrawSyndicateImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(sm);
+            byte[] bytes = pointerToByteArray(library.nativeDrawSyndicateImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawSyndicateImage(sm);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawSyndicateImage(sm);
+        }
     }
 
 
@@ -376,8 +560,16 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     @Override
     public byte[] drawVoidTraderImage(List<VoidTrader> vt) {
-        Pointer pointer = convertToPointer(vt);
-        return pointerToByteArray(library.nativeDrawVoidTraderImage(pointer));
+        try {
+            Pointer pointer = convertToPointer(vt);
+            byte[] bytes = pointerToByteArray(library.nativeDrawVoidTraderImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawVoidTraderImage(vt);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawVoidTraderImage(vt);
+        }
 
     }
 

@@ -18,9 +18,9 @@ import java.util.logging.Logger;
  * @version 1.0.2
  */
 @SuppressWarnings("unused")
-public final class PluginManager {
+public final class DrawImagePluginManager {
 
-    private static final Logger LOGGER = Logger.getLogger(PluginManager.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(DrawImagePluginManager.class.getName());
 
     private final List<DrawImagePlugin> plugins = new ArrayList<>();
 
@@ -51,8 +51,10 @@ public final class PluginManager {
                 name.endsWith(".jar") || name.endsWith(".dll") ||
                         name.endsWith(".so") || name.endsWith(".dylib"));
 
-        if (files == null) {
-            throw new RuntimeException("在目录中未找到插件: %s".formatted(pluginDir));
+        if (files == null || files.length == 0) {
+            LOGGER.warning("在目录中未找到插件...将加载默认实现.");
+            plugins.add(new DefaultDrawImagePlugin());
+            return;
         }
 
         LOGGER.info("找到 %d 个插件文件".formatted(files.length));
