@@ -62,7 +62,7 @@ final class DefaultDrawArbitrationImage {
         // 敌人
         y += IMAGE_ROW_HEIGHT;
         combiner.setColor(TEXT_COLOR)
-                .addText("敌人: " + arbitration.getEnemy(), IMAGE_MARGIN, y);
+                .addText("敌人: " + arbitration.getEnemyName(), IMAGE_MARGIN, y);
 
         // 任务类型
         y += IMAGE_ROW_HEIGHT;
@@ -73,7 +73,7 @@ final class DefaultDrawArbitrationImage {
         y += IMAGE_ROW_HEIGHT;
         if (arbitration.getActivation() != null) {
             combiner.setColor(TEXT_COLOR)
-                    .addText("开始时间: " + arbitration.getActivation(), IMAGE_MARGIN, y);
+                    .addText("开始时间: " + arbitration.getActivationFormat(), IMAGE_MARGIN, y);
         }
 
         y += IMAGE_ROW_HEIGHT;

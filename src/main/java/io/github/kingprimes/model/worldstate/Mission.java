@@ -6,6 +6,8 @@ import io.github.kingprimes.model.enums.MissionTypeEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.awt.*;
+
 /**
  * 任务详情
  *
@@ -35,6 +37,18 @@ public class Mission {
      */
     @JsonIgnore
     public String getMissionTypeName() {
+        if (missionType == null) return MissionTypeEnum.MT_DEFAULT.getName();
         return missionType.getName();
+    }
+
+    /**
+     * 获取任务类型颜色
+     *
+     * @return 颜色值 {@link MissionTypeEnum#getColor(MissionTypeEnum)}
+     */
+    @JsonIgnore
+    public Color getMissionTypeColor() {
+        if (missionType == null) return MissionTypeEnum.getColor(MissionTypeEnum.MT_DEFAULT);
+        return MissionTypeEnum.getColor(missionType);
     }
 }

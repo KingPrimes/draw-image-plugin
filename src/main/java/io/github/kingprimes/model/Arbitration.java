@@ -2,13 +2,16 @@ package io.github.kingprimes.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.kingprimes.model.enums.FactionEnum;
 import io.github.kingprimes.utils.TimeUtils;
 import io.github.kingprimes.utils.TimeZoneUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.awt.*;
 import java.time.Instant;
+import java.util.Arrays;
 
 /**
  * 预测仲裁
@@ -76,11 +79,52 @@ public class Arbitration {
     }
 
     /**
+     * 获取派系枚举
+     *
+     * @return 派系枚举
+     */
+    @JsonIgnore
+    public FactionEnum getEnemy() {
+        return Arrays.stream(FactionEnum.values()).filter(f -> f.name().contains(enemy.toUpperCase())).findFirst().orElse(FactionEnum.FC_NONE);
+    }
+
+    /**
+     * 获取敌人名称
+     *
+     * @return 敌人名称
+     */
+    @JsonIgnore
+    public String getEnemyName() {
+        return getEnemy().getName();
+    }
+
+    /**
+     * 获取敌人颜色
+     *
+     * @return 敌人颜色
+     */
+    @JsonIgnore
+    public Color getEnemyColor() {
+        return getEnemy().getColor();
+    }
+
+    /**
+     * 获取敌人图标
+     *
+     * @return 敌人图标
+     */
+    @JsonIgnore
+    public String getEnemyIcon() {
+        return getEnemy().getIcon();
+    }
+
+    /**
      * 开始时间
      *
      * @return 开始时间
      */
-    public String getActivation() {
+    @JsonIgnore
+    public String getActivationFormat() {
         return TimeZoneUtil.formatTimestamp(activation.toEpochMilli());
     }
 
@@ -89,7 +133,8 @@ public class Arbitration {
      *
      * @return 结束时间
      */
-    public String getExpiry() {
+    @JsonIgnore
+    public String getExpiryFormat() {
         return TimeZoneUtil.formatTimestamp(expiry.toEpochMilli());
     }
 
@@ -110,6 +155,7 @@ public class Arbitration {
      *
      * @return 剩余时间
      */
+    @JsonIgnore
     public String getEtc() {
         return TimeUtils.timeDeltaToString(expiry.toEpochMilli() - System.currentTimeMillis());
     }

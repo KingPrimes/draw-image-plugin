@@ -1,8 +1,6 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.model.enums.MissionTypeEnum;
-import io.github.kingprimes.model.enums.VoidEnum;
 import io.github.kingprimes.model.worldstate.ActiveMission;
 
 import java.awt.*;
@@ -47,7 +45,7 @@ final class DefaultDrawActiveMission {
 
         combiner.setColor(ACTIVE_MISSION_HEADER_COLOR)
                 .setFont(FONT)
-                .addCenteredText(activeMission.getFirst().getHard() ? "钢铁裂隙" : "虚空裂隙", IMAGE_MARGIN_TOP)
+                .addCenteredText(activeMission.getFirst().getVoidStorms() ? "虚空风暴" : activeMission.getFirst().getHard() ? "钢铁裂隙" : "虚空裂隙", IMAGE_MARGIN_TOP)
                 .drawStandingDrawing();
         // 绘制内容区域
         int y = IMAGE_MARGIN + IMAGE_ROW_HEIGHT + IMAGE_ROW_HEIGHT;
@@ -55,20 +53,19 @@ final class DefaultDrawActiveMission {
         for (ActiveMission mission : activeMission) {
             int x = IMAGE_MARGIN;
             // 裂隙类型
-            String modifier = mission.getModifier();
-            combiner.setColor(getModifierColor(mission.getVoidEnum()))
-                    .addText(modifier, x, y);
+            combiner.setColor(mission.getModifierColor())
+                    .addText(mission.getModifierName(), x, y);
 
             x += IMAGE_MARGIN + 60;
             // 任务类型和派系
             String missionInfo = mission.getMissionTypeName();
-            combiner.setColor(MissionTypeEnum.getColor(mission.getMissionType() == null ? MissionTypeEnum.MT_DEFAULT : mission.getMissionType()))
+            combiner.setColor(mission.getMissionTypeColor())
                     .addText(missionInfo, x, y);
             combiner.setFont(FONT_FACTION)
-                    .setColor(mission.getFaction().getColor())
-                    .addText(mission.getFaction().getIcon(), x + 140, y + 8)
+                    .setColor(mission.getFactionColor())
+                    .addText(mission.getFactionIcon(), x + 140, y + 8)
                     .setFont(FONT)
-                    .addText(mission.getFaction().getName(), x + 190, y);
+                    .addText(mission.getFactionName(), x + 190, y);
             x += IMAGE_MARGIN + 60;
             // 节点位置
             x += IMAGE_MARGIN + 260;
@@ -77,7 +74,7 @@ final class DefaultDrawActiveMission {
                     .addText(node, x, y);
 
             // 剩余时间
-            x += IMAGE_MARGIN + 300;
+            x += IMAGE_MARGIN + combiner.getStringWidth(node) + 60;
             Color timeColor = getTimeColor(mission);
             combiner.setColor(timeColor)
                     .addText(mission.getTimeLeft(), x, y);
@@ -94,17 +91,6 @@ final class DefaultDrawActiveMission {
         } catch (Exception e) {
             throw new RuntimeException("无法获取图像输出流: %s".formatted(e.getMessage()), e);
         }
-    }
-
-    private static Color getModifierColor(VoidEnum ve) {
-        return switch (ve) {
-            case VoidT1 -> ACTIVE_MISSION_VOID_T1_COLOR;
-            case VoidT2 -> ACTIVE_MISSION_VOID_T2_COLOR;
-            case VoidT3 -> ACTIVE_MISSION_VOID_T3_COLOR;
-            case VoidT4 -> ACTIVE_MISSION_VOID_T4_COLOR;
-            case VoidT5 -> ACTIVE_MISSION_VOID_T5_COLOR;
-            case VoidT6 -> ACTIVE_MISSION_VOID_T6_COLOR;
-        };
     }
 
     /**

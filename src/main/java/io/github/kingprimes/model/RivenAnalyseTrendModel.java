@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class RivenAnalyseTrend {
+public class RivenAnalyseTrendModel {
     /**
      * 武器名称
      */

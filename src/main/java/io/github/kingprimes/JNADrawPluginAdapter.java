@@ -469,20 +469,20 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
     /**
      * 绘制 紫卡分析 图像
      *
-     * @param rivenAnalyseTrend 紫卡分析数据
+     * @param rivenAnalyseTrendModel 紫卡分析数据
      * @return 图像流
      */
     @Override
-    public byte[] drawRivenAnalyseTrendImage(List<RivenAnalyseTrend> rivenAnalyseTrend) {
+    public byte[] drawRivenAnalyseTrendImage(List<RivenAnalyseTrendModel> rivenAnalyseTrendModel) {
         try {
-            Pointer pointer = convertToPointer(rivenAnalyseTrend);
+            Pointer pointer = convertToPointer(rivenAnalyseTrendModel);
             byte[] bytes = pointerToByteArray(library.nativeDrawRivenAnalyseTrendImage(pointer));
             if (bytes != null && bytes.length > 0) {
                 return bytes;
             }
-            return new DefaultDrawImagePlugin().drawRivenAnalyseTrendImage(rivenAnalyseTrend);
+            return new DefaultDrawImagePlugin().drawRivenAnalyseTrendImage(rivenAnalyseTrendModel);
         } catch (Exception e) {
-            return new DefaultDrawImagePlugin().drawRivenAnalyseTrendImage(rivenAnalyseTrend);
+            return new DefaultDrawImagePlugin().drawRivenAnalyseTrendImage(rivenAnalyseTrendModel);
         }
     }
 

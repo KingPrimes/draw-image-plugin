@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.awt.*;
+
 /**
  * 虚空风暴
  * <p>表示九重天中的虚空风暴任务节点信息</p>
@@ -31,25 +33,30 @@ public class VoidStorms extends BastWorldState {
      * <p>当前激活的虚空任务等级，如VoidT1、VoidT2等</p>
      */
     @JsonProperty("ActiveMissionTier")
-    private VoidEnum ActiveMissionTier;
+    private VoidEnum Tier;
 
     /**
-     * 获取激活任务等级名称
+     * 获取遗物等级
      *
-     * @return 任务等级的显示名称 {@link VoidEnum#name}
+     * <p>{@link VoidEnum#name}</p>
+     *
+     * @return 遗物等级 String字符串
      */
     @JsonIgnore
-    public String getActiveMissionTier() {
-        return ActiveMissionTier.getName();
+    public String getTierName() {
+        if (Tier == null) return VoidEnum.VoidT1.getName();
+        return Tier.getName();
     }
 
+
     /**
-     * 获取虚空枚举
+     * 获取虚空遗物等级颜色
+     * <p>{@link VoidEnum#color}</p>
      *
-     * @return 虚空任务等级枚举值 {@link VoidEnum}
+     * @return 虚空遗物等级的颜色值
      */
     @JsonIgnore
-    public VoidEnum getVoidEnum() {
-        return ActiveMissionTier;
+    public Color getTierColor() {
+        return Tier.getColor();
     }
 }

@@ -136,8 +136,8 @@ final class DefaultDrawInvasionImage {
                         IMAGE_MARGIN + 20, startY + 40);
 
         // 绘制阵营信息
-        String attackerFaction = invasion.getFaction() != null ? invasion.getFaction() : "未知阵营";
-        String defenderFaction = invasion.getDefenderFaction() != null ? invasion.getDefenderFaction() : "未知阵营";
+        String attackerFaction = invasion.getFaction() != null ? invasion.getFaction().getName() : "未知阵营";
+        String defenderFaction = invasion.getDefenderFaction() != null ? invasion.getDefenderFaction().getName() : "未知阵营";
 
         // 绘制进攻方阵营名称
         combiner.setColor(ATTACKER_COLOR)

@@ -1,7 +1,7 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.model.RivenAnalyseTrend;
+import io.github.kingprimes.model.RivenAnalyseTrendModel;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -28,11 +28,11 @@ final class DefaultDrawRivenAnalyseTrendImage {
     /**
      * 绘制紫卡分析趋势图像
      *
-     * @param rivenAnalyseTrends 紫卡分析数据列表
+     * @param rivenAnalyseTrendModels 紫卡分析数据列表
      * @return 图像字节数组
      */
-    public static byte[] drawRivenAnalyseTrendImage(List<RivenAnalyseTrend> rivenAnalyseTrends) {
-        if (rivenAnalyseTrends == null || rivenAnalyseTrends.isEmpty()) {
+    public static byte[] drawRivenAnalyseTrendImage(List<RivenAnalyseTrendModel> rivenAnalyseTrendModels) {
+        if (rivenAnalyseTrendModels == null || rivenAnalyseTrendModels.isEmpty()) {
             return new byte[0];
         }
 
@@ -40,8 +40,8 @@ final class DefaultDrawRivenAnalyseTrendImage {
         int cardWidth = 700;
         int cardHeight = 400;
         int cardMargin = 60;
-        int columns = Math.min(2, rivenAnalyseTrends.size());
-        int rows = (int) Math.ceil((double) rivenAnalyseTrends.size() / columns);
+        int columns = Math.min(2, rivenAnalyseTrendModels.size());
+        int rows = (int) Math.ceil((double) rivenAnalyseTrendModels.size() / columns);
 
         int totalWidth = cardWidth * columns + cardMargin * (columns + 1) + 400;
         int totalHeight = cardHeight * rows + cardMargin * (rows + 1) + 200; // 为标题和看板娘预留空间
@@ -63,8 +63,8 @@ final class DefaultDrawRivenAnalyseTrendImage {
 
         // 绘制紫卡分析卡片
         int currentY = titleY + 40;
-        for (int i = 0; i < rivenAnalyseTrends.size(); i++) {
-            RivenAnalyseTrend trend = rivenAnalyseTrends.get(i);
+        for (int i = 0; i < rivenAnalyseTrendModels.size(); i++) {
+            RivenAnalyseTrendModel trend = rivenAnalyseTrendModels.get(i);
             int row = i / columns;
             int col = i % columns;
 
@@ -96,7 +96,7 @@ final class DefaultDrawRivenAnalyseTrendImage {
      * @param trend    紫卡分析数据
      * @return 绘制完成的图像
      */
-    private static BufferedImage drawRivenAnalyseTrendCard(ImageCombiner combiner, RivenAnalyseTrend trend) {
+    private static BufferedImage drawRivenAnalyseTrendCard(ImageCombiner combiner, RivenAnalyseTrendModel trend) {
         int width = combiner.getCanvasWidth();
         int height = combiner.getCanvasHeight();
 
@@ -125,7 +125,7 @@ final class DefaultDrawRivenAnalyseTrendImage {
         if (trend.getAttributes() != null && !trend.getAttributes().isEmpty()) {
             int attrY = 220;
 
-            for (RivenAnalyseTrend.Attribute attribute : trend.getAttributes()) {
+            for (RivenAnalyseTrendModel.Attribute attribute : trend.getAttributes()) {
                 String attrText = formatAttributeText(attribute);
                 combiner.setColor(attribute.getAttrDiff().contains("-") ? DOW : UP)
                         .addText(attrText, 20, attrY);
@@ -143,7 +143,7 @@ final class DefaultDrawRivenAnalyseTrendImage {
      * @param attribute 属性对象
      * @return 格式化后的文本
      */
-    private static String formatAttributeText(RivenAnalyseTrend.Attribute attribute) {
+    private static String formatAttributeText(RivenAnalyseTrendModel.Attribute attribute) {
         if (attribute == null) {
             return "";
         }

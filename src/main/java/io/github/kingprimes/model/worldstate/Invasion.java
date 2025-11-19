@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -108,47 +109,91 @@ public class Invasion extends BastWorldState {
     private MissionInfo defenderMissionInfo;
 
     /**
-     * 获取进攻方阵营名称
-     * <p>{@link FactionEnum#name}</p>
+     * 获取进攻方阵营
+     * <p>{@link FactionEnum}</p>
      *
-     * @return 进攻方阵营的显示名称 例如："Corpus"
+     * @return 进攻方阵营
      */
     @JsonIgnore
-    public String getFaction() {
+    public FactionEnum getFaction() {
+        return faction;
+    }
+
+    /**
+     * 获取进攻方阵营名称
+     * <p>{@link FactionEnum#name} </p>
+     *
+     * @return 进攻方阵营
+     */
+    @JsonIgnore
+    public String getFactionName() {
         return faction.getName();
     }
 
     /**
-     * 获取进攻方阵营枚举名称
-     * <p>{@link FactionEnum#name()} </p>
+     * 获取进攻方阵营颜色
+     * <p>{@link FactionEnum#color} </p>
      *
-     * @return 进攻方阵营的枚举名称
+     * @return 进攻方阵营颜色
      */
     @JsonIgnore
-    public String getFactionName() {
-        return faction.name();
+    public Color getFactionColor() {
+        return faction.getColor();
     }
 
     /**
-     * 获取防守方阵营名称
-     * <p>{@link FactionEnum#name}</p>
+     * 获取进攻方阵营图标
+     * <p>{@link FactionEnum#icon} </p>
      *
-     * @return 防守方阵营的显示名称 例如："Corpus"
+     * @return 进攻方阵营图标
      */
     @JsonIgnore
-    public String getDefenderFaction() {
-        return defenderFaction.getName();
+    public String getFactionIcon() {
+        return faction.getIcon();
+    }
+
+    /**
+     * 获取防守方阵营
+     * <p>{@link FactionEnum}</p>
+     *
+     * @return 防守方阵营
+     */
+    @JsonIgnore
+    public FactionEnum getDefenderFaction() {
+        return defenderFaction;
     }
 
     /**
      * 获取防守方阵营枚举名称
-     * <p>{@link FactionEnum#name()} </p>
+     * <p>{@link FactionEnum#name} </p>
      *
-     * @return 防守方阵营的枚举名称
+     * @return 进攻方阵营的显示名称 例如："Corpus"
      */
     @JsonIgnore
     public String getDefenderFactionName() {
-        return defenderFaction.name();
+        return defenderFaction.getName();
+    }
+
+    /**
+     * 获取防守方阵营颜色
+     * <p>{@link FactionEnum#color} </p>
+     *
+     * @return 防守方阵营颜色
+     */
+    @JsonIgnore
+    public Color getDefenderFactionColor() {
+        return defenderFaction.getColor();
+    }
+
+    /**
+     * 获取防守方阵营图标
+     * <p>{@link FactionEnum#icon} </p>
+     *
+     * @return 防守方阵营图标
+     */
+    @JsonIgnore
+    public String getDefenderFactionIcon() {
+        return defenderFaction.getIcon();
     }
 
     /**

@@ -21,7 +21,7 @@ public class TestDrawActiveMission {
         List<ActiveMission> list = worldState.getActiveMissions()
                 .stream()
                 .filter(am -> !am.getHard())
-                .sorted(Comparator.comparing(ActiveMission::getVoidEnum))
+                .sorted(Comparator.comparing(ActiveMission::getModifier))
                 .toList();
         byte[] bytes = new DefaultDrawImagePlugin().drawActiveMissionImage(list);
         ImageIO.write(ImageIO.read(new ByteArrayInputStream(bytes)), Constant.PNG, new File(Constant.DRAW_PATH.formatted("draw_active_mission.png")));
@@ -33,7 +33,7 @@ public class TestDrawActiveMission {
         List<ActiveMission> list = worldState.getActiveMissions()
                 .stream()
                 .filter(ActiveMission::getHard)
-                .sorted(Comparator.comparing(ActiveMission::getVoidEnum))
+                .sorted(Comparator.comparing(ActiveMission::getModifier))
                 .toList();
         byte[] bytes = new DefaultDrawImagePlugin().drawActiveMissionImage(list);
         ImageIO.write(ImageIO.read(new ByteArrayInputStream(bytes)), Constant.PNG, new File(Constant.DRAW_PATH.formatted("draw_active_mission_hard.png")));

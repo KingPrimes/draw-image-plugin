@@ -127,7 +127,7 @@ final class DrawConstants {
     /**
      * 裂隙任务图像宽度
      */
-    public static final int ACTIVE_MISSION_WIDTH = 1500;
+    public static final int ACTIVE_MISSION_WIDTH = 1700;
 
     /**
      * 裂隙任务图像头部颜色
@@ -144,7 +144,7 @@ final class DrawConstants {
     /**
      * 裂隙任务图像时间中色
      */
-    public static final Color ACTIVE_MISSION_TIME_MEDIUM_COLOR = new Color(0xfeca57);
+    public static final Color ACTIVE_MISSION_TIME_MEDIUM_COLOR = new Color(0xAA7E1E);
     /**
      * 裂隙任务图像时间高色
      */
@@ -169,10 +169,6 @@ final class DrawConstants {
      * 裂隙任务图像虚空T5颜色
      */
     public static final Color ACTIVE_MISSION_VOID_T5_COLOR = new Color(0x872A2C);
-    /**
-     * 裂隙任务图像虚空T6颜色
-     */
-    public static final Color ACTIVE_MISSION_VOID_T6_COLOR = new Color(0x7f8c8d);
 
 
     /**

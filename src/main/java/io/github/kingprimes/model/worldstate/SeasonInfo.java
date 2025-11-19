@@ -1,5 +1,6 @@
 package io.github.kingprimes.model.worldstate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -72,51 +73,66 @@ public class SeasonInfo extends BastWorldState {
          * 挑战任务
          * <p>挑战任务的路径标识符</p>
          */
+        @JsonProperty("Challenge")
         String challenge;
 
         /**
          * 任务名称
-         * <p>需要通过{@link #challenge} 标识符获取</p>
+         * <p>需要通过{@link ActiveChallenges#getChallenge()} 标识符获取</p>
          */
+        @JsonProperty("Name")
         String name;
 
         /**
          * 任务描述
-         * <p>需要通过{@link #challenge} 标识符获取</p>
+         * <p>需要通过{@link ActiveChallenges#getChallenge()} 标识符获取</p>
          */
+        @JsonProperty("Description")
         String description;
 
         /**
          * 任务声望
-         * <p>需要通过{@link #challenge} 标识符获取</p>
+         * <p>需要通过{@link ActiveChallenges#getChallenge()} 标识符获取</p>
          */
+        @JsonProperty("Standing")
         Integer standing;
 
         /**
          * 任务数量
-         * <p>需要通过{@link #challenge} 标识符获取</p>
+         * <p>需要通过{@link ActiveChallenges#getChallenge()} 标识符获取</p>
          */
+        @JsonProperty("Required")
         Integer required;
 
         /**
          * 是否为每日任务
          */
+        @JsonProperty("Daily")
         Boolean daily;
 
         /**
          * 是否为每周任务
          * <p>需要通过{@link #challenge} 标识符获取</p>
          */
+        @JsonProperty("Weekly")
         Boolean weekly;
 
         /**
          * 是否为精英任务
          * <p>需要通过{@link #challenge} 标识符获取</p>
          */
+        @JsonProperty("Elite")
         Boolean elite;
 
+        /**
+         * 获取任务描述
+         * <p>将任务描述中的计数符替换为任务数量</p>
+         *
+         * @return 任务描述
+         */
+        @JsonIgnore
         public String getDescription() {
-            return description.replace("|COUNT|", required.toString()).replaceAll("<.*?>","");
+            return description.replace("|COUNT|", required.toString()).replaceAll("<.*?>", "");
         }
     }
 

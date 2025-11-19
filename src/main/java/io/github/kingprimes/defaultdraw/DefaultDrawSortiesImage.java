@@ -1,7 +1,6 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.model.enums.MissionTypeEnum;
 import io.github.kingprimes.model.worldstate.Sortie;
 import io.github.kingprimes.model.worldstate.Variant;
 
@@ -92,7 +91,7 @@ final class DefaultDrawSortiesImage {
                     if (variant.getMissionType() != null) {
                         String missionType = variant.getMissionTypeName();
                         combiner
-                                .setColor(MissionTypeEnum.getColor(variant.getMissionType()))
+                                .setColor(variant.getMissionTypeColor())
                                 .addText("任务: " + missionType, IMAGE_MARGIN + 20, currentY + 20);
                     }
 

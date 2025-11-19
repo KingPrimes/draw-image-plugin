@@ -192,10 +192,10 @@ public interface DrawImagePlugin {
     /**
      * 绘制 紫卡分析 图像
      *
-     * @param rivenAnalyseTrend 紫卡分析数据
+     * @param rivenAnalyseTrendModel 紫卡分析数据
      * @return 图像流
      */
-    byte[] drawRivenAnalyseTrendImage(List<RivenAnalyseTrend> rivenAnalyseTrend);
+    byte[] drawRivenAnalyseTrendImage(List<RivenAnalyseTrendModel> rivenAnalyseTrendModel);
 
     /**
      * 绘制 突击 图像

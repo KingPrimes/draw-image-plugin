@@ -1,7 +1,6 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.model.enums.MissionTypeEnum;
 import io.github.kingprimes.model.worldstate.LiteSorite;
 import io.github.kingprimes.model.worldstate.Mission;
 
@@ -78,7 +77,7 @@ final class DefaultDrawLiteSoriteImage {
             y += 10;
             for (Mission mission : liteSorite.getMissions()) {
                 y += IMAGE_ROW_HEIGHT;
-                combiner.setColor(MissionTypeEnum.getColor(mission.getMissionType()))
+                combiner.setColor(mission.getMissionTypeColor())
                         .addText("• " + mission.getMissionTypeName() + " - " + mission.getNode(), IMAGE_MARGIN + 20, y);
             }
         } else {

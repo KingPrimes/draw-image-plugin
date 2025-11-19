@@ -7,6 +7,8 @@ import io.github.kingprimes.model.enums.ModifierTypeEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.awt.*;
+
 /**
  * 突击 任务模型<br/>
  * 该类使用在突击任务中的任务列表<br/>
@@ -42,13 +44,29 @@ public class Variant {
     private String tileset;
 
     /**
-     * 获取任务类型名称
+     * 获取任务类型
      *
-     * @return {@link MissionTypeEnum#name}
+     * <p>{@link MissionTypeEnum#name}</p>
+     *
+     * @return 任务类型 String字符串
      */
     @JsonIgnore
     public String getMissionTypeName() {
+        if (missionType == null) return MissionTypeEnum.MT_DEFAULT.getName();
         return missionType.getName();
+    }
+
+    /**
+     * 获取任务类型颜色
+     *
+     * <p>{@link MissionTypeEnum#getColor(MissionTypeEnum)}</p>
+     *
+     * @return 任务类型颜色
+     */
+    @JsonIgnore
+    public Color getMissionTypeColor() {
+        if (missionType == null) return MissionTypeEnum.getColor(MissionTypeEnum.MT_DEFAULT);
+        return MissionTypeEnum.getColor(missionType);
     }
 
     /**

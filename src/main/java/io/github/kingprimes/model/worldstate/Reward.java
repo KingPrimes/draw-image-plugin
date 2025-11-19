@@ -36,7 +36,7 @@ public class Reward {
     /**
      * 有数量的物品奖励列表 <br/>
      * 包含特定数量的物品奖励详情 <br/>
-     * 该奖励集合主要用于 {@link Invasion#defenderReward} 与 {@link Invasion#attackerReward} 奖励
+     * 该奖励集合主要用于 {@link Invasion#getDefenderReward()} 与 {@link Invasion#getAttackerReward()} 奖励
      */
     @JsonProperty("countedItems")
     private List<Item> countedItems;

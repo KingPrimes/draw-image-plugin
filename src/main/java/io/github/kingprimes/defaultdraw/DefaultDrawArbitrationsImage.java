@@ -72,7 +72,7 @@ final class DefaultDrawArbitrationsImage {
             // 敌人
             textY += IMAGE_MARGIN;
             combiner.setColor(TEXT_COLOR)
-                    .addText("敌人: " + arbitration.getEnemy(), IMAGE_MARGIN, textY);
+                    .addText("敌人: " + arbitration.getEnemyName(), IMAGE_MARGIN, textY);
 
             // 任务类型
             textY += IMAGE_MARGIN;
@@ -83,7 +83,7 @@ final class DefaultDrawArbitrationsImage {
             textY += IMAGE_MARGIN;
             if (arbitration.getExpiry() != null) {
                 combiner.setColor(TEXT_COLOR)
-                        .addText("结束时间: " + arbitration.getTimeLeft(), IMAGE_MARGIN, textY);
+                        .addText("开始时间: " + arbitration.getActivationFormat(), IMAGE_MARGIN, textY);
             }
             textY += IMAGE_MARGIN;
             // 价值标识

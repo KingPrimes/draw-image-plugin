@@ -1,5 +1,6 @@
 package io.github.kingprimes.model.worldstate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.kingprimes.model.enums.SyndicateEnum;
 import lombok.Data;
@@ -47,4 +48,28 @@ public class SyndicateMission extends BastWorldState {
      */
     @JsonProperty("Jobs")
     private List<Job> jobs;
+
+    /**
+     * 获取集团名称
+     * <p>返回该集团任务的名称</p>
+     * {@link SyndicateEnum#name}
+     *
+     * @return 集团名称
+     */
+    @JsonIgnore
+    public String getSyndicateName() {
+        return tag.getName();
+    }
+
+    /**
+     * 获取集团图标
+     * <p>返回该集团任务的图标</p>
+     * {@link SyndicateEnum#icon}
+     *
+     * @return 集团图标
+     */
+    @JsonIgnore
+    public String getSyndicateIcon() {
+        return tag.getIcon();
+    }
 }

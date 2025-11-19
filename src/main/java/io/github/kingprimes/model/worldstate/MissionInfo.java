@@ -6,6 +6,7 @@ import io.github.kingprimes.model.enums.FactionEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -40,7 +41,27 @@ public class MissionInfo {
      * @return {@link FactionEnum#name}
      */
     @JsonIgnore
-    public String getFaction() {
+    public String getFactionName() {
         return faction.getName();
+    }
+
+    /**
+     * 获取任务阵营颜色
+     *
+     * @return {@link FactionEnum#color}
+     */
+    @JsonIgnore
+    public Color getFactionColor() {
+        return faction.getColor();
+    }
+
+    /**
+     * 获取任务阵营图标
+     *
+     * @return {@link FactionEnum#icon}
+     */
+    @JsonIgnore
+    public String getFactionIcon() {
+        return faction.getIcon();
     }
 }
