@@ -181,7 +181,7 @@ final class DefaultDrawMarketDucatsImage {
 
         combiner.addText(itemName != null ? itemName : "未知物品", startX + 10, y + ROW_HEIGHT / 2 + 8)
                 .addText(ducat.getDucats() != null ? ducat.getDucats().toString() : "N/A", startX + 250, y + ROW_HEIGHT / 2 + 8)
-                .addText(ducat.getDucatsPerPlatinum() != null ? String.format("%.2f", ducat.getDucatsPerPlatinum()) : "N/A", startX + 350, y + ROW_HEIGHT / 2 + 8)
+                .addText(ducat.getDucatsPerPlatinumWa() != null ? String.format("%.2f", ducat.getDucatsPerPlatinumWa()) : "N/A", startX + 350, y + ROW_HEIGHT / 2 + 8)
                 .addText(ducat.getWaPrice() != null ? String.format("%.2f", ducat.getWaPrice()) : "N/A", startX + 500, y + ROW_HEIGHT / 2 + 8)
                 .addText(ducat.getVolume() != null ? ducat.getVolume().toString() : "N/A", startX + 600, y + ROW_HEIGHT / 2 + 8);
     }

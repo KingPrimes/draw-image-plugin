@@ -2,17 +2,15 @@ package io.github.kingprimes.model.worldstate;
 
 import io.github.kingprimes.model.enums.SyndicateEnum;
 import io.github.kingprimes.utils.TimeUtils;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
 
-@Setter(AccessLevel.NONE)
 @Getter
 public final class CetusCycle {
     /**
@@ -75,7 +73,7 @@ public final class CetusCycle {
         Instant now = Instant.now();
         Instant bountiesClone = bountiesEndDate.truncatedTo(ChronoUnit.SECONDS);
 
-        long millisLeft = java.time.Duration.between(now, bountiesClone).toMillis();
+        long millisLeft = Duration.between(now, bountiesClone).toMillis();
         long secondsToNightEnd = Math.round((double) millisLeft / 1000);
         boolean dayTime = secondsToNightEnd > NIGHT_TIME;
 

@@ -6,7 +6,6 @@ import io.github.kingprimes.model.worldstate.Variant;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
@@ -33,8 +32,8 @@ final class DefaultDrawSortiesImage {
      * @param sorties 突击数据列表
      * @return 图像字节数组
      */
-    public static byte[] drawSortiesImage(List<Sortie> sorties) {
-        if (sorties == null || sorties.isEmpty()) {
+    public static byte[] drawSortiesImage(Sortie sorties) {
+        if (sorties == null) {
             return new byte[0];
         }
 
@@ -61,58 +60,46 @@ final class DefaultDrawSortiesImage {
         // 纵向排列绘制突击任务数据
         int currentY = 120;
 
-        for (int i = 0; i < sorties.size(); i++) {
-            Sortie sortie = sorties.get(i);
+        // 绘制Boss标题
+        combiner.setColor(HEADER_COLOR)
+                .setFont(FONT)
+                .addText("Boss: " + sorties.getBoss(), IMAGE_MARGIN, currentY + 30);
 
-            // 绘制Boss标题
-            combiner.setColor(HEADER_COLOR)
-                    .setFont(FONT)
-                    .addText("Boss: " + sortie.getBoss(), IMAGE_MARGIN, currentY + 30);
+        currentY += 100;
 
-            currentY += 100;
+        // 绘制变体任务
+        if (sorties.getVariants() != null) {
+            for (int j = 0; j < sorties.getVariants().size(); j++) {
+                Variant variant = sorties.getVariants().get(j);
 
-            // 绘制变体任务
-            if (sortie.getVariants() != null) {
-                for (int j = 0; j < sortie.getVariants().size(); j++) {
-                    Variant variant = sortie.getVariants().get(j);
-
-                    // 绘制斑马纹背景
-                    if (j % 2 == 1) { // 奇数行添加背景色
-                        combiner.setColor(new Color(0xE0E0E0, true))
-                                .fillRect(IMAGE_MARGIN, currentY, SORTIE_IMAGE_WIDTH - 2 * IMAGE_MARGIN, SORTIE_ROW_HEIGHT);
-                    }
-
-                    // 绘制任务信息
-                    combiner.setColor(TEXT_COLOR)
-                            .setFont(FONT);
-
-                    // 任务类型
-
-                    if (variant.getMissionType() != null) {
-                        String missionType = variant.getMissionTypeName();
-                        combiner
-                                .setColor(variant.getMissionTypeColor())
-                                .addText("任务: " + missionType, IMAGE_MARGIN + 20, currentY + 20);
-                    }
-
-                    // 节点
-                    String node = variant.getNode() != null ? variant.getNode() : "未知";
-                    combiner.addText("节点: " + node, IMAGE_MARGIN + 225, currentY + 20);
-
-                    // 修饰
-                    String modifier = variant.getModifierType() != null ? variant.getModifierTypeStr() : "未知";
-                    combiner.addText(modifier, IMAGE_MARGIN + 580, currentY + 20);
-
-                    currentY += SORTIE_ROW_HEIGHT;
+                // 绘制斑马纹背景
+                if (j % 2 == 1) { // 奇数行添加背景色
+                    combiner.setColor(new Color(0xE0E0E0, true))
+                            .fillRect(IMAGE_MARGIN, currentY, SORTIE_IMAGE_WIDTH - 2 * IMAGE_MARGIN, SORTIE_ROW_HEIGHT);
                 }
-            }
 
-            // 添加分割线
-            if (i < sorties.size() - 1) {
-                combiner.setColor(HEADER_COLOR)
-                        .setStroke(2)
-                        .drawLine(IMAGE_MARGIN, currentY + 10, SORTIE_IMAGE_WIDTH - IMAGE_MARGIN, currentY + 10);
-                currentY += 30;
+                // 绘制任务信息
+                combiner.setColor(TEXT_COLOR)
+                        .setFont(FONT);
+
+                // 任务类型
+
+                if (variant.getMissionType() != null) {
+                    String missionType = variant.getMissionTypeName();
+                    combiner
+                            .setColor(variant.getMissionTypeColor())
+                            .addText("任务: " + missionType, IMAGE_MARGIN + 20, currentY + 20);
+                }
+
+                // 节点
+                String node = variant.getNode() != null ? variant.getNode() : "未知";
+                combiner.addText("节点: " + node, IMAGE_MARGIN + 225, currentY + 20);
+
+                // 修饰
+                String modifier = variant.getModifierType() != null ? variant.getModifierTypeStr() : "未知";
+                combiner.addText(modifier, IMAGE_MARGIN + 580, currentY + 20);
+
+                currentY += SORTIE_ROW_HEIGHT;
             }
         }
 
@@ -130,25 +117,16 @@ final class DefaultDrawSortiesImage {
      * @param sorties 突击数据列表
      * @return 图像高度
      */
-    private static int calculateImageHeight(List<Sortie> sorties) {
+    private static int calculateImageHeight(Sortie sorties) {
         int headerHeight = 120;
         int sectionHeight = 50; // Boss标题高度
-        int separatorHeight = 30; // 分割线高度
 
         int totalHeight = headerHeight;
 
-        for (int i = 0; i < sorties.size(); i++) {
-            Sortie sortie = sorties.get(i);
-            totalHeight += sectionHeight; // Boss标题
+        totalHeight += sectionHeight; // Boss标题
 
-            if (sortie.getVariants() != null) {
-                totalHeight += SORTIE_ROW_HEIGHT * sortie.getVariants().size(); // 任务行
-            }
-
-            // 如果不是最后一个，则添加分割线
-            if (i < sorties.size() - 1) {
-                totalHeight += separatorHeight;
-            }
+        if (sorties.getVariants() != null) {
+            totalHeight += SORTIE_ROW_HEIGHT * sorties.getVariants().size(); // 任务行
         }
 
         totalHeight += IMAGE_FOOTER_HEIGHT;

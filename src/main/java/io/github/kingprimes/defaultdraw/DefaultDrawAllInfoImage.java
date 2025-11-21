@@ -164,7 +164,7 @@ final class DefaultDrawAllInfoImage {
         y += IMAGE_ROW_HEIGHT;
 
         // 频率、缓存大小为一行
-        combiner.addText("频率: " + cpuInfo.getFrequency() + " MHz", IMAGE_MARGIN + 20, y);
+        combiner.addText("频率: " + cpuInfo.getFrequency() + " GHz", IMAGE_MARGIN + 20, y);
         if (cpuInfo.getCacheSize() > 0) {
             combiner.addText("缓存大小: " + cpuInfo.getCacheSize() + " KB", IMAGE_MARGIN + 500, y);
         }

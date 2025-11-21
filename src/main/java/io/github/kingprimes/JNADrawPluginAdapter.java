@@ -494,7 +494,7 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      * @return 图像流
      */
     @Override
-    public byte[] drawSortiesImage(List<Sortie> sorties) {
+    public byte[] drawSortiesImage(Sortie sorties) {
         try {
             Pointer pointer = convertToPointer(sorties);
             byte[] bytes = pointerToByteArray(library.nativeDrawSortiesImage(pointer));

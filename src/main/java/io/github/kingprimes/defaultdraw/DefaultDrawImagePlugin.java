@@ -268,7 +268,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      * @return 图像流
      */
     @Override
-    public byte[] drawSortiesImage(List<Sortie> sorties) {
+    public byte[] drawSortiesImage(Sortie sorties) {
         return DefaultDrawSortiesImage.drawSortiesImage(sorties);
     }
 

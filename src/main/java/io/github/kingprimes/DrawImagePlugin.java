@@ -203,7 +203,7 @@ public interface DrawImagePlugin {
      * @param sorties 突击数据
      * @return 图像流
      */
-    byte[] drawSortiesImage(List<Sortie> sorties);
+    byte[] drawSortiesImage(Sortie sorties);
 
     /**
      * 绘制 钢铁奖励 图像
