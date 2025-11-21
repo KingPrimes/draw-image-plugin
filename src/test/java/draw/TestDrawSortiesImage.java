@@ -19,7 +19,7 @@ public class TestDrawSortiesImage {
         WorldState worldState = Constant.WORLD_STATE;
         List<Sortie> sorties = worldState.getSorties();
 
-        byte[] bytes = new DefaultDrawImagePlugin().drawSortiesImage(sorties);
+        byte[] bytes = new DefaultDrawImagePlugin().drawSortiesImage(sorties.getFirst());
         ImageIO.write(ImageIO.read(new ByteArrayInputStream(bytes)),
                 Constant.PNG,
                 new File(Constant.DRAW_PATH.formatted("draw_sorties.png")));
