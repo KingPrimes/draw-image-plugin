@@ -27,14 +27,14 @@ DrawImagePlugin是一个强大的Java图像处理库，主要用于将Warframe�
 <dependency>
     <groupId>io.github.kingprimes</groupId>
     <artifactId>draw-image-plugin</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.6</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```gradle
-implementation 'io.github.kingprimes:draw-image-plugin:1.0.3'
+implementation 'io.github.kingprimes:draw-image-plugin:1.0.6'
 ```
 
 ## 🛠️ 使用示例
