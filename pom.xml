@@ -6,7 +6,7 @@
 
     <groupId>io.github.kingprimes</groupId>
     <artifactId>draw-image-plugin</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <name>DrawImagePlugin</name>
     <description>A Java library for image composition and drawing operations</description>
     <url>https://github.com/kingprimes/DrawImagePlugin</url>
@@ -49,7 +49,7 @@
         <dependency>
             <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>3.0.0</version>
+            <version>3.1.0</version>
         </dependency>
         <dependency>
             <groupId>net.java.dev.jna</groupId>
@@ -179,7 +179,7 @@
             <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.9.0</version>
+                <version>0.10.0</version>
                 <extensions>true</extensions>
                 <configuration>
                     <publishingServerId>central</publishingServerId>
@@ -190,7 +190,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.2</version>
+                <version>3.5.5</version>
                 <configuration>
                     <skipTests>true</skipTests>
                 </configuration>
