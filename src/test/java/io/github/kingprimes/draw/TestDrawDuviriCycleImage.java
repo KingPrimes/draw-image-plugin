@@ -1,6 +1,6 @@
-package draw;
+package io.github.kingprimes.draw;
 
-import common.Constant;
+import io.github.kingprimes.common.Constant;
 import io.github.kingprimes.defaultdraw.DefaultDrawImagePlugin;
 import io.github.kingprimes.model.WorldState;
 import org.junit.Test;

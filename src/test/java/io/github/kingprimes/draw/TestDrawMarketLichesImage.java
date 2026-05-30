@@ -1,7 +1,7 @@
-package draw;
+package io.github.kingprimes.draw;
 
-import com.alibaba.fastjson2.JSON;
-import common.Constant;
+import tools.jackson.databind.json.JsonMapper;
+import io.github.kingprimes.common.Constant;
 import io.github.kingprimes.defaultdraw.DefaultDrawImagePlugin;
 import io.github.kingprimes.model.market.MarketLichSister;
 import org.junit.Test;
@@ -15,7 +15,8 @@ public class TestDrawMarketLichesImage {
     @Test
     public void testDrawMarketLichesImage() throws IOException {
         // 读取测试数据
-        MarketLichSister marketLichs = JSON.parseObject(TestDrawMarketLichesImage.class.getResourceAsStream("/liches.json"), MarketLichSister.class);
+        MarketLichSister marketLichs = new JsonMapper().readValue(
+                TestDrawMarketLichesImage.class.getResourceAsStream("/liches.json"), MarketLichSister.class);
 
         // 绘制图像
         byte[] imageBytes = new DefaultDrawImagePlugin().drawMarketLichesImage(marketLichs);

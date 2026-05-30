@@ -29,8 +29,8 @@ final class DefaultDrawVoidTraderImage {
     private static final int HEADER_HEIGHT = 60;
 
     // 颜色常量定义
-    private static final Color HEADER_BG_COLOR = new Color(0x2C3E50);
-    private static final Color ITEM_NAME_COLOR = new Color(0x3498DB);
+    private static final Color HEADER_BG_COLOR = CARD_BACKGROUND_COLOR;
+    private static final Color ITEM_NAME_COLOR = TITLE_COLOR;
     private static final Color LOCATION_COLOR = new Color(0x9B59B6);
 
     /**
@@ -229,14 +229,14 @@ final class DefaultDrawVoidTraderImage {
         // 杜卡币价格
         String ducatsPrice = item.getPrimePrice() != null ?
                 item.getPrimePrice().toString() : "0";
-        combiner.setColor(new Color(0x9c8140))
+        combiner.setColor(ACCENT_GOLD_COLOR)
                 .setFont(FONT_WARFRAME_ICON.deriveFont(24f))
                 .addText(IconEnum.DUCATS.getIcon(), startX + columnWidths[0] + 20, rowY + ROW_HEIGHT / 2 + 6)
                 .setFont(FONT.deriveFont(24f))
                 .addText(ducatsPrice, startX + columnWidths[0] + 60, rowY + ROW_HEIGHT / 2 + 6);
 
         // 星币价格
-        combiner.setColor(new Color(0x45778f))
+        combiner.setColor(TITLE_COLOR)
                 .setFont(FONT_WARFRAME_ICON.deriveFont(24f))
                 .addText(IconEnum.CREDITS.getIcon(), startX + columnWidths[0] + columnWidths[1] + 20,
                         rowY + ROW_HEIGHT / 2 + 6)

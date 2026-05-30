@@ -124,6 +124,12 @@ public class SeasonInfo extends BastWorldState {
         @JsonProperty("Elite")
         Boolean elite;
 
+        @JsonProperty("Activation")
+        DateField activation;
+
+        @JsonProperty("Expiry")
+        DateField expiry;
+
         /**
          * 获取任务描述
          * <p>将任务描述中的计数符替换为任务数量</p>

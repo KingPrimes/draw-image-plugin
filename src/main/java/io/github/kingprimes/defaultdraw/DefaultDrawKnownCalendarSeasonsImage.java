@@ -36,7 +36,7 @@ final class DefaultDrawKnownCalendarSeasonsImage {
     private static final int MONTHS_PER_ROW = 2;
 
     // 颜色常量定义（使用项目中已有的颜色常量）
-    private static final Color SEASON_COLOR = new Color(0x2E86AB); // 季节信息颜色 - 蓝色系
+    private static final Color SEASON_COLOR = TITLE_COLOR; // 季节标题颜色
 
     /**
      * 私有构造函数，防止实例化该工具类

@@ -412,10 +412,10 @@ final class DefaultDrawSyndicateImage {
         }
 
         return switch (rarity) {
-            case COMMON -> ACTIVE_MISSION_VOID_T2_COLOR; // #75562B
-            case UNCOMMON -> ACTIVE_MISSION_VOID_T3_COLOR; // #9F9E9E
-            case RARE -> ACTIVE_MISSION_VOID_T4_COLOR; // #C1BE39
-            case LEGENDARY -> ACTIVE_MISSION_VOID_T5_COLOR; // #872A2C
+            case COMMON -> VOID_T2_COLOR; // #75562B
+            case UNCOMMON -> VOID_T3_COLOR; // #9F9E9E
+            case RARE -> VOID_T4_COLOR; // #C1BE39
+            case LEGENDARY -> VOID_T5_COLOR; // #872A2C
         };
     }
 }

@@ -9,96 +9,84 @@ import java.io.ByteArrayOutputStream;
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
 /**
- * 默认仲裁任务图片绘制工具类
+ * 仲裁卡片渲染器 — 对应 Python card_arbitration.py
  *
  * @author KingPrimes
- * @version 1.0.3
+ * @version 1.0.8
  */
 final class DefaultDrawArbitrationImage {
 
-    private static final int ARBITRATION_IMAGE_WIDTH = 800;
-    private static final int ARBITRATION_IMAGE_HEIGHT = 500;
+    private static final int CANVAS_W = 800;
+    private static final int MARGIN = 40;
+    private static final int ROW_H = 55;
+    private static final int TITLE_Y = MARGIN + 5;
+    private static final int CONTENT_START = MARGIN + 45;
 
-    private static final Color ARBITRATION_WORTH_COLOR = new Color(0x27ae60);
-    private static final Color ARBITRATION_NOT_WORTH_COLOR = new Color(0xe74c3c);
+    private static final Color WORTH_COLOR = new Color(0x27ae60);
+    private static final Color NOT_WORTH_COLOR = new Color(0xe74c3c);
 
-    /**
-     * 绘制单个仲裁任务图像
-     *
-     * @param arbitration 仲裁任务数据
-     * @return 生成的仲裁任务图像的 PNG 格式字节数组
-     */
+    private DefaultDrawArbitrationImage() {
+        throw new AssertionError("Cannot instantiate");
+    }
+
     public static byte[] drawArbitrationImage(Arbitration arbitration) {
-        if (arbitration == null) {
-            return new byte[0];
-        }
+        if (arbitration == null) return new byte[0];
 
-        // 创建画布
-        ImageCombiner combiner = new ImageCombiner(ARBITRATION_IMAGE_WIDTH, ARBITRATION_IMAGE_HEIGHT, ImageCombiner.OutputFormat.PNG);
+        int canvasH = 500;
+        int contentX = MARGIN + 10;
 
-        // 设置背景
-        combiner.setColor(Color.WHITE)
-                .fillRect(0, 0, ARBITRATION_IMAGE_WIDTH, ARBITRATION_IMAGE_HEIGHT)
-                .drawTooRoundRect();
-
-        int y = IMAGE_MARGIN;
+        ImageCombiner cb = new ImageCombiner(CANVAS_W, canvasH, ImageCombiner.OutputFormat.PNG);
+        cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, canvasH);
+        cb.drawTooRoundRect();
 
         // 标题
-        String title = "仲裁任务";
-        combiner.setColor(TITLE_COLOR)
-                .setFont(FONT)
-                .addCenteredText(title, y + IMAGE_MARGIN_TOP / 2)
-                .drawStandingDrawing();
+        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 28));
+        cb.addCenteredText("仲裁任务", TITLE_Y);
+        // 分割线
+        cb.setColor(DIVIDER_COLOR).drawLine(MARGIN, TITLE_Y + 30, CANVAS_W - MARGIN, TITLE_Y + 30);
 
-        y += IMAGE_MARGIN_TOP;
-        // 任务信息
-        combiner.setFont(FONT);
+        int y = CONTENT_START;
+        Font bodyFont = FONT.deriveFont(20f);
 
         // 节点
-        y += IMAGE_ROW_HEIGHT;
-        combiner.setColor(TEXT_COLOR)
-                .addText("节点: " + arbitration.getNode(), IMAGE_MARGIN, y);
+        cb.setColor(TEXT_COLOR).setFont(bodyFont);
+        cb.addText("节点: " + (arbitration.getNode() != null ? arbitration.getNode() : "未知节点"), contentX, y);
 
         // 敌人
-        y += IMAGE_ROW_HEIGHT;
-        combiner.setColor(TEXT_COLOR)
-                .addText("敌人: " + arbitration.getEnemyName(), IMAGE_MARGIN, y);
+        y += ROW_H;
+        cb.setColor(TEXT_COLOR).setFont(bodyFont);
+        cb.addText("敌人: " + arbitration.getEnemyName(), contentX, y);
 
         // 任务类型
-        y += IMAGE_ROW_HEIGHT;
-        combiner.setColor(TEXT_COLOR)
-                .addText("任务类型: " + arbitration.getType(), IMAGE_MARGIN, y);
+        y += ROW_H;
+        cb.setColor(TEXT_COLOR).setFont(bodyFont);
+        cb.addText("任务类型: " + (arbitration.getType() != null ? arbitration.getType() : "未知"), contentX, y);
 
-        // 时间信息
-        y += IMAGE_ROW_HEIGHT;
-        if (arbitration.getActivation() != null) {
-            combiner.setColor(TEXT_COLOR)
-                    .addText("开始时间: " + arbitration.getActivationFormat(), IMAGE_MARGIN, y);
-        }
+        // 开始时间
+        y += ROW_H;
+        cb.setColor(TEXT_SECONDARY_COLOR).setFont(bodyFont);
+        cb.addText("开始时间: " + arbitration.getActivationFormat(), contentX, y);
 
-        y += IMAGE_ROW_HEIGHT;
-        if (arbitration.getExpiry() != null) {
-            combiner.setColor(TEXT_COLOR)
-                    .addText("剩余时间: " + arbitration.getTimeLeft(), IMAGE_MARGIN, y);
-        }
+        // 剩余时间
+        y += ROW_H;
+        cb.setColor(ACCENT_GOLD_COLOR).setFont(bodyFont);
+        cb.addText("剩余时间: " + arbitration.getTimeLeft(), contentX, y);
 
         // 价值判断
-        y += IMAGE_ROW_HEIGHT + 10;
+        y += ROW_H + 5;
         String worthText = arbitration.isWorth() ? "值得参与" : "不值得参与";
-        Color worthColor = arbitration.isWorth() ? ARBITRATION_WORTH_COLOR : ARBITRATION_NOT_WORTH_COLOR;
+        Color worthColor = arbitration.isWorth() ? WORTH_COLOR : NOT_WORTH_COLOR;
+        cb.setColor(worthColor).setFont(FONT.deriveFont(Font.BOLD, 24));
+        cb.addText(worthText, contentX, y);
 
-        combiner.setColor(worthColor)
-                .addText(worthText, IMAGE_MARGIN, y);
+        cb.drawStandingAt(CANVAS_W - 280, canvasH - 410, 240, 360);
+        addFooter(cb, canvasH - 30);
 
-        // 添加底部署名
-        addFooter(combiner, ARBITRATION_IMAGE_HEIGHT - IMAGE_FOOTER_HEIGHT);
-
-        // 合并图像
-        combiner.combine();
-        try (ByteArrayOutputStream bos = combiner.getCombinedImageOutStream()) {
+        cb.combine();
+        try (ByteArrayOutputStream bos = cb.getCombinedImageOutStream()) {
             return bos.toByteArray();
         } catch (Exception e) {
-            throw new RuntimeException("无法获取图像输出流: %s".formatted(e.getMessage()), e);
+            throw new RuntimeException("无法获取图像输出流", e);
         }
     }
 }

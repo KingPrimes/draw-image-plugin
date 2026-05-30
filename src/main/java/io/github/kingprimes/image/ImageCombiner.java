@@ -760,13 +760,15 @@ public class ImageCombiner {
      * @param roundRect 参数
      * @return 当前实例
      */
+    private static final Color BORDER_OUTER_COLOR = new Color(0x3C3C5A);
+    private static final Color BORDER_INNER_COLOR = new Color(0x4a4a6a);
+
     public ImageCombiner drawTooRoundRect(RoundRect roundRect) {
-        this.setColor(new Color(0xB1B1B1))
+        this.setColor(BORDER_OUTER_COLOR)
                 .setStroke(roundRect.stroke)
                 .drawRoundRect(roundRect.x, roundRect.y, roundRect.width, roundRect.height, roundRect.arcWidth, roundRect.arcHeight);
 
-        // 内层边框（深灰色）
-        this.setColor(new Color(0x333333))
+        this.setColor(BORDER_INNER_COLOR)
                 .setStroke(roundRect.stroke)
                 .drawRoundRect(roundRect.offsetX, roundRect.offsetY, roundRect.offsetWidth, roundRect.offsetHeight, roundRect.arcWidth, roundRect.arcHeight);
         return this;
@@ -1079,6 +1081,8 @@ public class ImageCombiner {
      * @return 返回当前ImageCombiner实例，支持链式调用
      */
     public ImageCombiner drawStandingDrawing() {
+        java.awt.image.BufferedImage img = ImageIOUtils.getRandomXiaoMeiWangImage();
+        if (img == null) return this;
         int width = this.target.getWidth();
         int height = this.target.getHeight();
         int imageWidth = 413, imageHeight = 625;
@@ -1086,7 +1090,7 @@ public class ImageCombiner {
             return drawOneInchStandingDrawing();
         }
 
-        return drawImageWithAspectRatio(ImageIOUtils.getRandomXiaoMeiWangImage(),
+        return drawImageWithAspectRatio(img,
                 width - 433,
                 height - 645,
                 imageWidth,
@@ -1101,14 +1105,31 @@ public class ImageCombiner {
      * @return 返回当前ImageCombiner实例，支持链式调用
      */
     public ImageCombiner drawOneInchStandingDrawing() {
+        java.awt.image.BufferedImage img = ImageIOUtils.getRandomXiaoMeiWangImage();
+        if (img == null) return this;
         int width = this.target.getWidth();
         int height = this.target.getHeight();
         int imageWidth = 240, imageHeight = 360;
-        return drawImageWithAspectRatio(ImageIOUtils.getRandomXiaoMeiWangImage(),
+        return drawImageWithAspectRatio(img,
                 width - 265,
                 height - 382,
                 imageWidth,
                 imageHeight);
+    }
+
+    /**
+     * 在指定位置绘制立绘插图（指定尺寸）— 对应 Python draw_standing_at
+     *
+     * @param x          X坐标
+     * @param y          Y坐标
+     * @param imageWidth  最大宽度
+     * @param imageHeight 最大高度
+     * @return 返回当前ImageCombiner实例，支持链式调用
+     */
+    public ImageCombiner drawStandingAt(int x, int y, int imageWidth, int imageHeight) {
+        java.awt.image.BufferedImage img = ImageIOUtils.getRandomXiaoMeiWangImage();
+        if (img == null) return this;
+        return drawImageWithAspectRatio(img, x, y, imageWidth, imageHeight);
     }
 
     /**

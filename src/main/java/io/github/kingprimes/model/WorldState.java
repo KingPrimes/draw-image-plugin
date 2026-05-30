@@ -37,12 +37,18 @@ public class WorldState {
     @JsonProperty("BuildLabel")
     String buildLabel;
 
+    @JsonProperty("Conquests")
+    List<Conquest> conquests;
+
     @JsonProperty("ConstructionProjects")
     List<ConstructionProjects> constructionProjects;
 
     // 每日特惠
     @JsonProperty("DailyDeals")
     List<DailyDeals> dailyDeals;
+
+    @JsonProperty("Descents")
+    List<Descent> descents;
 
     // 双衍王境 奖励
     @JsonProperty("EndlessXpChoices")
@@ -153,8 +159,37 @@ public class WorldState {
     @JsonProperty("WorldSeed")
     String worldSeed;
 
-    @JsonProperty("SteelPath")
     SteelPathOffering steelPath = new SteelPathOffering();
+
+    @JsonProperty("SkuSales")
+    List<SkuSale> skuSales;
+
+    @JsonProperty("PrimeAccessAvailability")
+    PrimeAccessAvailability primeAccessAvailability;
+
+    @JsonProperty("PrimeVaultAvailabilities")
+    List<Boolean> primeVaultAvailabilities;
+
+    @JsonProperty("PrimeTokenAvailability")
+    Boolean primeTokenAvailability;
+
+    @JsonProperty("PVPChallengeInstances")
+    List<PVPChallengeInstance> pvpChallengeInstances;
+
+    @JsonProperty("PersistentEnemies")
+    List<PersistentEnemies> persistentEnemies;
+
+    @JsonProperty("PVPAlternativeModes")
+    List<PVPAlternativeMode> pvpAlternativeModes;
+
+    @JsonProperty("PVPActiveTournaments")
+    List<PVPActiveTournament> pvpActiveTournaments;
+
+    @JsonProperty("TwitchPromos")
+    List<TwitchPromo> twitchPromos;
+
+    @JsonProperty("EndlessXpSchedule")
+    List<EndlessXpSchedule> endlessXpSchedule;
 
     @JsonIgnore
     public EarthCycle getEarthCycle() {

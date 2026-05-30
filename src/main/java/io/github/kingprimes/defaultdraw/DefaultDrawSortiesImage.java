@@ -20,7 +20,7 @@ final class DefaultDrawSortiesImage {
     private static final int SORTIE_IMAGE_WIDTH = 1200;
     private static final int SORTIE_IMAGE_MIN_HEIGHT = 600;
     private static final int SORTIE_ROW_HEIGHT = 60;
-    private static final Color HEADER_COLOR = new Color(0x4A90E2);
+    private static final Color HEADER_COLOR = TITLE_COLOR;
 
     private DefaultDrawSortiesImage() {
         throw new AssertionError("Cannot instantiate DefaultDrawSortiesImage class");
@@ -52,10 +52,12 @@ final class DefaultDrawSortiesImage {
                 .drawTooRoundRect();
 
         // 绘制标题
-        combiner.setColor(HEADER_COLOR)
-                .setFont(FONT.deriveFont(Font.BOLD, 40))
-                .addCenteredText("突击任务", 80)
-                .drawStandingDrawing();
+        combiner.setColor(HEADER_COLOR).setFont(FONT.deriveFont(Font.BOLD, 48))
+                .addCenteredText("突击任务", 70);
+        // 分割线
+        int cx = IMAGE_MARGIN + 20;
+        combiner.setColor(DIVIDER_COLOR).drawLine(cx, 138, IMAGE_WIDTH - cx, 138);
+        combiner.drawStandingDrawing();
 
         // 纵向排列绘制突击任务数据
         int currentY = 120;
@@ -74,7 +76,7 @@ final class DefaultDrawSortiesImage {
 
                 // 绘制斑马纹背景
                 if (j % 2 == 1) { // 奇数行添加背景色
-                    combiner.setColor(new Color(0xE0E0E0, true))
+                    combiner.setColor(CARD_BACKGROUND_ALT_COLOR)
                             .fillRect(IMAGE_MARGIN, currentY, SORTIE_IMAGE_WIDTH - 2 * IMAGE_MARGIN, SORTIE_ROW_HEIGHT);
                 }
 

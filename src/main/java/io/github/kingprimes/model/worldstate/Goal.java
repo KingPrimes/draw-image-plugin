@@ -73,8 +73,20 @@ public class Goal extends BastWorldState {
      * 提示
      * <p>活动提示信息的本地化字符串键</p>
      */
-    @JsonProperty("Tooltip")
+    @JsonProperty("ToolTip")
     private String toolTip;
+
+    /**
+     * 宽限期
+     */
+    @JsonProperty("GracePeriod")
+    private DateField gracePeriod;
+
+    /**
+     * 物品类型
+     */
+    @JsonProperty("ItemType")
+    private String itemType;
 
     /**
      * 可选任务

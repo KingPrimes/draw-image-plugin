@@ -1,5 +1,6 @@
 package io.github.kingprimes.model.worldstate;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.kingprimes.model.enums.FactionEnum;
 import io.github.kingprimes.model.enums.MissionTypeEnum;
@@ -19,6 +20,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Alert extends BastWorldState {
     /**
      * 是否强制解锁
@@ -32,6 +34,12 @@ public class Alert extends BastWorldState {
      */
     @JsonProperty("Tag")
     String tag;
+
+    /**
+     * 警报图标
+     */
+    @JsonProperty("Icon")
+    String icon;
 
     /**
      * 任务信息
@@ -115,6 +123,18 @@ public class Alert extends BastWorldState {
          */
         @JsonProperty("missionReward")
         Reward missionReward;
+
+        @JsonProperty("extraEnemySpec")
+        String extraEnemySpec;
+
+        @JsonProperty("questReq")
+        String questReq;
+
+        @JsonProperty("leadersAlwaysAllowed")
+        Boolean leadersAlwaysAllowed;
+
+        @JsonProperty("seed")
+        Integer seed;
 
         /**
          * 任务奖励类

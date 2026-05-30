@@ -25,11 +25,11 @@ public final class DefaultDrawSeasonInfoImage {
     private static final int CARD_PADDING = 15;
     private static final int LINE_HEIGHT = 40;
     
-    private static final Color HEADER_COLOR = new Color(0x4A90E2);
+    private static final Color HEADER_COLOR = TITLE_COLOR;
     private static final Color DAILY_CHALLENGE_COLOR = new Color(0xFF9500);
-    private static final Color WEEKLY_CHALLENGE_COLOR = new Color(0x4A90E2);
+    private static final Color WEEKLY_CHALLENGE_COLOR = TITLE_COLOR;
     private static final Color ELITE_CHALLENGE_COLOR = new Color(0x9B59B6);
-    private static final Color CARD_BORDER_COLOR = new Color(0xCCCCCC);
+    private static final Color CARD_BORDER_COLOR = DIVIDER_COLOR;
 
     private DefaultDrawSeasonInfoImage() {
         throw new AssertionError("Cannot instantiate DefaultDrawSeasonInfoImage class");

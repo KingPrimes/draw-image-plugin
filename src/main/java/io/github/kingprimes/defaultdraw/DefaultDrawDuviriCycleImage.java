@@ -11,158 +11,139 @@ import java.util.List;
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
 /**
- * 默认双衍王境图片绘制工具类
+ * 双衍王境卡片渲染器 — 情绪展示卡 + 双列选择卡
+ * <p>对应 Python card_duviri.py 完整重写</p>
  *
  * @author KingPrimes
- * @version 1.0.0
+ * @version 1.0.8
  */
 final class DefaultDrawDuviriCycleImage {
 
-    private static final int DUVIRI_CYCLE_IMAGE_WIDTH = 1000;
-    private static final int DUVIRI_CYCLE_IMAGE_HEIGHT = 600;
+    private static final int CANVAS_W = 1000;
+    private static final int CONTENT_X = 60;
+    private static final int CONTENT_W = 880;
+    private static final int CARD_RADIUS = 14;
+    private static final int COL_GAP = 20;
+    private static final int CARD_W = (CONTENT_W - COL_GAP) / 2;
+    private static final int TITLE_Y = 70;
+    private static final int FOOTER_OFFSET = 55;
+    private static final int MAX_ITEMS = 7;
+    private static final int ITEM_H = 32;
 
-    private static final Color NORMAL_HEADER_COLOR = new Color(0xFFD700);
-    private static final Color HARD_HEADER_COLOR = new Color(0xFF6B6B);
+    private static final Color EMOTION_SAD = new Color(74, 144, 217);
+    private static final Color EMOTION_FEAR = new Color(155, 89, 182);
+    private static final Color EMOTION_JOY = new Color(241, 196, 15);
+    private static final Color EMOTION_ANGER = new Color(231, 76, 60);
+    private static final Color EMOTION_ENVY = new Color(46, 204, 113);
 
     private DefaultDrawDuviriCycleImage() {
         throw new AssertionError("Cannot instantiate DefaultDrawDuviriCycleImage class");
     }
 
-    /**
-     * 绘制双衍王境循环图像
-     *
-     * @param duvalierCycle 双衍王境循环数据
-     * @return 生成的双衍王境循环图像的 PNG 格式字节数组
-     */
-    public static byte[] drawDuviriCycleImage(DuvalierCycle duvalierCycle) {
-        if (duvalierCycle == null) {
-            return new byte[0];
+    public static byte[] drawDuviriCycleImage(DuvalierCycle cycle) {
+        if (cycle == null) return new byte[0];
+
+        List<EndlessXpChoices> choices = cycle.getChoices();
+        List<String> normalItems = List.of();
+        List<String> hardItems = List.of();
+        if (choices != null) {
+            for (EndlessXpChoices c : choices) {
+                if (c.getCategory() == EndlessXpChoices.Category.EXC_NORMAL) normalItems = c.getChoices();
+                if (c.getCategory() == EndlessXpChoices.Category.EXC_HARD) hardItems = c.getChoices();
+            }
         }
 
-        // 创建画布
-        ImageCombiner combiner = new ImageCombiner(
-                DUVIRI_CYCLE_IMAGE_WIDTH,
-                DUVIRI_CYCLE_IMAGE_HEIGHT,
-                ImageCombiner.OutputFormat.PNG
-        );
+        int maxItems = Math.max(normalItems.size(), hardItems.size());
+        int displayed = Math.min(maxItems, MAX_ITEMS);
+        int choiceCardsH = 80 + displayed * ITEM_H + 30;
+        int canvasH = 130 + 110 + 40 + choiceCardsH + 240 + FOOTER_OFFSET;
 
-        // 填充背景色
-        combiner.setFont(FONT)
-                .setColor(PAGE_BACKGROUND_COLOR)
-                .fillRect(0, 0, DUVIRI_CYCLE_IMAGE_WIDTH, DUVIRI_CYCLE_IMAGE_HEIGHT)
-                // 绘制双层边框
-                .drawTooRoundRect()
-                // 绘制看板娘
-                .drawStandingDrawing();
+        ImageCombiner cb = new ImageCombiner(CANVAS_W, canvasH, ImageCombiner.OutputFormat.PNG);
+        cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, canvasH);
+        cb.drawTooRoundRect();
 
-        // 绘制标题
-        combiner.setColor(TITLE_COLOR)
-                .setFont(FONT.deriveFont(Font.BOLD, 32))
-                .addCenteredText("双衍王境", 80);
+        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 48))
+                .addCenteredText("双衍王境", TITLE_Y);
+        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 68, CONTENT_X + CONTENT_W, TITLE_Y + 68);
 
-        // 绘制表格
-        int tableY = 120;
-        int tableWidth = DUVIRI_CYCLE_IMAGE_WIDTH - 2 * IMAGE_MARGIN;
-        int cellWidth = tableWidth / 2;
-        int headerHeight = 60;
-        int contentHeight = DUVIRI_CYCLE_IMAGE_HEIGHT - tableY - headerHeight - IMAGE_FOOTER_HEIGHT - 40;
+        // ---- 情绪展示卡 ----
+        String emotion = cycle.getState() != null ? cycle.getState() : "喜悦";
+        Color emotionColor = getEmotionColor(emotion);
+        int emotionCardW = 420;
+        int emotionCardH = 110;
+        int emotionCardX = (CANVAS_W - emotionCardW) / 2;
+        int emotionCardY = 130;
 
-        // 绘制表头
-        // 普通表头
-        combiner.setColor(NORMAL_HEADER_COLOR)
-                .fillRect(IMAGE_MARGIN, tableY, cellWidth, headerHeight);
+        cb.setColor(CARD_BACKGROUND_COLOR)
+                .fillRoundRect(emotionCardX, emotionCardY, emotionCardW, emotionCardH, CARD_RADIUS, CARD_RADIUS);
+        cb.setColor(emotionColor).setStroke(3)
+                .drawRoundRect(emotionCardX, emotionCardY, emotionCardW, emotionCardH, CARD_RADIUS, CARD_RADIUS);
 
-        combiner.setColor(TEXT_COLOR)
-                .addText("普通", IMAGE_MARGIN + cellWidth / 2, tableY + headerHeight / 2 + 8);
-
-        // 钢铁表头
-        combiner.setColor(HARD_HEADER_COLOR)
-                .fillRect(IMAGE_MARGIN + cellWidth, tableY, cellWidth, headerHeight);
-
-        combiner.setColor(TEXT_COLOR)
-                .addText("钢铁", IMAGE_MARGIN + cellWidth + cellWidth / 2, tableY + headerHeight / 2 + 8);
-
-        // 绘制表格边框
-        combiner.setColor(TEXT_COLOR)
-                .setStroke(2)
-                .drawLine(IMAGE_MARGIN, tableY, IMAGE_MARGIN + tableWidth, tableY) // 顶部线
-                .drawLine(IMAGE_MARGIN, tableY + headerHeight, IMAGE_MARGIN + tableWidth, tableY + headerHeight) // 表头底部线
-                .drawLine(IMAGE_MARGIN, tableY + headerHeight + contentHeight, IMAGE_MARGIN + tableWidth, tableY + headerHeight + contentHeight) // 底部线
-                .drawLine(IMAGE_MARGIN, tableY, IMAGE_MARGIN, tableY + headerHeight + contentHeight) // 左侧线
-                .drawLine(IMAGE_MARGIN + cellWidth, tableY, IMAGE_MARGIN + cellWidth, tableY + headerHeight + contentHeight) // 中间线
-                .drawLine(IMAGE_MARGIN + tableWidth, tableY, IMAGE_MARGIN + tableWidth, tableY + headerHeight + contentHeight); // 右侧线
-
-        // 绘制内容
-        if (duvalierCycle.getChoices() != null) {
-            drawChoices(combiner, duvalierCycle.getChoices(), tableY + headerHeight, cellWidth, contentHeight);
+        String timeLeft = cycle.getTimeLeft() != null ? cycle.getTimeLeft() : "";
+        cb.setColor(TEXT_SECONDARY_COLOR).setFont(FONT.deriveFont(18f));
+        cb.addCenteredText("当前情绪", emotionCardY + 25);
+        cb.setColor(emotionColor).setFont(FONT.deriveFont(Font.BOLD, 40));
+        cb.addCenteredText(emotion, emotionCardY + 65);
+        if (!timeLeft.isEmpty()) {
+            cb.setColor(ACCENT_COLOR).setFont(FONT.deriveFont(18f));
+            cb.addCenteredText("剩余: " + timeLeft, emotionCardY + 95);
         }
 
+        // ---- 选择卡 ----
+        int cardsY = emotionCardY + emotionCardH + 40;
+        int leftX = CONTENT_X;
+        int rightX = CONTENT_X + CARD_W + COL_GAP;
 
-        // 添加底部署名
-        addFooter(combiner, DUVIRI_CYCLE_IMAGE_HEIGHT - IMAGE_FOOTER_HEIGHT);
+        drawChoiceCard(cb, "普通", normalItems, leftX, cardsY, ACCENT_GOLD_COLOR);
+        drawChoiceCard(cb, "钢铁之路", hardItems, rightX, cardsY, ACCENT_COLOR);
 
-        // 合并图像
-        combiner.combine();
-        try (ByteArrayOutputStream bos = combiner.getCombinedImageOutStream()) {
+        cb.drawStandingAt(CONTENT_X + CONTENT_W - 300, canvasH - 450, 300, 450);
+        addFooter(cb, canvasH - FOOTER_OFFSET);
+
+        cb.combine();
+        try (ByteArrayOutputStream bos = cb.getCombinedImageOutStream()) {
             return bos.toByteArray();
         } catch (Exception e) {
-            throw new RuntimeException("无法获取图像输出流: %s".formatted(e.getMessage()), e);
+            throw new RuntimeException("无法获取图像输出流", e);
         }
     }
 
-    /**
-     * 绘制选择项内容
-     *
-     * @param combiner      图像合成器
-     * @param choices       选择项列表
-     * @param startY        起始Y坐标
-     * @param cellWidth     单元格宽度
-     * @param contentHeight 内容区域高度
-     */
-    private static void drawChoices(ImageCombiner combiner, List<EndlessXpChoices> choices, int startY, int cellWidth, int contentHeight) {
-        int padding = 20;
-        int itemWidth = (cellWidth - 3 * padding) / 2;
-        int itemHeight = 100;
-        int maxItemsPerColumn = (contentHeight - padding) / (itemHeight + padding);
+    private static void drawChoiceCard(ImageCombiner cb, String title, List<String> items,
+                                        int cardX, int cardY, Color accent) {
+        if (items == null) items = List.of();
+        int displayed = Math.min(items.size(), MAX_ITEMS);
+        int cardH = 80 + displayed * ITEM_H + 30;
 
-        int normalX = DrawConstants.IMAGE_MARGIN + padding;
-        int hardX = DrawConstants.IMAGE_MARGIN + cellWidth + padding;
-        int currentNormalY = startY + padding;
-        int currentHardY = startY + padding;
+        cb.setColor(CARD_BACKGROUND_COLOR)
+                .fillRoundRect(cardX, cardY, CARD_W, cardH, CARD_RADIUS, CARD_RADIUS);
+        cb.setColor(accent).fillRect(cardX + CARD_RADIUS, cardY + 2, CARD_W - 2 * CARD_RADIUS, 4);
 
-        for (EndlessXpChoices choice : choices) {
-            if (choice.getCategory() == EndlessXpChoices.Category.EXC_NORMAL) {
-                drawChoiceItems(combiner, choice.getChoices(), normalX, currentNormalY, itemWidth, itemHeight, maxItemsPerColumn);
-            }
-            if (choice.getCategory() == EndlessXpChoices.Category.EXC_HARD) {
-                drawChoiceItems(combiner, choice.getChoices(), hardX, currentHardY, itemWidth, itemHeight, maxItemsPerColumn);
-            }
+        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 24));
+        cb.addCenteredText(title, cardY + 35);
+        cb.setColor(DIVIDER_COLOR).drawLine(cardX + 20, cardY + 52, cardX + CARD_W - 20, cardY + 52);
+
+        int itemY = cardY + 70;
+        for (int i = 0; i < displayed; i++) {
+            String item = items.get(i);
+            if (item != null && item.length() > 22) item = item.substring(0, 20) + "..";
+            cb.setColor(TEXT_COLOR).setFont(FONT.deriveFont(20f));
+            cb.addText("• " + (item != null ? item : ""), cardX + 25, itemY + 8);
+            itemY += ITEM_H;
+        }
+        if (items.isEmpty()) {
+            cb.setColor(TEXT_MUTED_COLOR).setFont(FONT.deriveFont(20f));
+            cb.addText("暂无", cardX + 25, cardY + 85);
         }
     }
 
-    /**
-     * 绘制选择项
-     *
-     * @param combiner          图像合成器
-     * @param choices           选择项列表
-     * @param x                 X坐标
-     * @param y                 Y坐标
-     * @param width             宽度
-     * @param height            高度
-     * @param maxItemsPerColumn 每列最大项目数
-     */
-    private static void drawChoiceItems(ImageCombiner combiner, List<String> choices, int x, int y, int width, int height, int maxItemsPerColumn) {
-        if (choices == null || choices.isEmpty()) {
-            return;
-        }
-
-        int itemsToDraw = Math.min(choices.size(), maxItemsPerColumn);
-        int itemHeight = height / itemsToDraw;
-        int itemY = y + itemHeight / 2;
-        for (String choice : choices) {
-            combiner.setColor(TEXT_COLOR)
-                    .addText(choice, x + width / 2, itemY);
-            itemY += itemHeight;
-        }
+    private static Color getEmotionColor(String emotion) {
+        return switch (emotion) {
+            case "悲伤" -> EMOTION_SAD;
+            case "恐惧" -> EMOTION_FEAR;
+            case "喜悦" -> EMOTION_JOY;
+            case "愤怒" -> EMOTION_ANGER;
+            case "嫉妒" -> EMOTION_ENVY;
+            default -> ACCENT_GOLD_COLOR;
+        };
     }
 }

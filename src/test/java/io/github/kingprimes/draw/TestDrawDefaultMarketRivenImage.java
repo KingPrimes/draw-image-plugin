@@ -1,8 +1,8 @@
-package draw;
+package io.github.kingprimes.draw;
 
 
-import com.alibaba.fastjson2.JSON;
-import common.Constant;
+import tools.jackson.databind.json.JsonMapper;
+import io.github.kingprimes.common.Constant;
 import io.github.kingprimes.defaultdraw.DefaultDrawImagePlugin;
 import io.github.kingprimes.model.market.MarketRiven;
 import org.junit.Test;
@@ -16,7 +16,8 @@ public class TestDrawDefaultMarketRivenImage {
 
     @Test
     public void testDrawMarketRivenImage() throws Exception {
-        MarketRiven marketRiven = JSON.parseObject(TestDrawDefaultMarketRivenImage.class.getResourceAsStream("/marketRiven.json"), MarketRiven.class);
+        MarketRiven marketRiven = new JsonMapper().readValue(
+                TestDrawDefaultMarketRivenImage.class.getResourceAsStream("/marketRiven.json"), MarketRiven.class);
 
         // 创建绘图插件实例
         DefaultDrawImagePlugin plugin = new DefaultDrawImagePlugin();

@@ -119,10 +119,10 @@ final class DefaultDrawMarketDucatsImage {
             } else {
                 // 绘制空白行
                 if (i % 2 == 1) {
-                    combiner.setColor(new Color(0xE8F4FD))
+                    combiner.setColor(CARD_BACKGROUND_ALT_COLOR)
                             .fillRect(leftColumnX, currentY, TABLE_WIDTH, ROW_HEIGHT);
                 } else {
-                    combiner.setColor(Color.WHITE)
+                    combiner.setColor(CARD_BACKGROUND_COLOR)
                             .fillRect(leftColumnX, currentY, TABLE_WIDTH, ROW_HEIGHT);
                 }
             }
@@ -133,10 +133,10 @@ final class DefaultDrawMarketDucatsImage {
             } else {
                 // 绘制空白行
                 if (i % 2 == 1) {
-                    combiner.setColor(new Color(0xE8F4FD))
+                    combiner.setColor(CARD_BACKGROUND_ALT_COLOR)
                             .fillRect(rightColumnX, currentY, TABLE_WIDTH, ROW_HEIGHT);
                 } else {
-                    combiner.setColor(Color.WHITE)
+                    combiner.setColor(CARD_BACKGROUND_COLOR)
                             .fillRect(rightColumnX, currentY, TABLE_WIDTH, ROW_HEIGHT);
                 }
             }
@@ -163,10 +163,10 @@ final class DefaultDrawMarketDucatsImage {
     private static void drawDucatRow(ImageCombiner combiner, Ducats.Ducat ducat, int startX, int y, int index) {
         // 交替行背景色
         if (index % 2 == 1) {
-            combiner.setColor(new Color(0xE8F4FD))
+            combiner.setColor(CARD_BACKGROUND_ALT_COLOR)
                     .fillRect(startX, y, TABLE_WIDTH, ROW_HEIGHT);
         } else {
-            combiner.setColor(Color.WHITE)
+            combiner.setColor(CARD_BACKGROUND_COLOR)
                     .fillRect(startX, y, TABLE_WIDTH, ROW_HEIGHT);
         }
 

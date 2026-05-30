@@ -18,7 +18,7 @@ import java.util.List;
  * @version 1.0.0
  */
 @Getter
-public final class DuvalierCycle {
+public final class DuvalierCycle implements Cycle {
 
 
     static final long CYCLE_TIME = 36000; // 总周期时长（秒）

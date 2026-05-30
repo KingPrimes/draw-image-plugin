@@ -3,6 +3,7 @@ package io.github.kingprimes.model.worldstate;
 import io.github.kingprimes.utils.TimeUtils;
 import lombok.Getter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
@@ -18,7 +19,7 @@ import java.util.List;
  * @version 1.0.0
  */
 @Getter
-public final class SteelPathOffering {
+public final class SteelPathOffering implements Cycle {
     private static final LocalDateTime START_DATE = LocalDateTime.of(2020, 11, 16, 0, 0, 0);
     private static final List<SteelPathReward> rotation = new ArrayList<>();
     private static final List<SteelPathReward> evergreens = new ArrayList<>();
@@ -64,7 +65,7 @@ public final class SteelPathOffering {
     /**
      * 结束时间
      */
-    private final LocalDateTime expiry;
+    private final Instant expiry;
     /**
      * 剩余时间
      */
@@ -97,10 +98,10 @@ public final class SteelPathOffering {
 
         // 设置激活和过期时间
         this.activation = TimeUtils.getFirstDayOfWeek();
-        this.expiry = TimeUtils.getLastDayOfWeek();
+        this.expiry = TimeUtils.getLastDayOfWeek().atZone(ZoneOffset.UTC).toInstant();
 
         // 计算剩余时间
-        this.remaining = TimeUtils.timeDeltaToString(ChronoUnit.MILLIS.between(LocalDateTime.now(ZoneOffset.UTC), this.expiry));
+        this.remaining = TimeUtils.timeDeltaToString(this.expiry.toEpochMilli() - System.currentTimeMillis());
 
         // 设置时间信息
         LocalDateTime startOfDay = TimeUtils.getStartOfDay();

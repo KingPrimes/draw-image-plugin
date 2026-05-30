@@ -1,8 +1,8 @@
-package draw;
+package io.github.kingprimes.draw;
 
 
-import com.alibaba.fastjson2.JSON;
-import common.Constant;
+import tools.jackson.databind.json.JsonMapper;
+import io.github.kingprimes.common.Constant;
 import io.github.kingprimes.defaultdraw.DefaultDrawImagePlugin;
 import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.model.market.Orders;
@@ -23,7 +23,8 @@ public class TestDrawMarketOrdersImage {
 
     @Test
     public void testDrawMarketOrdersImage() throws Exception {
-        Orders orders = JSON.parseObject(TestDrawMarketLichesImage.class.getResourceAsStream("/orders.json"), Orders.class);
+        Orders orders = new JsonMapper().readValue(
+                TestDrawMarketOrdersImage.class.getResourceAsStream("/orders.json"), Orders.class);
         BufferedImage resourcesImage = ImageIOUtils.getResourcesImage("/image/nova.png");
         Assert.assertNotNull(orders);
         orders.setIcon(resourcesImage);

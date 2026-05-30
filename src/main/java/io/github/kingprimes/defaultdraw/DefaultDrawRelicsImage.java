@@ -100,7 +100,7 @@ final class DefaultDrawRelicsImage {
                 .fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT)
                 .setColor(CARD_BACKGROUND_COLOR)
                 .fillRoundRect(0, 0, CARD_WIDTH, CARD_HEIGHT, 15, 15)
-                .setColor(new Color(0x333333))
+                .setColor(DIVIDER_COLOR)
                 .setStroke(2)
                 .drawRoundRect(0, 0, CARD_WIDTH, CARD_HEIGHT, 15, 15)
                 .drawRoundRect(-1, -1, CARD_WIDTH, CARD_HEIGHT, 15, 15);
@@ -132,9 +132,9 @@ final class DefaultDrawRelicsImage {
         }
 
         return switch (rarity) {
-            case COMMON -> ACTIVE_MISSION_VOID_T2_COLOR; // #75562B
-            case UNCOMMON -> ACTIVE_MISSION_VOID_T3_COLOR; // #B3B3B3
-            case RARE -> ACTIVE_MISSION_VOID_T4_COLOR; // #C1BE39
+            case COMMON -> VOID_T2_COLOR; // #75562B
+            case UNCOMMON -> VOID_T3_COLOR; // #B3B3B3
+            case RARE -> VOID_T4_COLOR; // #C1BE39
             default -> TEXT_COLOR;
         };
     }

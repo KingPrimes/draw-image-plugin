@@ -92,7 +92,7 @@ final class DefaultDrawMarketOrdersImage {
                 .setColor(Color.WHITE)
                 .addText("买家", lineX += 25, currentY);
         // 绘制价值杜卡币
-        combiner.setColor(new Color(0x9c8140))
+        combiner.setColor(ACCENT_GOLD_COLOR)
                 .addText("杜卡币", lineX += 350, currentY - 32)
                 .setFont(FONT_WARFRAME_ICON)
                 .addText(IconEnum.DUCATS.getIcon(), lineX, currentY + 15)
@@ -100,7 +100,7 @@ final class DefaultDrawMarketOrdersImage {
                 .addText(orders.getDucats().toString(), lineX += 50, currentY + 15);
 
         // 绘制交易税
-        combiner.setColor(new Color(0x45778f))
+        combiner.setColor(TITLE_COLOR)
                 .addText("交易税", lineX += 150, currentY - 32)
                 .setFont(FONT_WARFRAME_ICON)
                 .addText(IconEnum.CREDITS.getIcon(), lineX, currentY + 15)

@@ -241,6 +241,22 @@ public interface DrawImagePlugin {
     byte[] drawWarframeSubscribeImage(Map<Integer, String> subscribe, Map<Integer, String> missionType);
 
     /**
+     * 绘制 深层征服 图像
+     *
+     * @param conquests 深层征服数据
+     * @return 图像流
+     */
+    byte[] drawConquestImage(List<Conquest> conquests);
+
+    /**
+     * 绘制 深层下降 图像
+     *
+     * @param descents 深层下降数据
+     * @return 图像流
+     */
+    byte[] drawDescentImage(List<Descent> descents);
+
+    /**
      * 获取插件名称
      *
      * @return 插件名称

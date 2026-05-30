@@ -4,6 +4,7 @@ import io.github.kingprimes.image.ImageCombiner;
 import io.github.kingprimes.model.worldstate.LiteSorite;
 import io.github.kingprimes.model.worldstate.Mission;
 
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
@@ -47,11 +48,13 @@ final class DefaultDrawLiteSoriteImage {
 
         // 标题
         String title = "执刑官猎杀";
-        combiner.setColor(TITLE_COLOR)
-                .setFont(FONT)
-                .addCenteredText(title, y + IMAGE_MARGIN_TOP / 2);
-
-        y += IMAGE_MARGIN_TOP;
+        combiner.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 44))
+                .addCenteredText(title, 70);
+        // 分割线
+        int contentX = IMAGE_MARGIN + 30;
+        int contentW = LITE_SORITE_IMAGE_WIDTH - 2 * (IMAGE_MARGIN + 30);
+        combiner.setColor(DIVIDER_COLOR).drawLine(contentX, 138, contentX + contentW, 138);
+        y = 160;
 
         // 执刑官信息
         combiner.setFont(FONT);

@@ -1,7 +1,8 @@
-package draw;
+package io.github.kingprimes.draw;
 
-import com.alibaba.fastjson2.JSON;
-import common.Constant;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
+import io.github.kingprimes.common.Constant;
 import io.github.kingprimes.defaultdraw.DefaultDrawImagePlugin;
 import io.github.kingprimes.model.RivenAnalyseTrendModel;
 import org.junit.Test;
@@ -16,10 +17,9 @@ public class TestDrawDefaultRivenAnalyseTrendModelImage {
     @Test
     public void testDrawRivenAnalyseTrendImage() throws Exception {
         // 从JSON文件中读取测试数据
-        String jsonString = JSON.parseObject(
+        List<RivenAnalyseTrendModel> rivenAnalyseTrendModels = new JsonMapper().readValue(
                 TestDrawDefaultRivenAnalyseTrendModelImage.class.getResourceAsStream("/rivenAnalyseTrend.json"),
-                String.class);
-        List<RivenAnalyseTrendModel> rivenAnalyseTrendModels = JSON.parseArray(jsonString, RivenAnalyseTrendModel.class);
+                new TypeReference<List<RivenAnalyseTrendModel>>() {});
 
         // 创建绘图插件实例
         DefaultDrawImagePlugin plugin = new DefaultDrawImagePlugin();
