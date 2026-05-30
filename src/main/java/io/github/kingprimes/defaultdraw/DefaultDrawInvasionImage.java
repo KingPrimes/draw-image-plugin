@@ -37,8 +37,8 @@ final class DefaultDrawInvasionImage {
     private static final int STANDING_W = 260;
     private static final int STANDING_H = 390;
 
-    private static final Color ATTACKER_COLOR = new Color(0xFF6B6B);
-    private static final Color DEFENDER_COLOR = new Color(0x4CAF50);
+    private static final Color ATK_COLOR = DrawConstants.ATTACKER_COLOR;
+    private static final Color DEF_COLOR = DrawConstants.DEFENDER_COLOR;
 
     private DefaultDrawInvasionImage() {
         throw new AssertionError("Cannot instantiate DefaultDrawInvasionImage class");
@@ -100,11 +100,11 @@ final class DefaultDrawInvasionImage {
         // 顶部双色进度条
         int splitX = cardX + (int) (CARD_W * progress);
         if (splitX - cardX > CARD_RADIUS) {
-            cb.setColor(ATTACKER_COLOR)
+            cb.setColor(ATK_COLOR)
                     .fillRect(cardX + CARD_RADIUS, cardY + 2, splitX - cardX - CARD_RADIUS, ACCENT_STRIP_H);
         }
         if (cardX + CARD_W - splitX > CARD_RADIUS) {
-            cb.setColor(DEFENDER_COLOR)
+            cb.setColor(DEF_COLOR)
                     .fillRect(splitX, cardY + 2, cardX + CARD_W - splitX - CARD_RADIUS, ACCENT_STRIP_H);
         }
 
@@ -141,7 +141,7 @@ final class DefaultDrawInvasionImage {
         int rewardY = cardY + 134;
         String atkReward = getFirstRewardText(inv.getAttackerReward());
         if (!atkReward.isEmpty()) {
-            cb.setColor(ATTACKER_COLOR).setFont(rewardFont);
+            cb.setColor(ATK_COLOR).setFont(rewardFont);
             cb.addText("进攻: " + atkReward, innerX, rewardY + 3);
         }
         String defReward = "";
@@ -152,7 +152,7 @@ final class DefaultDrawInvasionImage {
                     + (item.getName() != null ? item.getName() : "?");
         }
         if (!defReward.isEmpty()) {
-            cb.setColor(DEFENDER_COLOR).setFont(rewardFont);
+            cb.setColor(DEF_COLOR).setFont(rewardFont);
             int labelW = cb.getFontMetrics(rewardFont).stringWidth("防守: " + defReward);
             cb.addText("防守: " + defReward, innerX + innerW - labelW, rewardY + 3);
         }

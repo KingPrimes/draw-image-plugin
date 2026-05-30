@@ -61,10 +61,12 @@ public class VerifyDeserialization {
         total++; if (ws.getAlerts() != null && ws.getAlerts().size() == 3) {
             passed++;
             var a = ws.getAlerts().getFirst();
+            var ami = a.getMissionInfo();
             details.append(String.format("Alerts: %d 条 | Icon=%s | seed=%s | questReq=%s | leadersAlwaysAllowed=%s\n",
                     ws.getAlerts().size(), a.getIcon() != null ? "OK" : "null",
-                    a.getMissionInfo().getSeed(), a.getMissionInfo().getQuestReq(),
-                    a.getMissionInfo().getLeadersAlwaysAllowed()));
+                    ami != null ? ami.getSeed() : "N/A",
+                    ami != null ? ami.getQuestReq() : "N/A",
+                    ami != null ? ami.getLeadersAlwaysAllowed() : "N/A"));
         } else { details.append(String.format("FAIL: Alerts (expected 3, got %d)\n", ws.getAlerts() != null ? ws.getAlerts().size() : 0)); }
 
         // === Sorties ===
@@ -95,19 +97,24 @@ public class VerifyDeserialization {
             passed++;
             var c = ws.getConquests().getFirst();
             details.append(String.format("Conquests: %d 条 | Type=%s | Missions=%d | Variables=%d | RandomSeed=%s\n",
-                    ws.getConquests().size(), c.getType(), c.getMissions().size(), c.getVariables().size(), c.getRandomSeed()));
+                    ws.getConquests().size(), c.getType(),
+                    c.getMissions() != null ? c.getMissions().size() : 0,
+                    c.getVariables() != null ? c.getVariables().size() : 0,
+                    c.getRandomSeed()));
         } else { details.append(String.format("FAIL: Conquests (expected 2, got %d)\n", ws.getConquests() != null ? ws.getConquests().size() : 0)); }
 
         // === Descents (P0: 完整重写 + Long溢出修复) ===
         total++; if (ws.getDescents() != null && ws.getDescents().size() == 5) {
             passed++;
             var d = ws.getDescents().getFirst();
-            details.append(String.format("Descents: %d 条 | RandSeed=%d | Challenges=%d\n",
-                    ws.getDescents().size(), d.getRandSeed(), d.getChallenges().size()));
+            details.append(String.format("Descents: %d 条 | RandSeed=%s | Challenges=%d\n",
+                    ws.getDescents().size(), d.getRandSeed(),
+                    d.getChallenges() != null ? d.getChallenges().size() : 0));
         } else { details.append(String.format("FAIL: Descents (expected 5, got %d)\n", ws.getDescents() != null ? ws.getDescents().size() : 0)); }
 
         // === SeasonInfo (P2: Activation/Expiry in ActiveChallenges) ===
-        total++; if (ws.getSeasonInfo() != null && ws.getSeasonInfo().getActiveChallenges() != null) {
+        total++; if (ws.getSeasonInfo() != null && ws.getSeasonInfo().getActiveChallenges() != null
+                && !ws.getSeasonInfo().getActiveChallenges().isEmpty()) {
             passed++;
             var ac = ws.getSeasonInfo().getActiveChallenges().getFirst();
             details.append(String.format("SeasonInfo: %d ActiveChallenges | Activation=%s | Expiry=%s\n",

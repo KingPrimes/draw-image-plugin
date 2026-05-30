@@ -70,9 +70,10 @@ final class DefaultDrawDescentImage {
         if (challenges == null || challenges.isEmpty()) return startY;
 
         int cardWidth = DESCENT_IMAGE_WIDTH - 2 * IMAGE_MARGIN;
-        int extraH = challenges.stream().anyMatch(c ->
+        long extraRows = challenges.stream().filter(c ->
                 (c.getSpecs() != null && !c.getSpecs().isEmpty()) ||
-                (c.getAuras() != null && !c.getAuras().isEmpty())) ? challenges.size() * 26 : 0;
+                (c.getAuras() != null && !c.getAuras().isEmpty())).count();
+        int extraH = (int) (extraRows * 26);
         int cardHeight = 55 + challenges.size() * CHALLENGE_CARD_HEIGHT + 20 + extraH;
 
         // 卡片背景
@@ -213,12 +214,11 @@ final class DefaultDrawDescentImage {
         int height = 150;
         for (Descent d : descents) {
             int challengeCount = d.getChallenges() != null ? d.getChallenges().size() : 0;
-            boolean hasDetails = d.getChallenges() != null &&
-                    d.getChallenges().stream().anyMatch(c ->
+            long extraRows = d.getChallenges() != null ?
+                    d.getChallenges().stream().filter(c ->
                             (c.getSpecs() != null && !c.getSpecs().isEmpty()) ||
-                                    (c.getAuras() != null && !c.getAuras().isEmpty()));
-            int cardHeight = 55 + challengeCount * CHALLENGE_CARD_HEIGHT + 20;
-            if (hasDetails) cardHeight += challengeCount * 26;
+                            (c.getAuras() != null && !c.getAuras().isEmpty())).count() : 0;
+            int cardHeight = 55 + challengeCount * CHALLENGE_CARD_HEIGHT + 20 + (int) (extraRows * 26);
             height += cardHeight + 15;
         }
         height += IMAGE_FOOTER_HEIGHT + 50;

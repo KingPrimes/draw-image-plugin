@@ -123,7 +123,8 @@ final class DefaultDrawActiveMission {
         }
 
         // 行 1: tier 名称 + 剩余时间
-        String tierText = m.getModifierName() + " " + getVoidEnName(m.getModifierName());
+        String mn = m.getModifierName();
+        String tierText = (mn != null ? mn : "未知") + " " + getVoidEnName(mn);
         cb.setColor(tierRgb != null ? lighten(tierRgb, 0.45f) : TEXT_SECONDARY_COLOR).setFont(tierFont);
         cb.addText(tierText, innerX, cardY + 32);
 

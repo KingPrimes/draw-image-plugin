@@ -4,6 +4,8 @@ import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 import io.github.kingprimes.model.WorldState;
 
+import java.io.InputStream;
+
 public class Constant {
     /**
      * 绘制图片保存路径</br>
@@ -22,8 +24,13 @@ public class Constant {
             .build();
 
     static {
-        try {
-            WORLD_STATE = MAPPER.readValue(Constant.class.getResourceAsStream(WORLD_STATUS_PATH), WorldState.class);
+        try (InputStream is = Constant.class.getResourceAsStream(WORLD_STATUS_PATH)) {
+            if (is == null) {
+                throw new RuntimeException("Resource not found: " + WORLD_STATUS_PATH);
+            }
+            WORLD_STATE = MAPPER.readValue(is, WorldState.class);
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse WorldState JSON", e);
         }

@@ -92,6 +92,21 @@ final class DrawConstants {
     public static final Color REWARD_BG_COLOR = new Color(0x0f3460);
     /** 表头背景色 */
     public static final Color TABLE_HEADER_BG_COLOR = new Color(0x2980b9);
+    /** 进攻方 / 红色状态 */
+    public static final Color ATTACKER_COLOR = new Color(0xFF6B6B);
+    /** 防守方 / 绿色状态 */
+    public static final Color DEFENDER_COLOR = new Color(0x4CAF50);
+    /** 值得参与 / 成功 */
+    public static final Color WORTH_COLOR = new Color(0x27ae60);
+    /** 不值得参与 / 危险 */
+    public static final Color NOT_WORTH_COLOR = new Color(0xe74c3c);
+
+    // 双衍王境情绪颜色
+    public static final Color EMOTION_SAD_COLOR = new Color(74, 144, 217);
+    public static final Color EMOTION_FEAR_COLOR = new Color(155, 89, 182);
+    public static final Color EMOTION_JOY_COLOR = new Color(241, 196, 15);
+    public static final Color EMOTION_ANGER_COLOR = new Color(231, 76, 60);
+    public static final Color EMOTION_ENVY_COLOR = new Color(46, 204, 113);
     /** 黑色 */
     public static final Color BLACK_COLOR = Color.BLACK;
 

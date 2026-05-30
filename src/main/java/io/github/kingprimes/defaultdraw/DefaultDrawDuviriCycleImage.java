@@ -30,11 +30,11 @@ final class DefaultDrawDuviriCycleImage {
     private static final int MAX_ITEMS = 7;
     private static final int ITEM_H = 32;
 
-    private static final Color EMOTION_SAD = new Color(74, 144, 217);
-    private static final Color EMOTION_FEAR = new Color(155, 89, 182);
-    private static final Color EMOTION_JOY = new Color(241, 196, 15);
-    private static final Color EMOTION_ANGER = new Color(231, 76, 60);
-    private static final Color EMOTION_ENVY = new Color(46, 204, 113);
+    private static final Color EM_SAD = EMOTION_SAD_COLOR;
+    private static final Color EM_FEAR = EMOTION_FEAR_COLOR;
+    private static final Color EM_JOY = EMOTION_JOY_COLOR;
+    private static final Color EM_ANGER = EMOTION_ANGER_COLOR;
+    private static final Color EM_ENVY = EMOTION_ENVY_COLOR;
 
     private DefaultDrawDuviriCycleImage() {
         throw new AssertionError("Cannot instantiate DefaultDrawDuviriCycleImage class");
@@ -123,10 +123,11 @@ final class DefaultDrawDuviriCycleImage {
         cb.setColor(DIVIDER_COLOR).drawLine(cardX + 20, cardY + 52, cardX + CARD_W - 20, cardY + 52);
 
         int itemY = cardY + 70;
+        Font itemFont = FONT.deriveFont(20f);
         for (int i = 0; i < displayed; i++) {
             String item = items.get(i);
             if (item != null && item.length() > 22) item = item.substring(0, 20) + "..";
-            cb.setColor(TEXT_COLOR).setFont(FONT.deriveFont(20f));
+            cb.setColor(TEXT_COLOR).setFont(itemFont);
             cb.addText("• " + (item != null ? item : ""), cardX + 25, itemY + 8);
             itemY += ITEM_H;
         }
@@ -138,11 +139,11 @@ final class DefaultDrawDuviriCycleImage {
 
     private static Color getEmotionColor(String emotion) {
         return switch (emotion) {
-            case "悲伤" -> EMOTION_SAD;
-            case "恐惧" -> EMOTION_FEAR;
-            case "喜悦" -> EMOTION_JOY;
-            case "愤怒" -> EMOTION_ANGER;
-            case "嫉妒" -> EMOTION_ENVY;
+            case "悲伤" -> EM_SAD;
+            case "恐惧" -> EM_FEAR;
+            case "喜悦" -> EM_JOY;
+            case "愤怒" -> EM_ANGER;
+            case "嫉妒" -> EM_ENVY;
             default -> ACCENT_GOLD_COLOR;
         };
     }

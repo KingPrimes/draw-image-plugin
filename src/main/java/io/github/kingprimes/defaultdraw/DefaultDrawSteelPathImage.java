@@ -4,7 +4,6 @@ import io.github.kingprimes.image.ImageCombiner;
 import io.github.kingprimes.model.worldstate.SteelPathOffering;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
@@ -38,9 +37,7 @@ final class DefaultDrawSteelPathImage {
         if (sp.getRemaining() != null) rows++;
 
         int canvasH = Math.max(CONTENT_START_Y + rows * ROW_H + 240 + FOOTER_OFFSET + 50, 400);
-        ImageCombiner cb = new ImageCombiner(
-                new BufferedImage(CANVAS_W, canvasH, BufferedImage.TYPE_INT_ARGB),
-                ImageCombiner.OutputFormat.PNG);
+        ImageCombiner cb = new ImageCombiner(CANVAS_W, canvasH, ImageCombiner.OutputFormat.PNG);
 
         cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, canvasH);
         cb.drawTooRoundRect();
@@ -66,7 +63,7 @@ final class DefaultDrawSteelPathImage {
             cb.addText("剩余时间: " + sp.getRemaining(), CONTENT_X, y + 18);
         }
 
-        cb.drawStandingAt(CONTENT_X + CONTENT_W - 260 - 20, canvasH - 390 - 10, 300, 450);
+        cb.drawStandingAt(CONTENT_X + CONTENT_W - 300, canvasH - 450 - FOOTER_OFFSET, 300, 450);
         addFooter(cb, canvasH - FOOTER_OFFSET);
         cb.combine();
         return cb.getCombinedImageOutStream().toByteArray();
