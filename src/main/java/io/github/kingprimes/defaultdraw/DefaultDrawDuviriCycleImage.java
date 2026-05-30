@@ -64,7 +64,7 @@ final class DefaultDrawDuviriCycleImage {
 
         cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 48))
                 .addCenteredText("双衍王境", TITLE_Y);
-        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 68, CONTENT_X + CONTENT_W, TITLE_Y + 68);
+        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 40, CONTENT_X + CONTENT_W, TITLE_Y + 40);
 
         // ---- 情绪展示卡 ----
         String emotion = cycle.getState() != null ? cycle.getState() : "喜悦";
@@ -97,7 +97,7 @@ final class DefaultDrawDuviriCycleImage {
         drawChoiceCard(cb, "普通", normalItems, leftX, cardsY, ACCENT_GOLD_COLOR);
         drawChoiceCard(cb, "钢铁之路", hardItems, rightX, cardsY, ACCENT_COLOR);
 
-        cb.drawStandingAt(CONTENT_X + CONTENT_W - 300, canvasH - 450, 300, 450);
+        cb.drawStandingAt(CANVAS_W, canvasH, STANDING_RATIO);
         addFooter(cb, canvasH - FOOTER_OFFSET);
 
         cb.combine();
@@ -118,8 +118,10 @@ final class DefaultDrawDuviriCycleImage {
                 .fillRoundRect(cardX, cardY, CARD_W, cardH, CARD_RADIUS, CARD_RADIUS);
         cb.setColor(accent).fillRect(cardX + CARD_RADIUS, cardY + 2, CARD_W - 2 * CARD_RADIUS, 4);
 
-        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 24));
-        cb.addCenteredText(title, cardY + 35);
+        Font titleCardFont = FONT.deriveFont(Font.BOLD, 24);
+        cb.setColor(TITLE_COLOR).setFont(titleCardFont);
+        int titleW = cb.getFontMetrics(titleCardFont).stringWidth(title);
+        cb.addText(title, cardX + (CARD_W - titleW) / 2, cardY + 35);
         cb.setColor(DIVIDER_COLOR).drawLine(cardX + 20, cardY + 52, cardX + CARD_W - 20, cardY + 52);
 
         int itemY = cardY + 70;

@@ -71,9 +71,7 @@ final class DefaultDrawVoidTraderImage {
         combiner.setFont(FONT)
                 .setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, VOID_TRADER_IMAGE_WIDTH, height)
-                .drawTooRoundRect()
-                // 绘制看板娘
-                .drawStandingDrawing();
+                .drawTooRoundRect();
 
         // 绘制标题
         combiner.setColor(TITLE_COLOR)
@@ -88,9 +86,10 @@ final class DefaultDrawVoidTraderImage {
 
         // 添加底部署名
         addFooter(combiner.setFont(FONT), height - IMAGE_FOOTER_HEIGHT);
-
         // 合并图像并获取字节数组
-        combiner.combine();
+        combiner
+                .drawStandingAt(VOID_TRADER_IMAGE_WIDTH, height, STANDING_RATIO)
+                .combine();
         try (ByteArrayOutputStream bos = combiner.getCombinedImageOutStream()) {
             return bos.toByteArray();
         } catch (Exception e) {

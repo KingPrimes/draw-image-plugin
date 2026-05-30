@@ -25,13 +25,11 @@ final class DefaultDrawAlertsImage {
     private static final int COLS = 2;
     private static final int COL_GAP = 20;
     private static final int CARD_W = (CONTENT_W - COL_GAP) / COLS;
+    private static final int[] COL_X = {CONTENT_X, CONTENT_X + CARD_W + COL_GAP};
     private static final int CARD_H = 150;
     private static final int CARD_PAD = 20;
     private static final int CARD_RADIUS = 14;
     private static final int ROW_GAP = 20;
-
-    private static final int[] COL_X = {CONTENT_X, CONTENT_X + CARD_W + COL_GAP};
-
     private static final int TITLE_Y = 100;
     private static final int DIVIDER_Y = TITLE_Y + 40;
     private static final int CONTENT_START_Y = 170;
@@ -87,19 +85,11 @@ final class DefaultDrawAlertsImage {
             drawAlertCard(cb, alerts.get(i), cardX, cardY);
         }
 
-        // 看板娘
-        if (isOdd) {
-            int standingX = COL_X[1] + (CARD_W - STANDING_ODD_W) / 2;
-            cb.drawStandingAt(standingX, lastRowY, STANDING_ODD_W, STANDING_ODD_H);
-        } else {
-            int contentEnd = CONTENT_START_Y + cardsH;
-            int standingX = CONTENT_X + CONTENT_W - STANDING_EVEN_W - 20;
-            cb.drawStandingAt(standingX, contentEnd + 10, STANDING_EVEN_W, STANDING_EVEN_H);
-        }
-
         addFooter(cb, canvasH - FOOTER_OFFSET);
 
-        cb.combine();
+        cb
+                .drawStandingAt(CANVAS_W, canvasH, STANDING_RATIO)
+                .combine();
         try (ByteArrayOutputStream bos = cb.getCombinedImageOutStream()) {
             return bos.toByteArray();
         } catch (Exception e) {
@@ -146,7 +136,13 @@ final class DefaultDrawAlertsImage {
 
         if (mi != null && mi.getFaction() != null) {
             Color fColor = mi.getFaction().getColor();
+            String fIcon = mi.getFaction().getIcon();
             String fName = mi.getFaction().getName();
+            if (fIcon != null && !fIcon.isEmpty()) {
+                cb.setColor(fColor).setFont(FONT_WARFRAME_ICON);
+                cb.addText(fIcon, cursorX, badgeY + 5);
+                cursorX += cb.getFontMetrics(FONT_WARFRAME_ICON).stringWidth(fIcon) + 4;
+            }
             cb.setColor(fColor).setFont(badgeFont);
             cb.addText(fName, cursorX, badgeY + 3);
             cursorX += badgeFm.stringWidth(fName) + 14;

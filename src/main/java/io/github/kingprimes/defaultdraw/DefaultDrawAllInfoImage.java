@@ -87,7 +87,7 @@ final class DefaultDrawAllInfoImage {
                 .fillRect(0, 0, IMAGE_WIDTH, height)
                 // 绘制双层边框
                 .drawTooRoundRect()
-                .drawStandingDrawing();
+                .drawStandingAt(IMAGE_WIDTH, height, STANDING_RATIO);
 
         // 绘制标题
         combiner.setColor(TITLE_COLOR)

@@ -41,7 +41,7 @@ final class DefaultDrawAllCycleImage {
         combiner.setColor(TITLE_COLOR)
                 .setFont(FONT)
                 .addCenteredText("平原查询结果", IMAGE_MARGIN + IMAGE_TITLE_HEIGHT / 2)
-                .drawStandingDrawing();
+                .drawStandingAt(IMAGE_WIDTH, ALL_CYCLE_HEIGHT, STANDING_RATIO);
 
         // 绘制表头
         int tableY = IMAGE_MARGIN + IMAGE_TITLE_HEIGHT + ALL_CYCLE_TABLE_HEADER_HEIGHT;

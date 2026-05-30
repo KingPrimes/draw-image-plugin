@@ -6,7 +6,16 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
 /**
  * 图片IO工具类，提供了一些常用的图片操作方法
@@ -60,15 +69,54 @@ public final class ImageIOUtils {
         return image;
     }
 
+    /** 看板娘图片缓存，null = 未初始化，empty = 无图片 */
+    private static List<BufferedImage> standingCache;
+
+    /** 加载 /image/ 目录下所有看板娘图片到缓存 */
+    private static synchronized void initStandingCache() {
+        if (standingCache != null) return;
+        List<BufferedImage> list = new ArrayList<>();
+        URL url = ImageIOUtils.class.getResource("/image/");
+        if (url != null) {
+            try {
+                if ("file".equals(url.getProtocol())) {
+                    try (Stream<Path> files = Files.list(Paths.get(url.toURI()))) {
+                        files.filter(p -> p.getFileName().toString().matches("\\d+\\.png"))
+                                .sorted()
+                                .forEach(p -> {
+                                    BufferedImage img = getResourcesImage("/image/" + p.getFileName());
+                                    if (img != null) list.add(img);
+                                });
+                    }
+                }
+            } catch (IOException | URISyntaxException ignored) {
+            }
+        }
+        // JAR 环境兜底
+        if (list.isEmpty()) {
+            for (int i = 1; i <= 20; i++) {
+                try {
+                    BufferedImage img = getResourcesImage("/image/%d.png".formatted(i));
+                    if (img != null) list.add(img);
+                } catch (RuntimeException e) {
+                    break;
+                }
+            }
+        }
+        standingCache = Collections.unmodifiableList(list);
+    }
+
     /**
      * 随机获取 看板娘插画图片
      *
      * @return 返回随机的看板娘插画图片
      */
     public static BufferedImage getRandomXiaoMeiWangImage() {
-        Random random = new Random();
-        int i = random.nextInt(1, 12);
-        return getResourcesImage("/image/%d.png".formatted(i));
+        if (standingCache == null) {
+            initStandingCache();
+        }
+        if (standingCache.isEmpty()) return null;
+        return standingCache.get(new Random().nextInt(standingCache.size()));
     }
 
     /**

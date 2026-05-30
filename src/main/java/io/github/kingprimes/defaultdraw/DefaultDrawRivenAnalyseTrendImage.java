@@ -82,7 +82,7 @@ final class DefaultDrawRivenAnalyseTrendImage {
         addFooter(combiner, totalHeight - 40);
 
         // 添加看板娘图片
-        combiner.drawStandingDrawing();
+        combiner.drawStandingAt(totalWidth, totalHeight, STANDING_RATIO);
 
         // 合成并返回图像
         combiner.combine();

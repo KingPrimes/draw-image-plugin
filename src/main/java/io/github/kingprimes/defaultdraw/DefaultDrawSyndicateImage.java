@@ -21,11 +21,11 @@ import static io.github.kingprimes.defaultdraw.DrawConstants.*;
  */
 final class DefaultDrawSyndicateImage {
 
-    private static final int CARD_WIDTH = 550;
+    private static final int CARD_WIDTH = 480;
     private static final int CARD_MIN_HEIGHT = 250;
-    private static final int CARD_MARGIN_X = 40;
+    private static final int CARD_MARGIN_X = 35;
     private static final int CARD_MARGIN_Y = 30;
-    private static final int CARDS_PER_ROW = 2;
+    private static final int CARDS_PER_ROW = 3;
 
     private DefaultDrawSyndicateImage() {
         throw new AssertionError("Cannot instantiate DefaultDrawSyndicateImage class");
@@ -76,7 +76,7 @@ final class DefaultDrawSyndicateImage {
         combiner.setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, IMAGE_WIDTH, totalHeight)
                 .drawTooRoundRect()
-                .drawStandingDrawing();
+                .drawStandingAt(IMAGE_WIDTH, totalHeight, STANDING_RATIO);
 
         // 绘制标题
         String title = sm.getTag() != null ? sm.getTag().getName() + " - 节点" : "集团任务 - 节点";
@@ -123,17 +123,16 @@ final class DefaultDrawSyndicateImage {
             cardHeights.add(cardHeight);
         }
 
-        // 第二步：计算总高度（每行2个卡片）
+        // 第二步：计算总高度
         int totalHeight = IMAGE_MARGIN_TOP + IMAGE_TITLE_HEIGHT;
         for (int i = 0; i < cardHeights.size(); i += CARDS_PER_ROW) {
-            // 每行取两个卡片中较高的那个
             int rowHeight = cardHeights.get(i);
-            if (i + 1 < cardHeights.size()) {
-                rowHeight = Math.max(rowHeight, cardHeights.get(i + 1));
+            for (int j = 1; j < CARDS_PER_ROW && i + j < cardHeights.size(); j++) {
+                rowHeight = Math.max(rowHeight, cardHeights.get(i + j));
             }
             totalHeight += rowHeight + CARD_MARGIN_Y;
         }
-        totalHeight += IMAGE_FOOTER_HEIGHT + 100; // 为看板娘预留空间
+        totalHeight += IMAGE_FOOTER_HEIGHT + 200; // 为看板娘预留空间
 
         // 创建图像合成器
         BufferedImage image = new BufferedImage(IMAGE_WIDTH, totalHeight, BufferedImage.TYPE_INT_ARGB);
@@ -143,7 +142,7 @@ final class DefaultDrawSyndicateImage {
         combiner.setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, IMAGE_WIDTH, totalHeight)
                 .drawTooRoundRect()
-                .drawStandingDrawing();
+                .drawStandingAt(IMAGE_WIDTH, totalHeight, STANDING_RATIO);
 
         // 绘制标题
         String title = sm.getTag() != null ? sm.getTag().getName() + " - 赏金任务" : "集团任务";
@@ -163,10 +162,9 @@ final class DefaultDrawSyndicateImage {
             // 检查是否需要换行
             if (cardIndex > 0 && cardIndex % CARDS_PER_ROW == 0) {
                 x = IMAGE_MARGIN;
-                // 获取上一行的最大高度
-                int prevRowMaxHeight = cardHeights.get(i - 1);
-                if (i - 2 >= 0) {
-                    prevRowMaxHeight = Math.max(prevRowMaxHeight, cardHeights.get(i - 2));
+                int prevRowMaxHeight = 0;
+                for (int j = 1; j <= CARDS_PER_ROW && i - j >= 0; j++) {
+                    prevRowMaxHeight = Math.max(prevRowMaxHeight, cardHeights.get(i - j));
                 }
                 y += prevRowMaxHeight + CARD_MARGIN_Y;
             }

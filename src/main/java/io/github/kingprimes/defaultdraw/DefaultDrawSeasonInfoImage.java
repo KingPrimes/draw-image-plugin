@@ -18,7 +18,7 @@ public final class DefaultDrawSeasonInfoImage {
 
     private static final int SEASON_IMAGE_WIDTH = 1800;
     private static final int SEASON_IMAGE_MIN_HEIGHT = 600;
-    private static final int CARD_HEIGHT = 200;
+    private static final int CARD_HEIGHT = 240;
     private static final int CARD_MARGIN_H = 20;
     private static final int CARD_MARGIN_V = 30;
     private static final int CARDS_PER_ROW = 3;

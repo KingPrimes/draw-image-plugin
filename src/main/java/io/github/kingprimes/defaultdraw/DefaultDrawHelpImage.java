@@ -40,7 +40,7 @@ final class DefaultDrawHelpImage {
 
         ImageCombiner combiner = new ImageCombiner(IMAGE_WIDTH, totalHeight, ImageCombiner.OutputFormat.PNG);
         combiner.setFont(Fonts.FONT_TEXT)
-                .setColor(Color.WHITE)
+                .setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, IMAGE_WIDTH, totalHeight).drawTooRoundRect();
 
         // 标题绘制
@@ -89,7 +89,7 @@ final class DefaultDrawHelpImage {
 
         combiner
                 // 绘制立绘图
-                .drawStandingDrawing()
+                .drawStandingAt(IMAGE_WIDTH, totalHeight, STANDING_RATIO)
                 .setColor(HELP_IMAGE_TEXT_COLOR);
         // 3. 绘制所有数据行文字（批量操作）
         for (RowInfo info : rowInfos) {

@@ -24,14 +24,14 @@ final class DefaultDrawInvasionImage {
     private static final int CONTENT_X = 60;
     private static final int CONTENT_W = 1180;
     private static final int CARD_W = CONTENT_W;
-    private static final int CARD_H = 180;
+    private static final int CARD_H = 200;
     private static final int CARD_RADIUS = 14;
     private static final int CARD_PAD = 24;
-    private static final int ROW_GAP = 16;
+    private static final int ROW_GAP = 20;
     private static final int ACCENT_STRIP_H = 6;
 
-    private static final int TITLE_Y = 60;
-    private static final int CONTENT_START_Y = 175;
+    private static final int TITLE_Y = 80;
+    private static final int CONTENT_START_Y = 150;
     private static final int FOOTER_OFFSET = 50;
 
     private static final int STANDING_W = 260;
@@ -59,26 +59,23 @@ final class DefaultDrawInvasionImage {
         cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, canvasH);
         cb.drawTooRoundRect();
 
-        cb.setColor(ACCENT_COLOR).setFont(FONT.deriveFont(Font.BOLD, 60))
+        cb.setColor(ACCENT_COLOR).setFont(FONT.deriveFont(Font.BOLD, 48))
                 .addCenteredText("入侵任务", TITLE_Y);
-        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 68, CONTENT_X + CONTENT_W, TITLE_Y + 68);
+        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 55, CONTENT_X + CONTENT_W, TITLE_Y + 55);
 
-        Font nodeFont = FONT.deriveFont(Font.BOLD, 36);
-        Font factionFont = FONT.deriveFont(30f);
-        Font rewardFont = FONT.deriveFont(26f);
-        Font progressFont = FONT.deriveFont(28f);
+        Font nodeFont = FONT.deriveFont(Font.BOLD, 32);
+        Font factionFont = FONT.deriveFont(26f);
+        Font rewardFont = FONT.deriveFont(22f);
+        Font progressFont = FONT.deriveFont(24f);
 
         for (int i = 0; i < sorted.size(); i++) {
             drawInvasionCard(cb, sorted.get(i), CONTENT_X,
                     CONTENT_START_Y + i * (CARD_H + ROW_GAP),
                     nodeFont, factionFont, rewardFont, progressFont);
         }
-
-        cb.drawStandingAt(CONTENT_X + CONTENT_W - STANDING_W - 20,
-                canvasH - STANDING_H - 10, STANDING_W, STANDING_H);
         addFooter(cb, canvasH - FOOTER_OFFSET);
 
-        cb.combine();
+        cb.drawStandingAt(CANVAS_W, canvasH, STANDING_RATIO).combine();
         try (ByteArrayOutputStream bos = cb.getCombinedImageOutStream()) {
             return bos.toByteArray();
         } catch (Exception e) {
@@ -87,7 +84,7 @@ final class DefaultDrawInvasionImage {
     }
 
     private static void drawInvasionCard(ImageCombiner cb, Invasion inv, int cardX, int cardY,
-                                          Font nodeFont, Font factionFont, Font rewardFont, Font progressFont) {
+                                         Font nodeFont, Font factionFont, Font rewardFont, Font progressFont) {
         int innerX = cardX + CARD_PAD;
         int innerW = CARD_W - CARD_PAD * 2;
 
@@ -110,35 +107,49 @@ final class DefaultDrawInvasionImage {
 
         // 行 1: 节点（左） + 进度（右）
         cb.setColor(TEXT_COLOR).setFont(nodeFont);
-        cb.addText(inv.getNode() != null ? inv.getNode() : "未知节点", innerX, cardY + 34);
+        cb.addText(inv.getNode() != null ? inv.getNode() : "未知节点", innerX, cardY + 40);
         String pct = String.format("进度: %.1f%%", progress * 100);
         cb.setColor(TITLE_COLOR).setFont(progressFont);
         int pctW = cb.getFontMetrics(progressFont).stringWidth(pct);
-        cb.addText(pct, innerX + innerW - pctW, cardY + 36);
+        cb.addText(pct, innerX + innerW - pctW, cardY + 42);
 
         // 行 2: 阵营对抗（居中）
-        int row2Y = cardY + 82;
+        int row2Y = cardY + 88;
         String atkName = inv.getFaction() != null ? inv.getFaction().getName() : "未知";
         Color atkColor = inv.getFaction() != null ? inv.getFaction().getColor() : TEXT_MUTED_COLOR;
+        String atkIcon = inv.getFaction() != null ? inv.getFaction().getIcon() : "";
         String defName = inv.getDefenderFaction() != null ? inv.getDefenderFaction().getName() : "未知";
         Color defColor = inv.getDefenderFaction() != null ? inv.getDefenderFaction().getColor() : TEXT_MUTED_COLOR;
+        String defIcon = inv.getDefenderFaction() != null ? inv.getDefenderFaction().getIcon() : "";
         String sep = "  VS  ";
 
         java.awt.FontMetrics ffm = cb.getFontMetrics(factionFont);
+        Font iconFont = FONT_WARFRAME_ICON;
+        java.awt.FontMetrics ifm = cb.getFontMetrics(iconFont);
+        int atkIconW = (atkIcon != null && !atkIcon.isEmpty()) ? ifm.stringWidth(atkIcon) + 4 : 0;
+        int defIconW = (defIcon != null && !defIcon.isEmpty()) ? ifm.stringWidth(defIcon) + 4 : 0;
         int atkW = ffm.stringWidth(atkName);
         int sepW = ffm.stringWidth(sep);
         int defW = ffm.stringWidth(defName);
-        int totalW = atkW + sepW + defW;
+        int totalW = atkIconW + atkW + sepW + defIconW + defW;
         int curX = innerX + (innerW - totalW) / 2;
 
+        if (atkIcon != null && !atkIcon.isEmpty()) {
+            cb.setColor(atkColor).setFont(iconFont).addText(atkIcon, curX, row2Y);
+            curX += atkIconW;
+        }
         cb.setColor(atkColor).setFont(factionFont).addText(atkName, curX, row2Y + 3);
         curX += atkW;
         cb.setColor(TEXT_MUTED_COLOR).setFont(factionFont).addText(sep, curX, row2Y + 3);
         curX += sepW;
+        if (defIcon != null && !defIcon.isEmpty()) {
+            cb.setColor(defColor).setFont(iconFont).addText(defIcon, curX, row2Y);
+            curX += defIconW;
+        }
         cb.setColor(defColor).setFont(factionFont).addText(defName, curX, row2Y + 3);
 
         // 行 3: 奖励
-        int rewardY = cardY + 134;
+        int rewardY = cardY + 140;
         String atkReward = getFirstRewardText(inv.getAttackerReward());
         if (!atkReward.isEmpty()) {
             cb.setColor(ATK_COLOR).setFont(rewardFont);

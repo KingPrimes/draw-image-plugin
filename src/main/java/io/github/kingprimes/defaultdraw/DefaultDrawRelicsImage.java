@@ -46,7 +46,7 @@ final class DefaultDrawRelicsImage {
         ImageCombiner combiner = new ImageCombiner(image, ImageCombiner.OutputFormat.PNG);
 
         // 设置背景色
-        combiner.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, IMAGE_WIDTH, totalHeight).drawTooRoundRect().drawStandingDrawing();
+        combiner.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, IMAGE_WIDTH, totalHeight).drawTooRoundRect().drawStandingAt(IMAGE_WIDTH, totalHeight, STANDING_RATIO);
 
         // 绘制遗物卡片
         int x = IMAGE_MARGIN;

@@ -76,7 +76,7 @@ final class DefaultDrawKnownCalendarSeasonsImage {
                 .fillRect(0, 0, IMAGE_WIDTH, height)
                 .drawTooRoundRect()
                 // 绘制看板娘
-                .drawStandingDrawing();
+                .drawStandingAt(IMAGE_WIDTH, height, STANDING_RATIO);
 
         // 绘制标题
         combiner.setColor(TITLE_COLOR)
@@ -170,8 +170,7 @@ final class DefaultDrawKnownCalendarSeasonsImage {
             Map<String, List<KnownCalendarSeasons.Days>> sortedMonthDays = new TreeMap<>(monthDays);
 
             // 计算行数
-            Object[] months = sortedMonthDays.keySet().toArray();
-            int rows = (int) Math.ceil((double) months.length / MONTHS_PER_ROW);
+            int rows = (int) Math.ceil((double) sortedMonthDays.keySet().toArray().length / MONTHS_PER_ROW);
 
             // 计算每行的实际高度
             for (int row = 0; row < rows; row++) {

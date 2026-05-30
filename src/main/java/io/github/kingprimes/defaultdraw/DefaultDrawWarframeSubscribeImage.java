@@ -34,17 +34,17 @@ final class DefaultDrawWarframeSubscribeImage {
         ImageCombiner combiner = new ImageCombiner(SUBSCRIBE_IMAGE_WIDTH, SUBSCRIBE_IMAGE_HEIGHT, ImageCombiner.OutputFormat.PNG);
 
         combiner.setFont(FONT)
-                .setColor(Color.WHITE)
-                .fillRect(0, 0, SUBSCRIBE_IMAGE_WIDTH, SUBSCRIBE_IMAGE_HEIGHT); // 白色背景
+                .setColor(PAGE_BACKGROUND_COLOR)
+                .fillRect(0, 0, SUBSCRIBE_IMAGE_WIDTH, SUBSCRIBE_IMAGE_HEIGHT);
 
         int borderPadding = 20;
         combiner.drawTooRoundRect()
-                .drawStandingDrawing();
+                .drawStandingAt(SUBSCRIBE_IMAGE_WIDTH, SUBSCRIBE_IMAGE_HEIGHT, STANDING_RATIO);
 
         int y = SUBSCRIBE_IMAGE_MARGIN + borderPadding + SUBSCRIBE_IMAGE_TITLE_HEIGHT / 2;
         // ================== 标题 Start ==================
         String title = "---订阅指令表---";
-        combiner.setColor(BLACK_COLOR)
+        combiner.setColor(TEXT_COLOR)
                 .setFont(FONT)
                 .addCenteredText(title, y);
         // ================== 标题 END ==================
@@ -58,7 +58,7 @@ final class DefaultDrawWarframeSubscribeImage {
         String missionTypeText = "[-订阅任务类型]";
         String relicLevelText = "[-订阅遗物等级]";
 
-        combiner.setColor(BLACK_COLOR)
+        combiner.setColor(TEXT_COLOR)
                 .addText(usage, x, y);
 
         x += TextUtils.getFortWidth(usage, FONT) + 80;
@@ -83,7 +83,7 @@ final class DefaultDrawWarframeSubscribeImage {
         String subscribeTypeExample = "裂隙";
         String missionTypeExample = "生存模式";
         String relicLevelExample = "后纪";
-        combiner.setColor(BLACK_COLOR)
+        combiner.setColor(TEXT_COLOR)
                 .addText(example, x, y);
 
         x += TextUtils.getFortWidth(example, FONT) + 80;
@@ -111,7 +111,7 @@ final class DefaultDrawWarframeSubscribeImage {
         String t = "9";
         String f = "-11";
         String r = "-4";
-        combiner.setColor(BLACK_COLOR)
+        combiner.setColor(TEXT_COLOR)
                 .addText(l, x, y);
 
         x += TextUtils.getFortWidth(l, FONT) + 40;
@@ -141,7 +141,7 @@ final class DefaultDrawWarframeSubscribeImage {
         String f3 = "裂隙";
         String useful = "时有用";
 
-        combiner.setColor(BLACK_COLOR)
+        combiner.setColor(TEXT_COLOR)
                 .addText(note, x, y);
 
         x += TextUtils.getFortWidth(note, FONT) + 40;
@@ -149,7 +149,7 @@ final class DefaultDrawWarframeSubscribeImage {
                 .addText(rl, x, y);
 
         x += TextUtils.getFortWidth(rl, FONT) + 30;
-        combiner.setColor(BLACK_COLOR)
+        combiner.setColor(TEXT_COLOR)
                 .addText(only, x, y);
 
         x += TextUtils.getFortWidth(only, FONT) + 60;
@@ -157,7 +157,7 @@ final class DefaultDrawWarframeSubscribeImage {
                 .addText(f3, x, y);
 
         x += TextUtils.getFortWidth(f3, FONT);
-        combiner.setColor(BLACK_COLOR)
+        combiner.setColor(TEXT_COLOR)
                 .addText(useful, x, y);
         // ================== 注意事项 END ==================
 

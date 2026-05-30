@@ -62,7 +62,7 @@ final class DefaultDrawConquestImage {
         }
 
         addFooter(combiner, height - IMAGE_FOOTER_HEIGHT);
-        combiner.drawStandingDrawing();
+        combiner.drawStandingAt(CONQUEST_IMAGE_WIDTH, height, STANDING_RATIO);
         combiner.combine();
         return combiner.getCombinedImageOutStream().toByteArray();
     }

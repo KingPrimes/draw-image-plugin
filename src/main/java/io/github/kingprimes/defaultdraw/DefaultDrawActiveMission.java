@@ -27,12 +27,12 @@ final class DefaultDrawActiveMission {
     private static final int CARD_H = 160;
     private static final int CARD_RADIUS = 14;
     private static final int CARD_PAD = 20;
-    private static final int ROW_GAP = 16;
+    private static final int ROW_GAP = 20;
     private static final int ACCENT_STRIP_H = 4;
 
     private static final int[] COL_X = {CONTENT_X, CONTENT_X + CARD_W + COL_GAP};
-    private static final int TITLE_Y = 60;
-    private static final int CONTENT_START_Y = 175;
+    private static final int TITLE_Y = 80;
+    private static final int CONTENT_START_Y = 160;
     private static final int FOOTER_OFFSET = 50;
 
     private static final int STANDING_ODD_W = 310;
@@ -77,8 +77,8 @@ final class DefaultDrawActiveMission {
             title = "虚空裂隙";
             titleColor = TITLE_COLOR;
         }
-        cb.setColor(titleColor).setFont(FONT.deriveFont(Font.BOLD, 56)).addCenteredText(title, TITLE_Y);
-        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 68, CONTENT_X + CONTENT_W, TITLE_Y + 68);
+        cb.setColor(titleColor).setFont(FONT.deriveFont(Font.BOLD, 44)).addCenteredText(title, TITLE_Y);
+        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 55, CONTENT_X + CONTENT_W, TITLE_Y + 55);
 
         Font tierFont = FONT.deriveFont(Font.BOLD, 30);
         Font bodyFont = FONT.deriveFont(26f);
@@ -94,10 +94,12 @@ final class DefaultDrawActiveMission {
         }
 
         if (isOdd) {
-            cb.drawStandingAt(COL_X[1] + (CARD_W - STANDING_ODD_W) / 2, lastRowY, STANDING_ODD_W, STANDING_ODD_H);
+            box sz = scaleByPct(CANVAS_W, canvasH, 0.35);
+            cb.drawStandingAt(COL_X[1] + (CARD_W - sz.x()) / 2, lastRowY, sz.x(), sz.y());
         } else {
-            cb.drawStandingAt(CONTENT_X + CONTENT_W - STANDING_EVEN_W - 20,
-                    CONTENT_START_Y + cardsH + 10, STANDING_EVEN_W, STANDING_EVEN_H);
+            box sz = scaleByPct(CANVAS_W, canvasH, STANDING_RATIO);
+            cb.drawStandingAt(CONTENT_X + CONTENT_W - sz.x() - 20,
+                    CONTENT_START_Y + cardsH + 10, sz.x(), sz.y());
         }
 
         addFooter(cb, canvasH - FOOTER_OFFSET);
@@ -126,34 +128,40 @@ final class DefaultDrawActiveMission {
         String mn = m.getModifierName();
         String tierText = (mn != null ? mn : "未知") + " " + getVoidEnName(mn);
         cb.setColor(tierRgb != null ? lighten(tierRgb, 0.45f) : TEXT_SECONDARY_COLOR).setFont(tierFont);
-        cb.addText(tierText, innerX, cardY + 32);
+        cb.addText(tierText, innerX, cardY + 42);
 
         String eta = m.getTimeLeft() != null ? m.getTimeLeft() : "未知";
         cb.setColor(getTimeColor(eta)).setFont(timeFont);
         int etaW = cb.getFontMetrics(timeFont).stringWidth(eta);
-        cb.addText(eta, innerX + innerW - etaW, cardY + 33);
+        cb.addText(eta, innerX + innerW - etaW, cardY + 43);
 
         // 行 2: 任务类型 + 派系（居中）
         String mt = m.getMissionTypeName();
         Color mtCol = m.getMissionTypeColor();
         String fn = m.getFactionName() != null ? m.getFactionName() : "";
         Color fnCol = m.getFactionColor();
-        int row2Y = cardY + 72;
+        int row2Y = cardY + 85;
         java.awt.FontMetrics bfm = cb.getFontMetrics(bodyFont);
         int mtW = bfm.stringWidth(mt);
         int gap = fn.isEmpty() ? 0 : 8;
         int fnW = fn.isEmpty() ? 0 : bfm.stringWidth(fn);
         int totalW = mtW + gap + fnW;
         int curX = innerX + (innerW - totalW) / 2;
-        cb.setColor(mtCol).setFont(bodyFont).addText(mt, curX, row2Y + 3);
+        cb.setColor(mtCol).setFont(bodyFont).addText(mt, curX, row2Y);
         curX += mtW + gap;
         if (!fn.isEmpty()) {
-            cb.setColor(fnCol).setFont(bodyFont).addText(fn, curX, row2Y + 3);
+            String icon = m.getFactionIcon();
+            if (icon != null && !icon.isEmpty()) {
+                cb.setColor(fnCol).setFont(FONT_WARFRAME_ICON);
+                cb.addText(icon, curX, row2Y);
+                curX += cb.getFontMetrics(FONT_WARFRAME_ICON).stringWidth(icon) + 4;
+            }
+            cb.setColor(fnCol).setFont(bodyFont).addText(fn, curX, row2Y);
         }
 
         // 行 3: 节点
         cb.setColor(TEXT_COLOR).setFont(locationFont);
-        cb.addText(m.getNode() != null ? m.getNode() : "未知节点", innerX, cardY + 118);
+        cb.addText(m.getNode() != null ? m.getNode() : "未知节点", innerX, cardY + 130);
     }
 
     private static String getVoidEnName(String name) {

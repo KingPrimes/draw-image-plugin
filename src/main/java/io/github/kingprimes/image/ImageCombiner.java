@@ -1,5 +1,7 @@
 package io.github.kingprimes.image;
 
+import io.github.kingprimes.defaultdraw.DrawConstants;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,6 +19,14 @@ import java.io.IOException;
 public class ImageCombiner {
 
     /**
+     * 绘制双层边框
+     *
+     * @param roundRect 参数
+     * @return 当前实例
+     */
+    private static final Color BORDER_OUTER_COLOR = new Color(0x3C3C5A);
+    private static final Color BORDER_INNER_COLOR = new Color(0x4a4a6a);
+    /**
      * 目标画布图像，所有绘制操作的最终载体（尺寸不可变）
      */
     protected final BufferedImage target;
@@ -32,7 +42,6 @@ public class ImageCombiner {
      * 合并后图像的字节流缓存，需调用{@link #combine()}后才能通过{@link #getCombinedImageOutStream()}获取
      */
     protected ByteArrayOutputStream out;
-
     /**
      * 当前激活字体，用于文本绘制（null时使用g2默认字体）
      */
@@ -754,15 +763,6 @@ public class ImageCombiner {
         return this;
     }
 
-    /**
-     * 绘制双层边框
-     *
-     * @param roundRect 参数
-     * @return 当前实例
-     */
-    private static final Color BORDER_OUTER_COLOR = new Color(0x3C3C5A);
-    private static final Color BORDER_INNER_COLOR = new Color(0x4a4a6a);
-
     public ImageCombiner drawTooRoundRect(RoundRect roundRect) {
         this.setColor(BORDER_OUTER_COLOR)
                 .setStroke(roundRect.stroke)
@@ -1120,8 +1120,8 @@ public class ImageCombiner {
     /**
      * 在指定位置绘制立绘插图（指定尺寸）— 对应 Python draw_standing_at
      *
-     * @param x          X坐标
-     * @param y          Y坐标
+     * @param x           X坐标
+     * @param y           Y坐标
      * @param imageWidth  最大宽度
      * @param imageHeight 最大高度
      * @return 返回当前ImageCombiner实例，支持链式调用
@@ -1130,6 +1130,27 @@ public class ImageCombiner {
         java.awt.image.BufferedImage img = ImageIOUtils.getRandomXiaoMeiWangImage();
         if (img == null) return this;
         return drawImageWithAspectRatio(img, x, y, imageWidth, imageHeight);
+    }
+
+    /**
+     * 在图片的右下角位置绘制立绘插图 按比例缩放
+     *
+     * @param imageWidth  最大宽度
+     * @param imageHeight 最大高度
+     * @param pct         0.1 - 1.0 比例
+     * @return 返回当前ImageCombiner实例，支持链式调用
+     */
+    public ImageCombiner drawStandingAt(int imageWidth, int imageHeight, double pct) {
+        java.awt.image.BufferedImage img = ImageIOUtils.getRandomXiaoMeiWangImage();
+        if (img == null) return this;
+        if (pct < 0.1) {
+            pct = 0.1;
+        }
+        if (pct > 1.0) {
+            pct = 1.0;
+        }
+        DrawConstants.box box = DrawConstants.scaleByPct(imageWidth, imageHeight, pct);
+        return drawImageWithAspectRatio(img, imageWidth - box.x(), imageHeight - box.y(), box.x(), box.y());
     }
 
     /**

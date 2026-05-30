@@ -60,7 +60,7 @@ final class DefaultDrawMarketRivenImage {
         combiner.setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, totalWidth, totalHeight)
                 .drawTooRoundRect()
-                .drawStandingDrawing();
+                .drawStandingAt(totalWidth, totalHeight, STANDING_RATIO);
 
         // 绘制标题
         int titleY = 100;

@@ -42,9 +42,7 @@ final class DefaultDrawLiteSoriteImage {
         combiner.setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, LITE_SORITE_IMAGE_WIDTH, imageHeight)
                 .drawTooRoundRect()
-                .drawStandingDrawing();
-
-        int y = IMAGE_MARGIN;
+                .drawStandingAt(LITE_SORITE_IMAGE_WIDTH, imageHeight, STANDING_RATIO);
 
         // 标题
         String title = "执刑官猎杀";
@@ -54,7 +52,7 @@ final class DefaultDrawLiteSoriteImage {
         int contentX = IMAGE_MARGIN + 30;
         int contentW = LITE_SORITE_IMAGE_WIDTH - 2 * (IMAGE_MARGIN + 30);
         combiner.setColor(DIVIDER_COLOR).drawLine(contentX, 138, contentX + contentW, 138);
-        y = 160;
+        int y = 160;
 
         // 执刑官信息
         combiner.setFont(FONT);

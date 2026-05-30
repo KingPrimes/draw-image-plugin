@@ -49,7 +49,7 @@ final class DefaultDrawMarketLichSisterImage {
         combiner.setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, IMAGE_WIDTH, totalHeight)
                 .drawTooRoundRect()
-                .drawStandingDrawing();
+                .drawStandingAt(IMAGE_WIDTH, totalHeight, STANDING_RATIO);
         // 绘制标题
         int currentY = TITLE_HEIGHT;
         combiner.setColor(TITLE_COLOR)

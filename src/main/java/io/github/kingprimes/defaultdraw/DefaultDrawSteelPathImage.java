@@ -19,9 +19,9 @@ final class DefaultDrawSteelPathImage {
     private static final int CONTENT_X = 60;
     private static final int CONTENT_W = 1080;
     private static final int ROW_H = 55;
-    private static final int TITLE_Y = 70;
-    private static final int DIVIDER_Y = 138;
-    private static final int CONTENT_START_Y = 180;
+    private static final int TITLE_Y = 80;
+    private static final int DIVIDER_Y = 115;
+    private static final int CONTENT_START_Y = 155;
     private static final int FOOTER_OFFSET = 55;
 
     private DefaultDrawSteelPathImage() {
@@ -42,7 +42,7 @@ final class DefaultDrawSteelPathImage {
         cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, canvasH);
         cb.drawTooRoundRect();
 
-        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 56))
+        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 44))
                 .addCenteredText("钢铁奖励", TITLE_Y);
         cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, DIVIDER_Y, CONTENT_X + CONTENT_W, DIVIDER_Y);
 
@@ -63,7 +63,7 @@ final class DefaultDrawSteelPathImage {
             cb.addText("剩余时间: " + sp.getRemaining(), CONTENT_X, y + 18);
         }
 
-        cb.drawStandingAt(CONTENT_X + CONTENT_W - 300, canvasH - 450 - FOOTER_OFFSET, 300, 450);
+        cb.drawStandingAt(CANVAS_W, canvasH, STANDING_RATIO);
         addFooter(cb, canvasH - FOOTER_OFFSET);
         cb.combine();
         return cb.getCombinedImageOutStream().toByteArray();

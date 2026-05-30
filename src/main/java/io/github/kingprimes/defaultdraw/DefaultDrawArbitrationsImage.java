@@ -64,7 +64,7 @@ final class DefaultDrawArbitrationsImage {
             cb.addText("值得参与", IMAGE_MARGIN, textY);
         }
 
-        cb.drawStandingAt(IMAGE_WIDTH - 300, canvasH - 450, 260, 390);
+        cb.drawStandingAt(IMAGE_WIDTH, canvasH, STANDING_RATIO);
         addFooter(cb, canvasH - IMAGE_FOOTER_HEIGHT + 10);
         cb.combine();
         try (ByteArrayOutputStream bos = cb.getCombinedImageOutStream()) {
