@@ -122,7 +122,7 @@ public final class TextUtils {
             // 测试当前行加单词是否超过最大宽度
             String testLine = currentLine + word + " ";
             if (metrics.stringWidth(testLine) <= maxWidth) {
-                currentLine.append(word).append("");
+                currentLine.append(word);
             } else {
                 // 单个单词超过最大宽度，直接单独成行
                 if (currentLine.isEmpty()) {

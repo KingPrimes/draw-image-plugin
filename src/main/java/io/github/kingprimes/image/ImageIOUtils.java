@@ -25,6 +25,11 @@ import java.util.stream.Stream;
  */
 @SuppressWarnings("unused")
 public final class ImageIOUtils {
+    /**
+     * 看板娘图片缓存，null = 未初始化，empty = 无图片
+     */
+    private static List<BufferedImage> standingCache;
+
     private ImageIOUtils() {
     }
 
@@ -69,10 +74,9 @@ public final class ImageIOUtils {
         return image;
     }
 
-    /** 看板娘图片缓存，null = 未初始化，empty = 无图片 */
-    private static List<BufferedImage> standingCache;
-
-    /** 加载 /image/ 目录下所有看板娘图片到缓存 */
+    /**
+     * 加载 /image/ 目录下所有看板娘图片到缓存
+     */
     private static synchronized void initStandingCache() {
         if (standingCache != null) return;
         List<BufferedImage> list = new ArrayList<>();
@@ -117,15 +121,6 @@ public final class ImageIOUtils {
         }
         if (standingCache.isEmpty()) return null;
         return standingCache.get(new Random().nextInt(standingCache.size()));
-    }
-
-    /**
-     * 获取紫卡模板图片
-     *
-     * @return 返回紫卡模板图片
-     */
-    public static BufferedImage getRivenTemplate() {
-        return getResourcesImage("/image/riven/RivenTemplate.png");
     }
 
     /**

@@ -17,13 +17,6 @@ import java.io.IOException;
  */
 @SuppressWarnings("unused")
 public class ImageCombiner {
-
-    /**
-     * 绘制双层边框
-     *
-     * @param roundRect 参数
-     * @return 当前实例
-     */
     private static final Color BORDER_OUTER_COLOR = new Color(0x3C3C5A);
     private static final Color BORDER_INNER_COLOR = new Color(0x4a4a6a);
     /**
@@ -1072,52 +1065,6 @@ public class ImageCombiner {
     }
 
     /**
-     * 在图片右下角绘制两寸立绘插图
-     * <br/>
-     * 默认尺寸: 413*625 <br/>
-     * 若图片高度小于两寸，则调用 drawOneInchStandingDrawing()方法 返回一寸尺寸的图像<br/>
-     * 尺寸: 240*360
-     *
-     * @return 返回当前ImageCombiner实例，支持链式调用
-     */
-    public ImageCombiner drawStandingDrawing() {
-        java.awt.image.BufferedImage img = ImageIOUtils.getRandomXiaoMeiWangImage();
-        if (img == null) return this;
-        int width = this.target.getWidth();
-        int height = this.target.getHeight();
-        int imageWidth = 413, imageHeight = 625;
-        if (height <= imageHeight) {
-            return drawOneInchStandingDrawing();
-        }
-
-        return drawImageWithAspectRatio(img,
-                width - 433,
-                height - 645,
-                imageWidth,
-                imageHeight);
-    }
-
-    /**
-     * 在图片右下角绘制一寸立绘插图
-     * <br/>
-     * 尺寸: 240*360
-     *
-     * @return 返回当前ImageCombiner实例，支持链式调用
-     */
-    public ImageCombiner drawOneInchStandingDrawing() {
-        java.awt.image.BufferedImage img = ImageIOUtils.getRandomXiaoMeiWangImage();
-        if (img == null) return this;
-        int width = this.target.getWidth();
-        int height = this.target.getHeight();
-        int imageWidth = 240, imageHeight = 360;
-        return drawImageWithAspectRatio(img,
-                width - 265,
-                height - 382,
-                imageWidth,
-                imageHeight);
-    }
-
-    /**
      * 在指定位置绘制立绘插图（指定尺寸）— 对应 Python draw_standing_at
      *
      * @param x           X坐标
@@ -1133,11 +1080,11 @@ public class ImageCombiner {
     }
 
     /**
-     * 在图片的右下角位置绘制立绘插图 按比例缩放
+     * 在图片右下角绘制立绘插图，按 imageWidth 等比缩放为正方形盒子，自适应保持原图比例
      *
-     * @param imageWidth  最大宽度
-     * @param imageHeight 最大高度
-     * @param pct         0.1 - 1.0 比例
+     * @param imageWidth  画布宽度，用于计算正方形盒子大小（imageWidth * pct）
+     * @param imageHeight 画布高度，用于右下角 Y 定位
+     * @param pct         0.1 - 1.0 缩放比例
      * @return 返回当前ImageCombiner实例，支持链式调用
      */
     public ImageCombiner drawStandingAt(int imageWidth, int imageHeight, double pct) {
@@ -1149,7 +1096,7 @@ public class ImageCombiner {
         if (pct > 1.0) {
             pct = 1.0;
         }
-        DrawConstants.box box = DrawConstants.scaleByPct(imageWidth, imageHeight, pct);
+        DrawConstants.box box = DrawConstants.scaleByPct(imageWidth, imageWidth, pct);
         return drawImageWithAspectRatio(img, imageWidth - box.x(), imageHeight - box.y(), box.x(), box.y());
     }
 

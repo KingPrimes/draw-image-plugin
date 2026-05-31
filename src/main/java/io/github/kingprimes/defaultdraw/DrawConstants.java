@@ -4,6 +4,7 @@ import io.github.kingprimes.image.ImageCombiner;
 import io.github.kingprimes.utils.Fonts;
 
 import java.awt.*;
+import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 
 /**
@@ -27,11 +28,6 @@ public final class DrawConstants {
 
     public static final Font FONT_WARFRAME_ICON = Fonts.FONT_WARFRAME_ICON.deriveFont(32F);
 
-    public static final int FONT_SIZE = FONT.getSize();
-    /**
-     * 帮助图像每行高度
-     */
-    public static final int HELP_IMAGE_ROW_HEIGHT = FONT_SIZE + 20;
     /**
      * 标准图像宽度
      */
@@ -56,14 +52,6 @@ public final class DrawConstants {
      * 标准图像底部高度
      */
     public static final int IMAGE_FOOTER_HEIGHT = 40;
-    /**
-     * 标准图像表头高度
-     */
-    public static final int IMAGE_HEADER_HEIGHT = 60;
-    /**
-     * 标准图像行边距
-     */
-    public static final int IMAGE_ROW_MARGIN = 15;
 
     // ============================= 暗色主题颜色 =============================
     /**
@@ -74,10 +62,6 @@ public final class DrawConstants {
      * 卡片背景色
      */
     public static final Color CARD_BACKGROUND_COLOR = new Color(0x16213e);
-    /**
-     * 卡片交替行背景色
-     */
-    public static final Color CARD_BACKGROUND_ALT_COLOR = new Color(0x1e2d50);
     /**
      * 标题/强调色 — 蓝色
      */
@@ -111,14 +95,6 @@ public final class DrawConstants {
      */
     public static final Color DIVIDER_COLOR = new Color(0x3c3c5a);
     /**
-     * 奖励背景色
-     */
-    public static final Color REWARD_BG_COLOR = new Color(0x0f3460);
-    /**
-     * 表头背景色
-     */
-    public static final Color TABLE_HEADER_BG_COLOR = new Color(0x2980b9);
-    /**
      * 进攻方 / 红色状态
      */
     public static final Color ATTACKER_COLOR = new Color(0xFF6B6B);
@@ -141,38 +117,8 @@ public final class DrawConstants {
     public static final Color EMOTION_JOY_COLOR = new Color(241, 196, 15);
     public static final Color EMOTION_ANGER_COLOR = new Color(231, 76, 60);
     public static final Color EMOTION_ENVY_COLOR = new Color(46, 204, 113);
-    /**
-     * 黑色
-     */
-    public static final Color BLACK_COLOR = Color.BLACK;
-
-    // ============================= 功能颜色 =============================
-    /**
-     * 帮助图像偶数行背景色
-     */
-    public static final Color HELP_IMAGE_EVEN_ROW_COLOR = CARD_BACKGROUND_ALT_COLOR;
-    /**
-     * 帮助图像文本颜色
-     */
-    public static final Color HELP_IMAGE_TEXT_COLOR = TEXT_COLOR;
-    /**
-     * 帮助图像表头背景色
-     */
-    public static final Color HELP_IMAGE_HEADER_BG_COLOR = TABLE_HEADER_BG_COLOR;
-    /**
-     * 帮助图像标题颜色
-     */
-    public static final Color HELP_IMAGE_TITLE_COLOR = TEXT_COLOR;
 
     // ============================= 循环颜色 =============================
-    /**
-     * 循环图像表头高度
-     */
-    public static final int ALL_CYCLE_TABLE_HEADER_HEIGHT = 50;
-    /**
-     * 循环图像高度
-     */
-    public static final int ALL_CYCLE_HEIGHT = 750;
     /**
      * 循环温暖状态颜色
      */
@@ -183,18 +129,6 @@ public final class DrawConstants {
     public static final Color ALL_CYCLE_COLD_COLOR = new Color(0x00B4FF);
 
     // ============================= 裂隙颜色 =============================
-    /**
-     * 裂隙任务图像宽度
-     */
-    public static final int ACTIVE_MISSION_WIDTH = 1700;
-    /**
-     * 裂隙任务头部颜色
-     */
-    public static final Color ACTIVE_MISSION_HEADER_COLOR = new Color(0x1a2c38);
-    /**
-     * 裂隙节点文字颜色
-     */
-    public static final Color ACTIVE_MISSION_LOCATION_COLOR = new Color(0xff7e5f);
     /**
      * 裂隙时间 — 紧急
      */
@@ -240,22 +174,6 @@ public final class DrawConstants {
 
     // ============================= 订阅 =============================
     /**
-     * 订阅图像宽度
-     */
-    public static final int SUBSCRIBE_IMAGE_WIDTH = 1300;
-    /**
-     * 订阅图像高度
-     */
-    public static final int SUBSCRIBE_IMAGE_HEIGHT = 1000;
-    /**
-     * 订阅图像边距
-     */
-    public static final int SUBSCRIBE_IMAGE_MARGIN = 20;
-    /**
-     * 订阅图像标题高度
-     */
-    public static final int SUBSCRIBE_IMAGE_TITLE_HEIGHT = 50;
-    /**
      * 订阅蓝色
      */
     public static final Color SUBSCRIBE_IMAGE_BLUE_COLOR = new Color(0x1c84c6);
@@ -272,13 +190,9 @@ public final class DrawConstants {
      */
     public static final Color SUBSCRIBE_IMAGE_BROWN_COLOR = new Color(0xaf5244);
 
-
     /**
-     * 帮助图像每列项目数
+     * 看板娘绘制比例
      */
-    public static final int HELP_IMAGE_ITEMS_PER_COLUMN = 22;
-
-    /** 看板娘绘制比例 */
     public static final double STANDING_RATIO = 0.3;
 
     // ============================= 工具方法 =============================
@@ -319,6 +233,18 @@ public final class DrawConstants {
      */
     public static void addFooter(ImageCombiner combiner, Color color, int y) {
         combiner.setFont(FONT).setColor(color).addCenteredText(FOOTER_TEXT, y);
+    }
+
+    public static byte[] getBytes(box sz, int standingX, int standingY, int canvasH, ImageCombiner cb) {
+        cb.drawStandingAt(standingX, standingY, sz.x(), sz.y());
+
+        addFooter(cb, canvasH - 25);
+        cb.combine();
+        try (ByteArrayOutputStream bos = cb.getCombinedImageOutStream()) {
+            return bos.toByteArray();
+        } catch (Exception e) {
+            throw new RuntimeException("无法获取图像输出流", e);
+        }
     }
 
     public record box(int x, int y) {
