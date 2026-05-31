@@ -33,13 +33,6 @@ final class DefaultDrawAlertsImage {
     private static final int TITLE_Y = 100;
     private static final int DIVIDER_Y = TITLE_Y + 40;
     private static final int CONTENT_START_Y = 170;
-    private static final int FOOTER_OFFSET = 60;
-
-    // 看板娘尺寸
-    private static final int STANDING_ODD_W = 310;
-    private static final int STANDING_ODD_H = 360;
-    private static final int STANDING_EVEN_W = 260;
-    private static final int STANDING_EVEN_H = 390;
 
     private DefaultDrawAlertsImage() {
         throw new AssertionError("Cannot instantiate DefaultDrawAlertsImage class");
@@ -56,11 +49,9 @@ final class DefaultDrawAlertsImage {
 
         int canvasH;
         if (isOdd) {
-            int contentEnd = CONTENT_START_Y + cardsH;
-            canvasH = Math.max(contentEnd, lastRowY + STANDING_ODD_H + FOOTER_OFFSET + 10);
+            canvasH = Math.max(CONTENT_START_Y + cardsH, lastRowY + 360);
         } else {
-            int contentEnd = CONTENT_START_Y + cardsH;
-            canvasH = contentEnd + STANDING_EVEN_H + FOOTER_OFFSET + 20;
+            canvasH = CONTENT_START_Y + cardsH + 360;
         }
 
         ImageCombiner cb = new ImageCombiner(CANVAS_W, canvasH, ImageCombiner.OutputFormat.PNG);
@@ -85,7 +76,7 @@ final class DefaultDrawAlertsImage {
             drawAlertCard(cb, alerts.get(i), cardX, cardY);
         }
 
-        addFooter(cb, canvasH - FOOTER_OFFSET);
+        addFooter(cb, canvasH - 25);
 
         cb
                 .drawStandingAt(CANVAS_W, canvasH, STANDING_RATIO)

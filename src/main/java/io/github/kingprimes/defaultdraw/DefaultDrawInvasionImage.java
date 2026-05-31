@@ -32,10 +32,6 @@ final class DefaultDrawInvasionImage {
 
     private static final int TITLE_Y = 80;
     private static final int CONTENT_START_Y = 150;
-    private static final int FOOTER_OFFSET = 50;
-
-    private static final int STANDING_W = 260;
-    private static final int STANDING_H = 390;
 
     private static final Color ATK_COLOR = DrawConstants.ATTACKER_COLOR;
     private static final Color DEF_COLOR = DrawConstants.DEFENDER_COLOR;
@@ -52,11 +48,12 @@ final class DefaultDrawInvasionImage {
                 .toList();
         int n = sorted.size();
         int cardsH = n * CARD_H + (n - 1) * ROW_GAP;
-        int contentEnd = CONTENT_START_Y + cardsH;
-        int canvasH = contentEnd + STANDING_H + FOOTER_OFFSET + 20;
+        box sz = scaleByPct(CANVAS_W, CANVAS_W, STANDING_RATIO);
+        int canvasH = CONTENT_START_Y + cardsH + sz.y();
 
         ImageCombiner cb = new ImageCombiner(CANVAS_W, canvasH, ImageCombiner.OutputFormat.PNG);
-        cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, canvasH);
+        cb.setColor(PAGE_BACKGROUND_COLOR)
+                .fillRect(0, 0, CANVAS_W, canvasH);
         cb.drawTooRoundRect();
 
         cb.setColor(ACCENT_COLOR).setFont(FONT.deriveFont(Font.BOLD, 48))
@@ -69,13 +66,13 @@ final class DefaultDrawInvasionImage {
         Font progressFont = FONT.deriveFont(24f);
 
         for (int i = 0; i < sorted.size(); i++) {
-            drawInvasionCard(cb, sorted.get(i), CONTENT_X,
+            drawInvasionCard(cb, sorted.get(i),
                     CONTENT_START_Y + i * (CARD_H + ROW_GAP),
                     nodeFont, factionFont, rewardFont, progressFont);
         }
-        addFooter(cb, canvasH - FOOTER_OFFSET);
+        addFooter(cb, canvasH - 25);
 
-        cb.drawStandingAt(CANVAS_W, canvasH, STANDING_RATIO).combine();
+        cb.drawStandingAt(CANVAS_W - sz.x(), canvasH - sz.y(), sz.x(), sz.y()).combine();
         try (ByteArrayOutputStream bos = cb.getCombinedImageOutStream()) {
             return bos.toByteArray();
         } catch (Exception e) {
@@ -83,26 +80,26 @@ final class DefaultDrawInvasionImage {
         }
     }
 
-    private static void drawInvasionCard(ImageCombiner cb, Invasion inv, int cardX, int cardY,
+    private static void drawInvasionCard(ImageCombiner cb, Invasion inv, int cardY,
                                          Font nodeFont, Font factionFont, Font rewardFont, Font progressFont) {
-        int innerX = cardX + CARD_PAD;
+        int innerX = DefaultDrawInvasionImage.CONTENT_X + CARD_PAD;
         int innerW = CARD_W - CARD_PAD * 2;
 
         double progress = inv.getGoal() != null && inv.getGoal() != 0 && inv.getCount() != null
-                ? Math.min(Math.abs(inv.getCount()) / (double) inv.getGoal(), 1.0) : 0;
+                ? Math.min(Math.abs(inv.getCount()) / inv.getGoal(), 1.0) : 0;
 
         // 卡片背景
-        cb.setColor(CARD_BACKGROUND_COLOR).fillRoundRect(cardX, cardY, CARD_W, CARD_H, CARD_RADIUS, CARD_RADIUS);
+        cb.setColor(CARD_BACKGROUND_COLOR).fillRoundRect(DefaultDrawInvasionImage.CONTENT_X, cardY, CARD_W, CARD_H, CARD_RADIUS, CARD_RADIUS);
 
         // 顶部双色进度条
-        int splitX = cardX + (int) (CARD_W * progress);
-        if (splitX - cardX > CARD_RADIUS) {
+        int splitX = DefaultDrawInvasionImage.CONTENT_X + (int) (CARD_W * progress);
+        if (splitX - DefaultDrawInvasionImage.CONTENT_X > CARD_RADIUS) {
             cb.setColor(ATK_COLOR)
-                    .fillRect(cardX + CARD_RADIUS, cardY + 2, splitX - cardX - CARD_RADIUS, ACCENT_STRIP_H);
+                    .fillRect(DefaultDrawInvasionImage.CONTENT_X + CARD_RADIUS, cardY + 2, splitX - DefaultDrawInvasionImage.CONTENT_X - CARD_RADIUS, ACCENT_STRIP_H);
         }
-        if (cardX + CARD_W - splitX > CARD_RADIUS) {
+        if (DefaultDrawInvasionImage.CONTENT_X + CARD_W - splitX > CARD_RADIUS) {
             cb.setColor(DEF_COLOR)
-                    .fillRect(splitX, cardY + 2, cardX + CARD_W - splitX - CARD_RADIUS, ACCENT_STRIP_H);
+                    .fillRect(splitX, cardY + 2, DefaultDrawInvasionImage.CONTENT_X + CARD_W - splitX - CARD_RADIUS, ACCENT_STRIP_H);
         }
 
         // 行 1: 节点（左） + 进度（右）

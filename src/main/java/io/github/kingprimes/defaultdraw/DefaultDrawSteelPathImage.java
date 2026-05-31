@@ -22,7 +22,6 @@ final class DefaultDrawSteelPathImage {
     private static final int TITLE_Y = 80;
     private static final int DIVIDER_Y = 115;
     private static final int CONTENT_START_Y = 155;
-    private static final int FOOTER_OFFSET = 55;
 
     private DefaultDrawSteelPathImage() {
         throw new AssertionError("Cannot instantiate DefaultDrawSteelPathImage class");
@@ -36,7 +35,7 @@ final class DefaultDrawSteelPathImage {
         if (sp.getNextReward() != null) rows++;
         if (sp.getRemaining() != null) rows++;
 
-        int canvasH = Math.max(CONTENT_START_Y + rows * ROW_H + 240 + FOOTER_OFFSET + 50, 400);
+        int canvasH = Math.max(CONTENT_START_Y + rows * ROW_H + 360, 400);
         ImageCombiner cb = new ImageCombiner(CANVAS_W, canvasH, ImageCombiner.OutputFormat.PNG);
 
         cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, canvasH);
@@ -64,7 +63,7 @@ final class DefaultDrawSteelPathImage {
         }
 
         cb.drawStandingAt(CANVAS_W, canvasH, STANDING_RATIO);
-        addFooter(cb, canvasH - FOOTER_OFFSET);
+        addFooter(cb, canvasH - 25);
         cb.combine();
         return cb.getCombinedImageOutStream().toByteArray();
     }

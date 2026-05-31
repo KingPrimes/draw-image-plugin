@@ -26,7 +26,6 @@ final class DefaultDrawDuviriCycleImage {
     private static final int COL_GAP = 20;
     private static final int CARD_W = (CONTENT_W - COL_GAP) / 2;
     private static final int TITLE_Y = 70;
-    private static final int FOOTER_OFFSET = 55;
     private static final int MAX_ITEMS = 7;
     private static final int ITEM_H = 32;
 
@@ -56,7 +55,7 @@ final class DefaultDrawDuviriCycleImage {
         int maxItems = Math.max(normalItems.size(), hardItems.size());
         int displayed = Math.min(maxItems, MAX_ITEMS);
         int choiceCardsH = 80 + displayed * ITEM_H + 30;
-        int canvasH = 130 + 110 + 40 + choiceCardsH + 240 + FOOTER_OFFSET;
+        int canvasH = 130 + 110 + 40 + choiceCardsH + 300;
 
         ImageCombiner cb = new ImageCombiner(CANVAS_W, canvasH, ImageCombiner.OutputFormat.PNG);
         cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, canvasH);
@@ -91,14 +90,13 @@ final class DefaultDrawDuviriCycleImage {
 
         // ---- 选择卡 ----
         int cardsY = emotionCardY + emotionCardH + 40;
-        int leftX = CONTENT_X;
         int rightX = CONTENT_X + CARD_W + COL_GAP;
 
-        drawChoiceCard(cb, "普通", normalItems, leftX, cardsY, ACCENT_GOLD_COLOR);
+        drawChoiceCard(cb, "普通", normalItems, CONTENT_X, cardsY, ACCENT_GOLD_COLOR);
         drawChoiceCard(cb, "钢铁之路", hardItems, rightX, cardsY, ACCENT_COLOR);
 
         cb.drawStandingAt(CANVAS_W, canvasH, STANDING_RATIO);
-        addFooter(cb, canvasH - FOOTER_OFFSET);
+        addFooter(cb, canvasH - 25);
 
         cb.combine();
         try (ByteArrayOutputStream bos = cb.getCombinedImageOutStream()) {
@@ -109,7 +107,7 @@ final class DefaultDrawDuviriCycleImage {
     }
 
     private static void drawChoiceCard(ImageCombiner cb, String title, List<String> items,
-                                        int cardX, int cardY, Color accent) {
+                                       int cardX, int cardY, Color accent) {
         if (items == null) items = List.of();
         int displayed = Math.min(items.size(), MAX_ITEMS);
         int cardH = 80 + displayed * ITEM_H + 30;

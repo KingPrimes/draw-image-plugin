@@ -4,7 +4,6 @@ import io.github.kingprimes.image.ImageCombiner;
 import io.github.kingprimes.model.worldstate.ActiveMission;
 
 import java.awt.*;
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
@@ -24,21 +23,14 @@ final class DefaultDrawActiveMission {
     private static final int COLS = 2;
     private static final int COL_GAP = 20;
     private static final int CARD_W = (CONTENT_W - COL_GAP) / COLS;
+    private static final int[] COL_X = {CONTENT_X, CONTENT_X + CARD_W + COL_GAP};
     private static final int CARD_H = 160;
     private static final int CARD_RADIUS = 14;
     private static final int CARD_PAD = 20;
     private static final int ROW_GAP = 20;
     private static final int ACCENT_STRIP_H = 4;
-
-    private static final int[] COL_X = {CONTENT_X, CONTENT_X + CARD_W + COL_GAP};
     private static final int TITLE_Y = 80;
     private static final int CONTENT_START_Y = 160;
-    private static final int FOOTER_OFFSET = 50;
-
-    private static final int STANDING_ODD_W = 310;
-    private static final int STANDING_ODD_H = 360;
-    private static final int STANDING_EVEN_W = 260;
-    private static final int STANDING_EVEN_H = 390;
 
     private DefaultDrawActiveMission() {
         throw new AssertionError("Cannot instantiate DefaultDrawActiveMission class");
@@ -53,12 +45,18 @@ final class DefaultDrawActiveMission {
         boolean isOdd = n % COLS != 0;
         int lastRowY = CONTENT_START_Y + (rows - 1) * (CARD_H + ROW_GAP);
 
-        int canvasH;
+        // 看板娘尺寸（以画布宽度为参考，避免循环依赖）
+        box sz = scaleByPct(CANVAS_W, CANVAS_W, STANDING_RATIO);
+
+        int standingX = CANVAS_W - sz.x();
+        int standingY;
         if (isOdd) {
-            canvasH = Math.max(CONTENT_START_Y + cardsH, lastRowY + STANDING_ODD_H + FOOTER_OFFSET + 10);
+            standingY = lastRowY;
         } else {
-            canvasH = CONTENT_START_Y + cardsH + STANDING_EVEN_H + FOOTER_OFFSET + 20;
+            standingY = CONTENT_START_Y + cardsH + 10;
         }
+
+        int canvasH = standingY + sz.y();
 
         ImageCombiner cb = new ImageCombiner(CANVAS_W, canvasH, ImageCombiner.OutputFormat.PNG);
         cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, canvasH);
@@ -93,26 +91,11 @@ final class DefaultDrawActiveMission {
                     tierFont, bodyFont, timeFont, locationFont);
         }
 
-        if (isOdd) {
-            box sz = scaleByPct(CANVAS_W, canvasH, 0.35);
-            cb.drawStandingAt(COL_X[1] + (CARD_W - sz.x()) / 2, lastRowY, sz.x(), sz.y());
-        } else {
-            box sz = scaleByPct(CANVAS_W, canvasH, STANDING_RATIO);
-            cb.drawStandingAt(CONTENT_X + CONTENT_W - sz.x() - 20,
-                    CONTENT_START_Y + cardsH + 10, sz.x(), sz.y());
-        }
-
-        addFooter(cb, canvasH - FOOTER_OFFSET);
-        cb.combine();
-        try (ByteArrayOutputStream bos = cb.getCombinedImageOutStream()) {
-            return bos.toByteArray();
-        } catch (Exception e) {
-            throw new RuntimeException("无法获取图像输出流", e);
-        }
+        return getBytes(sz, standingX, standingY, canvasH, cb);
     }
 
     private static void drawFissureCard(ImageCombiner cb, ActiveMission m, int cardX, int cardY,
-                                         Font tierFont, Font bodyFont, Font timeFont, Font locationFont) {
+                                        Font tierFont, Font bodyFont, Font timeFont, Font locationFont) {
         int innerX = cardX + CARD_PAD;
         int innerW = CARD_W - CARD_PAD * 2;
 
@@ -126,8 +109,11 @@ final class DefaultDrawActiveMission {
 
         // 行 1: tier 名称 + 剩余时间
         String mn = m.getModifierName();
-        String tierText = (mn != null ? mn : "未知") + " " + getVoidEnName(mn);
-        cb.setColor(tierRgb != null ? lighten(tierRgb, 0.45f) : TEXT_SECONDARY_COLOR).setFont(tierFont);
+        String tierText = null;
+        if (mn != null) {
+            tierText = mn + " " + getVoidEnName(mn);
+        }
+        cb.setColor(tierRgb != null ? lighten(tierRgb) : TEXT_SECONDARY_COLOR).setFont(tierFont);
         cb.addText(tierText, innerX, cardY + 42);
 
         String eta = m.getTimeLeft() != null ? m.getTimeLeft() : "未知";
@@ -184,16 +170,17 @@ final class DefaultDrawActiveMission {
             try {
                 return Integer.parseInt(lo.replaceAll("\\D", "")) < 10
                         ? ACTIVE_MISSION_TIME_LOW_COLOR : ACTIVE_MISSION_TIME_MEDIUM_COLOR;
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) {
+            }
         }
         return ACTIVE_MISSION_TIME_LOW_COLOR;
     }
 
-    private static Color lighten(Color c, float f) {
+    private static Color lighten(Color c) {
         if (c == null) return TEXT_SECONDARY_COLOR;
         return new Color(
-                (int) (c.getRed() + (255 - c.getRed()) * f),
-                (int) (c.getGreen() + (255 - c.getGreen()) * f),
-                (int) (c.getBlue() + (255 - c.getBlue()) * f));
+                (int) (c.getRed() + (255 - c.getRed()) * (float) 0.45),
+                (int) (c.getGreen() + (255 - c.getGreen()) * (float) 0.45),
+                (int) (c.getBlue() + (255 - c.getBlue()) * (float) 0.45));
     }
 }
