@@ -249,6 +249,22 @@ public interface NativeDrawLibrary extends Library {
     Pointer nativeDrawWarframeSubscribeImage(Pointer subscribe, Pointer missionType);
 
     /**
+     * 绘制 深层征服 图像
+     *
+     * @param conquests 深层征服数据
+     * @return 图像流
+     */
+    Pointer nativeDrawConquestImage(Pointer conquests);
+
+    /**
+     * 绘制 深层下降 图像
+     *
+     * @param descents 深层下降数据
+     * @return 图像流
+     */
+    Pointer nativeDrawDescentImage(Pointer descents);
+
+    /**
      * 释放插件内存
      */
     void nativeReleaseMemory();

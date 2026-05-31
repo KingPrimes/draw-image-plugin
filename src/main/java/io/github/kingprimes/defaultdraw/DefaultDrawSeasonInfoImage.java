@@ -4,283 +4,221 @@ import io.github.kingprimes.image.ImageCombiner;
 import io.github.kingprimes.model.worldstate.SeasonInfo;
 
 import java.awt.*;
-import java.io.ByteArrayOutputStream;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
 /**
- * 电波图像绘制默认实现
+ * 电波赛季卡片渲染器 — 两列卡片 + 右下看板娘，卡片高度自适应内容
  *
  * @author KingPrimes
- * @version 1.0.3
+ * @version 1.0.8
  */
 public final class DefaultDrawSeasonInfoImage {
 
-    private static final int SEASON_IMAGE_WIDTH = 1800;
-    private static final int SEASON_IMAGE_MIN_HEIGHT = 600;
-    private static final int CARD_HEIGHT = 200;
-    private static final int CARD_MARGIN_H = 20;
-    private static final int CARD_MARGIN_V = 30;
-    private static final int CARDS_PER_ROW = 3;
-    private static final int CARD_PADDING = 15;
-    private static final int LINE_HEIGHT = 40;
-    
-    private static final Color HEADER_COLOR = new Color(0x4A90E2);
-    private static final Color DAILY_CHALLENGE_COLOR = new Color(0xFF9500);
-    private static final Color WEEKLY_CHALLENGE_COLOR = new Color(0x4A90E2);
-    private static final Color ELITE_CHALLENGE_COLOR = new Color(0x9B59B6);
-    private static final Color CARD_BORDER_COLOR = new Color(0xCCCCCC);
+    private static final int CANVAS_W = 1800;
+    private static final int CONTENT_X = 50;
+    private static final int COLS = 2;
+    private static final int COL_GAP = 20;
+    private static final int CARD_RADIUS = 14;
+    private static final int CARD_PAD = 20;
+    private static final int ROW_GAP = 20;
+    private static final int ROW_H = 40;
+
+    private static final int TITLE_Y = 80;
+    private static final int CARD_MIN_H = 200;
+
+    private static final Color DAILY_COLOR = new Color(0xFF9500);
+    private static final Color WEEKLY_COLOR = TITLE_COLOR;
+    private static final Color ELITE_COLOR = new Color(0x9B59B6);
 
     private DefaultDrawSeasonInfoImage() {
-        throw new AssertionError("Cannot instantiate DefaultDrawSeasonInfoImage class");
+        throw new AssertionError("Cannot instantiate");
     }
 
-    /**
-     * 绘制电波图像
-     *
-     * @param seasonInfo 电波数据
-     * @return 图像字节数组
-     */
     public static byte[] drawSeasonInfoImage(SeasonInfo seasonInfo) {
-        if (seasonInfo == null) {
-            return new byte[0];
+        if (seasonInfo == null) return new byte[0];
+
+        List<SeasonInfo.ActiveChallenges> challenges = seasonInfo.getActiveChallenges();
+        if (challenges == null || challenges.isEmpty()) return new byte[0];
+
+        int n = challenges.size();
+
+        box sz = scaleByPct(CANVAS_W, CANVAS_W, STANDING_RATIO);
+        int cardsContentW = CANVAS_W - CONTENT_X * 2;
+        int cardW = (cardsContentW - COL_GAP * (COLS - 1)) / COLS;
+        int descMaxW = cardW - CARD_PAD * 2;
+        Font descFont = FONT.deriveFont(22f);
+
+        // 预计算每张卡片的高度（基于描述文本换行）
+        int[] cardHeights = new int[n];
+        for (int i = 0; i < n; i++) {
+            cardHeights[i] = calcCardHeight(challenges.get(i), descMaxW, descFont);
         }
 
-        // 计算图像高度
-        int height = calculateImageHeight(seasonInfo);
-
-        // 创建画布
-        ImageCombiner combiner = new ImageCombiner(
-                SEASON_IMAGE_WIDTH,
-                height,
-                ImageCombiner.OutputFormat.PNG
-        );
-
-        // 填充背景色
-        combiner.setFont(FONT)
-                .setColor(PAGE_BACKGROUND_COLOR)
-                .fillRect(0, 0, SEASON_IMAGE_WIDTH, height)
-                // 绘制双层边框
-                .drawTooRoundRect();
-
-        // 绘制标题
-        combiner.setColor(HEADER_COLOR)
-                .setFont(FONT.deriveFont(Font.BOLD, 40))
-                .addCenteredText("电波赛季信息", 80);
-
-        // 绘制任务卡片
-        if (seasonInfo.getActiveChallenges() != null && !seasonInfo.getActiveChallenges().isEmpty()) {
-            int startY = 140;
-            drawChallengeCards(combiner, seasonInfo.getActiveChallenges(), startY);
+        // 按行取最大高度
+        int rows = (int) Math.ceil((double) n / COLS);
+        int[] rowHeights = new int[rows];
+        int cardsH = 0;
+        for (int r = 0; r < rows; r++) {
+            int maxH = 0;
+            for (int c = 0; c < COLS && r * COLS + c < n; c++) {
+                maxH = Math.max(maxH, cardHeights[r * COLS + c]);
+            }
+            rowHeights[r] = maxH;
+            cardsH += maxH;
+            if (r < rows - 1) cardsH += ROW_GAP;
         }
 
-        // 添加底部署名
-        addFooter(combiner, height - IMAGE_FOOTER_HEIGHT);
+        // 标题区域高度：标题 + 分隔线间距 + 赛季阶段信息
+        int headerH = 120;
+        int contentStartY = TITLE_Y + headerH;
 
-        // 合并图像
-        combiner.combine();
-        try (ByteArrayOutputStream bos = combiner.getCombinedImageOutStream()) {
-            return bos.toByteArray();
-        } catch (Exception e) {
-            throw new RuntimeException("无法获取图像输出流: %s".formatted(e.getMessage()), e);
+        // 看板娘在所有卡片下方，贴画布右下角
+        int standingX = CANVAS_W - sz.x();
+        int standingY = contentStartY + cardsH + 10;
+        int canvasH = standingY + sz.y();
+
+        int[] colX = new int[COLS];
+        for (int c = 0; c < COLS; c++) {
+            colX[c] = CONTENT_X + c * (cardW + COL_GAP);
         }
+
+        ImageCombiner cb = new ImageCombiner(CANVAS_W, canvasH, ImageCombiner.OutputFormat.PNG);
+        cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, canvasH);
+        cb.drawTooRoundRect();
+
+        // 标题 — 全画布居中
+        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 44))
+                .addCenteredText("电波赛季信息", TITLE_Y);
+
+        // 分隔线 — 横跨左右边距之间的全内容宽度
+        int dividerEnd = CANVAS_W - CONTENT_X;
+        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 50, dividerEnd, TITLE_Y + 50);
+
+        // 赛季阶段信息 — 标题下方
+        int infoY = TITLE_Y + 85;
+        cb.setColor(TEXT_SECONDARY_COLOR).setFont(FONT.deriveFont(20f));
+        String infoText = "赛季 " + seasonInfo.getSeason() + "  |  阶段 " + seasonInfo.getPhase();
+        cb.addText(infoText, CONTENT_X, infoY);
+
+        // 卡片网格
+        int currentY = contentStartY;
+        for (int i = 0; i < n; i++) {
+            int row = i / COLS;
+            int col = i % COLS;
+            int cardH = rowHeights[row];
+            drawChallengeCard(cb, challenges.get(i), colX[col], currentY, cardW, cardH, descMaxW, descFont);
+            if (col == COLS - 1 || i == n - 1) {
+                currentY += cardH + ROW_GAP;
+            }
+        }
+
+        return getBytes(sz, standingX, standingY, canvasH, cb);
     }
 
-    /**
-     * 绘制挑战任务卡片
-     *
-     * @param combiner   图像合成器
-     * @param challenges 挑战任务列表
-     * @param startY     起始Y坐标
-     */
-    private static void drawChallengeCards(ImageCombiner combiner, 
-                                          java.util.List<SeasonInfo.ActiveChallenges> challenges, 
-                                          int startY) {
-        int totalWidth = SEASON_IMAGE_WIDTH - 2 * IMAGE_MARGIN;
-        int availableWidth = totalWidth - (CARDS_PER_ROW - 1) * CARD_MARGIN_H;
-        int cardWidth = availableWidth / CARDS_PER_ROW;
-        
-        for (int i = 0; i < challenges.size(); i++) {
-            int row = i / CARDS_PER_ROW;
-            int col = i % CARDS_PER_ROW;
-            
-            int cardX = IMAGE_MARGIN + col * (cardWidth + CARD_MARGIN_H);
-            int cardY = startY + row * (CARD_HEIGHT + CARD_MARGIN_V);
-            
-            drawChallengeCard(combiner, challenges.get(i), cardX, cardY, cardWidth);
+    private static int calcCardHeight(SeasonInfo.ActiveChallenges c, int descMaxW, Font descFont) {
+        int h = CARD_PAD;
+        h += ROW_H; // 类型标签
+        h += ROW_H; // 名称
+        String desc = c.getDescription();
+        if (desc != null && !desc.isEmpty()) {
+            int lines = calcTextLines(desc, descMaxW, descFont);
+            h += lines * 30;
+        } else {
+            h += ROW_H;
         }
+        h += ROW_H; // 声望
+        h += CARD_PAD; // 底部内边距
+        return Math.max(h, CARD_MIN_H);
     }
 
-    /**
-     * 绘制单个挑战任务卡片
-     *
-     * @param combiner  图像合成器
-     * @param challenge 挑战任务数据
-     * @param x         卡片X坐标
-     * @param y         卡片Y坐标
-     * @param width     卡片宽度
-     */
-    private static void drawChallengeCard(ImageCombiner combiner, 
-                                         SeasonInfo.ActiveChallenges challenge, 
-                                         int x, 
-                                         int y,
-                                         int width) {
-        // 绘制卡片背景
-        combiner.setColor(CARD_BACKGROUND_COLOR)
-                .fillRoundRect(x, y, width, CARD_HEIGHT, 10, 10);
-        
-        // 绘制卡片边框
-        combiner.setColor(CARD_BORDER_COLOR)
-                .setStroke(1)
-                .drawRoundRect(x, y, width, CARD_HEIGHT, 10, 10);
-        
-        int contentX = x + CARD_PADDING;
-        int contentY = y + CARD_PADDING;
-        // 第一行：任务类型
-        contentY = drawChallengeType(combiner, challenge, contentX, contentY);
-        
-        // 第二行：任务名称
-        contentY = drawChallengeName(combiner, challenge, contentX, contentY);
-        
-        // 第三行：任务描述
-        contentY = drawChallengeDescription(combiner, challenge, contentX, contentY);
-        
-        // 第四行：任务奖励声望
-        drawChallengeStanding(combiner, challenge, contentX, contentY);
+    private static int calcTextLines(String text, int maxWidth, Font font) {
+        java.awt.FontMetrics fm = getFontMetrics(font);
+        return wrapLines(text, maxWidth, fm).size();
     }
 
-    /**
-     * 绘制挑战任务类型
-     *
-     * @param combiner 图像合成器
-     * @param challenge 挑战任务数据
-     * @param x X坐标
-     * @param y Y坐标
-     * @return 下一行的Y坐标
-     */
-    private static int drawChallengeType(ImageCombiner combiner, 
-                                        SeasonInfo.ActiveChallenges challenge, 
-                                        int x, 
-                                        int y) {
-        combiner.setFont(FONT);
-        
-        StringBuilder typeText = new StringBuilder();
-        Color typeColor = TEXT_COLOR;
-        
-        if (Boolean.TRUE.equals(challenge.getDaily())) {
-            typeText.append("每日");
-            typeColor = DAILY_CHALLENGE_COLOR;
+    private static List<String> wrapLines(String text, int maxWidth, java.awt.FontMetrics fm) {
+        List<String> lines = new ArrayList<>();
+        if (text == null || text.isEmpty()) return lines;
+        StringBuilder line = new StringBuilder();
+        for (char ch : text.toCharArray()) {
+            String test = line.toString() + ch;
+            if (fm.stringWidth(test) > maxWidth && !line.isEmpty()) {
+                lines.add(line.toString());
+                line = new StringBuilder(String.valueOf(ch));
+            } else {
+                line.append(ch);
+            }
         }
-        
-        if (Boolean.TRUE.equals(challenge.getWeekly())) {
-            if (!typeText.isEmpty()) typeText.append(" ");
-            typeText.append("每周");
-            typeColor = WEEKLY_CHALLENGE_COLOR;
-        }
-        
-        if (Boolean.TRUE.equals(challenge.getElite())) {
-            if (!typeText.isEmpty()) typeText.append(" ");
-            typeText.append("精英");
-            typeColor = ELITE_CHALLENGE_COLOR;
-        }
-        
-        if (typeText.isEmpty()) {
-            typeText.append("普通");
-        }
-        
-        combiner.setColor(typeColor)
-                .addText(typeText.toString(), x, y + FONT_SIZE);
-        
-        return y + LINE_HEIGHT;
+        if (!line.isEmpty()) lines.add(line.toString());
+        return lines;
     }
 
-    /**
-     * 绘制挑战任务名称
-     *
-     * @param combiner 图像合成器
-     * @param challenge 挑战任务数据
-     * @param x X坐标
-     * @param y Y坐标
-     * @return 下一行的Y坐标
-     */
-    private static int drawChallengeName(ImageCombiner combiner, 
-                                        SeasonInfo.ActiveChallenges challenge, 
-                                        int x, 
-                                        int y) {
-        String name = challenge.getName() != null ? challenge.getName() : "未知任务";
-        
-        combiner.setColor(TEXT_COLOR)
-                .setFont(FONT)
-                .addText(name, x, y + FONT_SIZE);
-        
-        return y + LINE_HEIGHT;
+    private static java.awt.FontMetrics getFontMetrics(Font font) {
+        BufferedImage tmp = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = tmp.createGraphics();
+        g2.setFont(font);
+        java.awt.FontMetrics fm = g2.getFontMetrics();
+        g2.dispose();
+        return fm;
     }
 
-    /**
-     * 绘制挑战任务描述
-     *
-     * @param combiner 图像合成器
-     * @param challenge 挑战任务数据
-     * @param x X坐标
-     * @param y Y坐标
-     * @return 下一行的Y坐标
-     */
-    private static int drawChallengeDescription(ImageCombiner combiner, 
-                                               SeasonInfo.ActiveChallenges challenge, 
-                                               int x, 
-                                               int y) {
-        String description = challenge.getDescription() != null ? challenge.getDescription() : "无描述";
-        
-        combiner.setColor(TEXT_COLOR)
-                .setFont(FONT)
-                .addText(description, x, y + FONT_SIZE);
-        
-        return y + LINE_HEIGHT;
-    }
+    private static void drawChallengeCard(ImageCombiner cb, SeasonInfo.ActiveChallenges c,
+                                          int cardX, int cardY, int cardW, int cardH,
+                                          int descMaxW, Font descFont) {
+        int innerX = cardX + CARD_PAD;
+        int innerW = cardW - CARD_PAD * 2;
 
-    /**
-     * 绘制挑战任务奖励声望
-     *
-     * @param combiner  图像合成器
-     * @param challenge 挑战任务数据
-     * @param x         X坐标
-     * @param y         Y坐标
-     */
-    private static void drawChallengeStanding(ImageCombiner combiner,
-                                              SeasonInfo.ActiveChallenges challenge,
-                                              int x,
-                                              int y) {
-        String standing = challenge.getStanding() != null ? 
-                "声望: " + challenge.getStanding() : "声望: 0";
-        
-        combiner.setColor(TEXT_COLOR)
-                .setFont(FONT)
-                .addText(standing, x, y + FONT_SIZE);
+        Color accent = getTypeColor(c);
+        cb.setColor(CARD_BACKGROUND_COLOR).fillRoundRect(cardX, cardY, cardW, cardH, CARD_RADIUS, CARD_RADIUS);
+        cb.setColor(accent).fillRect(cardX + CARD_RADIUS, cardY + 2, cardW - 2 * CARD_RADIUS, 5);
 
-    }
+        int cy = cardY + CARD_PAD;
 
-    /**
-     * 计算图像高度
-     *
-     * @param seasonInfo 电波数据
-     * @return 图像高度
-     */
-    private static int calculateImageHeight(SeasonInfo seasonInfo) {
-        int headerHeight = 140; // 标题区域
-        int footerHeight = IMAGE_FOOTER_HEIGHT + 20;
+        // 类型标签
+        cb.setColor(accent).setFont(FONT.deriveFont(Font.BOLD, 22f));
+        cb.addText(getTypeLabel(c), innerX, cy + 28);
+        cy += ROW_H;
 
-        int totalHeight = headerHeight;
+        // 任务名称
+        String name = c.getName() != null ? c.getName() : "未知任务";
+        cb.setColor(TEXT_COLOR).setFont(FONT.deriveFont(Font.BOLD, 24f));
+        cb.addText(name, innerX, cy + 28);
+        cy += ROW_H;
 
-        // 如果有挑战任务，计算卡片区域高度
-        if (seasonInfo.getActiveChallenges() != null && !seasonInfo.getActiveChallenges().isEmpty()) {
-            int challengeCount = seasonInfo.getActiveChallenges().size();
-            int rows = (int) Math.ceil((double) challengeCount / CARDS_PER_ROW);
-            int cardsHeight = rows * CARD_HEIGHT + (rows - 1) * CARD_MARGIN_V;
-            totalHeight += cardsHeight + 40; // 额外空间
+        // 描述（自动换行）
+        String desc = c.getDescription();
+        if (desc != null && !desc.isEmpty()) {
+            cb.setColor(TEXT_SECONDARY_COLOR).setFont(descFont);
+            java.awt.FontMetrics fm = cb.getFontMetrics(descFont);
+            List<String> lines = wrapLines(desc, descMaxW, fm);
+            for (String line : lines) {
+                cb.addText(line, innerX, cy + 24);
+                cy += 30;
+            }
         }
 
-        totalHeight += footerHeight;
+        // 声望 — 卡片右下角
+        String standing = c.getStanding() != null ? "声望: " + c.getStanding() : "声望: 0";
+        cb.setColor(ACCENT_GOLD_COLOR).setFont(FONT.deriveFont(Font.BOLD, 22f));
+        int standingW = cb.getFontMetrics(FONT.deriveFont(Font.BOLD, 22f)).stringWidth(standing);
+        cb.addText(standing, innerX + innerW - standingW, cardY + cardH - CARD_PAD - 5);
+    }
 
-        return Math.max(totalHeight, SEASON_IMAGE_MIN_HEIGHT);
+    private static String getTypeLabel(SeasonInfo.ActiveChallenges c) {
+        if (Boolean.TRUE.equals(c.getElite())) return "精英挑战";
+        if (Boolean.TRUE.equals(c.getWeekly())) return "每周挑战";
+        if (Boolean.TRUE.equals(c.getDaily())) return "每日挑战";
+        return "普通挑战";
+    }
+
+    private static Color getTypeColor(SeasonInfo.ActiveChallenges c) {
+        if (Boolean.TRUE.equals(c.getElite())) return ELITE_COLOR;
+        if (Boolean.TRUE.equals(c.getWeekly())) return WEEKLY_COLOR;
+        if (Boolean.TRUE.equals(c.getDaily())) return DAILY_COLOR;
+        return TEXT_COLOR;
     }
 }

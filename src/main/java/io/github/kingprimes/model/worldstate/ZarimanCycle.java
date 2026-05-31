@@ -15,7 +15,7 @@ import java.time.Instant;
  * @version 1.0.0
  */
 @Getter
-public final class ZarimanCycle {
+public final class ZarimanCycle implements Cycle {
 
     private static final long CORPUS_TIME_MILLIS = 1655182800000L; // Corpus 起始时间（毫秒）
     private static final long FULL_CYCLE = 18000000; // 完整周期时长（毫秒）

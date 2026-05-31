@@ -1,6 +1,7 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
+import io.github.kingprimes.model.enums.MissionTypeEnum;
 import io.github.kingprimes.model.worldstate.Alert;
 
 import java.awt.*;
@@ -10,186 +11,168 @@ import java.util.List;
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
 /**
- * 默认警报图片绘制工具类
+ * 警报卡片渲染器 — 两列卡片网格布局
+ * <p>对应 Python card_alert.py：居中标题 + 双层装饰边框 + 每张警报为独立圆角卡片</p>
  *
  * @author KingPrimes
- * @version 1.0.0
+ * @version 1.0.8
  */
-public final class DefaultDrawAlertsImage {
+final class DefaultDrawAlertsImage {
 
-    private static final int ALERTS_IMAGE_WIDTH = 1200;
-    private static final int ALERTS_IMAGE_MIN_HEIGHT = 600;
-
-    private static final Color HEADER_COLOR = new Color(0x4A90E2);
+    private static final int CANVAS_W = 1200;
+    private static final int CONTENT_X = 60;
+    private static final int CONTENT_W = 1080;
+    private static final int COLS = 2;
+    private static final int COL_GAP = 20;
+    private static final int CARD_W = (CONTENT_W - COL_GAP) / COLS;
+    private static final int[] COL_X = {CONTENT_X, CONTENT_X + CARD_W + COL_GAP};
+    private static final int CARD_H = 150;
+    private static final int CARD_PAD = 20;
+    private static final int CARD_RADIUS = 14;
+    private static final int ROW_GAP = 20;
+    private static final int TITLE_Y = 100;
+    private static final int DIVIDER_Y = TITLE_Y + 40;
+    private static final int CONTENT_START_Y = 170;
 
     private DefaultDrawAlertsImage() {
         throw new AssertionError("Cannot instantiate DefaultDrawAlertsImage class");
     }
 
-    /**
-     * 绘制警报图像
-     *
-     * @param alerts 警报数据列表
-     * @return 生成的警报图像的 PNG 格式字节数组
-     */
     public static byte[] drawAlertsImage(List<Alert> alerts) {
-        if (alerts == null || alerts.isEmpty()) {
-            return new byte[0];
+        if (alerts == null || alerts.isEmpty()) return new byte[0];
+
+        int n = alerts.size();
+        int rows = (int) Math.ceil((double) n / COLS);
+        int cardsH = rows * CARD_H + (rows - 1) * ROW_GAP;
+        boolean isOdd = n % COLS != 0;
+        int lastRowY = CONTENT_START_Y + (rows - 1) * (CARD_H + ROW_GAP);
+
+        int canvasH;
+        if (isOdd) {
+            canvasH = Math.max(CONTENT_START_Y + cardsH, lastRowY + 360);
+        } else {
+            canvasH = CONTENT_START_Y + cardsH + 360;
         }
 
-        // 计算图像高度
-        int height = calculateImageHeight(alerts.size());
+        ImageCombiner cb = new ImageCombiner(CANVAS_W, canvasH, ImageCombiner.OutputFormat.PNG);
 
-        // 创建画布
-        ImageCombiner combiner = new ImageCombiner(
-                ALERTS_IMAGE_WIDTH,
-                height,
-                ImageCombiner.OutputFormat.PNG
-        );
+        // 背景 + 双层边框
+        cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, canvasH);
+        cb.drawTooRoundRect();
 
-        // 填充背景色
-        combiner.setFont(FONT)
-                .setColor(PAGE_BACKGROUND_COLOR)
-                .fillRect(0, 0, ALERTS_IMAGE_WIDTH, height)
-                // 绘制双层边框
-                .drawTooRoundRect();
+        // 标题
+        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 56))
+                .addCenteredText("警报", TITLE_Y);
 
-        // 绘制标题
-        combiner.setColor(HEADER_COLOR)
-                .setFont(FONT.deriveFont(Font.BOLD, 40))
-                .addCenteredText("警报", 80);
+        // 分割线
+        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, DIVIDER_Y, CONTENT_X + CONTENT_W, DIVIDER_Y);
 
-        // 绘制表格
-        int tableY = 120;
-        int tableWidth = ALERTS_IMAGE_WIDTH - 2 * IMAGE_MARGIN;
-        int rowHeight = 60;
-
-        // 绘制表头
-        String[] headers = {"任务地点", "任务类型", "派系", "任务奖励", "距离结束"};
-        int[] columnWidths = {200, 150, 150, 350, 150};
-
-        // 绘制表头背景
-        combiner.setColor(HEADER_COLOR)
-                .fillRect(IMAGE_MARGIN, tableY, tableWidth, rowHeight);
-
-        // 绘制表头文字
-        combiner.setColor(Color.WHITE)
-                .setFont(FONT.deriveFont(Font.BOLD, 16));
-        int x = IMAGE_MARGIN;
-        for (int i = 0; i < headers.length; i++) {
-            combiner.addText(headers[i], x + columnWidths[i] / 2, tableY + rowHeight / 2 + 8);
-            x += columnWidths[i];
-        }
-        combiner.drawStandingDrawing();
-        // 绘制表格内容
-        int contentY = tableY + rowHeight;
-        for (int i = 0; i < alerts.size(); i++) {
-            Alert alert = alerts.get(i);
-            int rowY = contentY + i * rowHeight;
-
-            // 绘制斑马纹效果
-            if (i % 2 == 0) {
-                combiner.setColor(new Color(0xFFFFFF, true)) // 半透明白色
-                        .fillRect(IMAGE_MARGIN, rowY, tableWidth, rowHeight);
-            }
-
-            // 绘制表格行边框
-            combiner.setColor(new Color(0xE0E0E0, true))
-                    .setStroke(1)
-                    .drawLine(IMAGE_MARGIN, rowY + rowHeight, IMAGE_MARGIN + tableWidth, rowY + rowHeight);
-
-            // 绘制行内容
-            drawAlertRow(combiner, alert, rowY, columnWidths, rowHeight);
+        // 卡片网格
+        for (int i = 0; i < n; i++) {
+            int row = i / COLS;
+            int col = i % COLS;
+            int cardX = COL_X[col];
+            int cardY = CONTENT_START_Y + row * (CARD_H + ROW_GAP);
+            drawAlertCard(cb, alerts.get(i), cardX, cardY);
         }
 
-        // 绘制底部边框线
-        int tableHeight = rowHeight + alerts.size() * rowHeight;
-        combiner.setColor(new Color(0xE0E0E0, true))
-                .setStroke(1)
-                .drawLine(IMAGE_MARGIN, tableY + tableHeight, IMAGE_MARGIN + tableWidth, tableY + tableHeight);
+        addFooter(cb, canvasH - 25);
 
-
-        // 添加底部署名
-        addFooter(combiner, height - IMAGE_FOOTER_HEIGHT);
-
-        // 合并图像
-        combiner.combine();
-        try (ByteArrayOutputStream bos = combiner.getCombinedImageOutStream()) {
+        cb
+                .drawStandingAt(CANVAS_W, canvasH, STANDING_RATIO)
+                .combine();
+        try (ByteArrayOutputStream bos = cb.getCombinedImageOutStream()) {
             return bos.toByteArray();
         } catch (Exception e) {
-            throw new RuntimeException("无法获取图像输出流: %s".formatted(e.getMessage()), e);
+            throw new RuntimeException("无法获取图像输出流", e);
         }
     }
 
-    /**
-     * 计算图像高度
-     *
-     * @param alertCount 警报数量
-     * @return 图像高度
-     */
-    private static int calculateImageHeight(int alertCount) {
-        int headerHeight = 120;
-        int rowHeight = 60;
-        int tableHeight = headerHeight + (rowHeight * alertCount) + IMAGE_FOOTER_HEIGHT;
+    private static void drawAlertCard(ImageCombiner cb, Alert alert, int cardX, int cardY) {
+        int innerX = cardX + CARD_PAD;
+        int innerW = CARD_W - CARD_PAD * 2;
+        var mi = alert.getMissionInfo();
 
-        return Math.max(tableHeight, ALERTS_IMAGE_MIN_HEIGHT);
-    }
+        // 卡片背景
+        cb.setColor(CARD_BACKGROUND_COLOR)
+                .fillRoundRect(cardX, cardY, CARD_W, CARD_H, CARD_RADIUS, CARD_RADIUS);
 
-    /**
-     * 绘制警报行
-     *
-     * @param combiner     图像合成器
-     * @param alert        警报数据
-     * @param startY       起始Y坐标
-     * @param columnWidths 列宽数组
-     * @param rowHeight    行高
-     */
-    private static void drawAlertRow(ImageCombiner combiner, Alert alert, int startY, int[] columnWidths, int rowHeight) {
-        combiner.setColor(TEXT_COLOR);
+        // 行 1: 地点（左） + 剩余时间（右）
+        String location = (mi != null && mi.getLocation() != null) ? mi.getLocation() : "未知节点";
+        cb.setColor(TEXT_COLOR).setFont(FONT.deriveFont(28f));
+        cb.addText(location, innerX, cardY + 30);
 
-        // 任务地点
-        String node = alert.getMissionInfo() != null && alert.getMissionInfo().getLocation() != null ?
-                alert.getMissionInfo().getLocation() : "未知";
-        combiner
-                .addText(node, DrawConstants.IMAGE_MARGIN + columnWidths[0] / 2, startY + rowHeight / 2 + 5);
+        String eta = alert.getTimeLeft() != null ? alert.getTimeLeft() : "未知";
+        cb.setColor(ACCENT_GOLD_COLOR).setFont(FONT.deriveFont(20f));
+        java.awt.FontMetrics fm = cb.getFontMetrics(FONT.deriveFont(20f));
+        int etaW = fm.stringWidth(eta);
+        cb.addText(eta, innerX + innerW - etaW, cardY + 30);
 
-        // 任务类型
-        String missionType = alert.getMissionInfo() != null && alert.getMissionInfo().getMissionType() != null ?
-                alert.getMissionInfo().getMissionType().getName() : "未知";
-        combiner.addText(missionType, DrawConstants.IMAGE_MARGIN + columnWidths[0] + columnWidths[1] / 2, startY + rowHeight / 2 + 5);
+        // 行 2: 任务类型（有色） + 派系（有色） + 奖励
+        int badgeY = cardY + 74;
+        int cursorX = innerX;
 
-        // 派系
-        String faction = alert.getMissionInfo() != null && alert.getMissionInfo().getFaction() != null ?
-                alert.getMissionInfo().getFaction().getName() : "未知";
-        combiner.addText(faction, DrawConstants.IMAGE_MARGIN + columnWidths[0] + columnWidths[1] + columnWidths[2] / 2, startY + rowHeight / 2 + 5);
+        Font badgeFont = FONT.deriveFont(22f);
+        Font bodyFont = FONT.deriveFont(Font.BOLD, 24);
+        java.awt.FontMetrics badgeFm = cb.getFontMetrics(badgeFont);
+        java.awt.FontMetrics bodyFm = cb.getFontMetrics(bodyFont);
 
-        // 任务奖励
-        int rewardX = DrawConstants.IMAGE_MARGIN + columnWidths[0] + columnWidths[1] + columnWidths[2];
-        if (alert.getMissionInfo() != null && alert.getMissionInfo().getMissionReward() != null) {
-            Alert.MissionInfo.Reward reward = alert.getMissionInfo().getMissionReward();
-            int rewardY = startY + 15;
+        if (mi != null && mi.getMissionType() != null) {
+            Color mtColor = MissionTypeEnum.getColor(mi.getMissionType());
+            String mtName = mi.getMissionType().getName();
+            cb.setColor(mtColor).setFont(badgeFont);
+            cb.addText(mtName, cursorX, badgeY + 3);
+            cursorX += badgeFm.stringWidth(mtName) + 10;
+        }
 
-            // 绘制星币奖励
-            if (reward.getCredits() != null && reward.getCredits() > 0) {
-                combiner
-                        .addText(reward.getCredits() + "星币", rewardX + 80, rewardY + 15);
+        if (mi != null && mi.getFaction() != null) {
+            Color fColor = mi.getFaction().getColor();
+            String fIcon = mi.getFaction().getIcon();
+            String fName = mi.getFaction().getName();
+            if (fIcon != null && !fIcon.isEmpty()) {
+                cb.setColor(fColor).setFont(FONT_WARFRAME_ICON);
+                cb.addText(fIcon, cursorX, badgeY + 5);
+                cursorX += cb.getFontMetrics(FONT_WARFRAME_ICON).stringWidth(fIcon) + 4;
             }
+            cb.setColor(fColor).setFont(badgeFont);
+            cb.addText(fName, cursorX, badgeY + 3);
+            cursorX += badgeFm.stringWidth(fName) + 14;
+        }
 
-            // 绘制物品奖励
-            if (reward.getItems() != null && !reward.getItems().isEmpty()) {
-                for (String item : reward.getItems()) {
-                    if (item != null && !item.isEmpty()) {
-                        combiner
-                                .addText(item, rewardX + 220, rewardY + 15);
-                        rewardY += 20;
-                    }
+        // 奖励文字
+        String rewardText = buildRewardText(alert);
+        if (!rewardText.isEmpty()) {
+            cb.setColor(ACCENT_GOLD_COLOR).setFont(bodyFont);
+            int maxRewardW = innerX + innerW - cursorX - 6;
+            int rewardW = bodyFm.stringWidth(rewardText);
+            if (rewardW > maxRewardW) {
+                while (rewardW > maxRewardW && rewardText.length() > 3) {
+                    rewardText = rewardText.substring(0, rewardText.length() - 1);
+                    rewardW = bodyFm.stringWidth(rewardText + "..");
                 }
+                rewardText += "..";
             }
+            cb.addText(rewardText, cursorX, badgeY + 1);
         }
+    }
 
-        // 距离结束
-        String eta = alert.getTimeLeft();
-        combiner
-                .addText(eta, DrawConstants.IMAGE_MARGIN + columnWidths[0] + columnWidths[1] + columnWidths[2] + columnWidths[3] + columnWidths[4] / 2, startY + rowHeight / 2 + 5);
+    private static String buildRewardText(Alert alert) {
+        var mi = alert.getMissionInfo();
+        if (mi == null) return "";
+        var reward = mi.getMissionReward();
+        if (reward == null) return "";
+
+        StringBuilder sb = new StringBuilder();
+        if (reward.getCredits() != null && reward.getCredits() > 0) {
+            sb.append(reward.getCredits()).append("星币");
+        }
+        if (reward.getItems() != null && !reward.getItems().isEmpty()) {
+            if (!sb.isEmpty()) sb.append("  ");
+            var itemTexts = reward.getItems().stream().limit(5)
+                    .filter(it -> it != null && !it.isEmpty())
+                    .toList();
+            sb.append(String.join("  ", itemTexts));
+        }
+        return sb.toString();
     }
 }

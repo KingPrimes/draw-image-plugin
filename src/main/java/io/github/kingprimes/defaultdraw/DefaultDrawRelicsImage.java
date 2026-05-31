@@ -5,136 +5,144 @@ import io.github.kingprimes.model.Relics;
 import io.github.kingprimes.model.enums.RarityEnum;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
 /**
- * 遗物图像绘制实现类
+ * 遗物卡片渲染器 — 三列卡片网格 + 看板娘，列流式布局
  *
  * @author KingPrimes
- * @version 1.0.3
+ * @version 1.0.8
  */
 final class DefaultDrawRelicsImage {
 
-    private static final int CARD_WIDTH = 580;
-    private static final int CARD_HEIGHT = 350;
-    private static final int CARD_MARGIN_X = 20;
-    private static final int CARD_MARGIN_Y = 20;
-    private static final int CARDS_PER_ROW = 3;
-    private static final int IMAGE_WIDTH = 2250;
-    private static final int TITLE_HEIGHT = 60;
-    private static final int FOOTER_HEIGHT = 40;
+    private static final int CONTENT_X = 50;
+    private static final int COLS = 3;
+    private static final int COL_GAP = 20;
+    private static final int CARD_RADIUS = 14;
+    private static final int CARD_PAD = 20;
 
-    /**
-     * 绘制遗物图像
-     *
-     * @param relics 遗物数据列表
-     * @return 图像字节数组
-     */
+    private static final int TITLE_Y = 80;
+    private static final int CONTENT_START_Y = 150;
+
+    private DefaultDrawRelicsImage() {
+        throw new AssertionError("Cannot instantiate");
+    }
+
     public static byte[] drawRelicsImage(List<Relics> relics) {
-        if (relics == null || relics.isEmpty()) {
-            return new byte[0];
+        if (relics == null || relics.isEmpty()) return new byte[0];
+
+        int n = relics.size();
+        boolean isOdd = n % COLS != 0;
+        int cardW = 562;
+        int textW = cardW - CARD_PAD * 2;
+        int CANVAS_W = CONTENT_X + COLS * cardW + (COLS - 1) * COL_GAP + CONTENT_X;
+
+        int[] colX = new int[COLS];
+        for (int c = 0; c < COLS; c++) colX[c] = CONTENT_X + c * (cardW + COL_GAP);
+
+        // 预计算高度
+        int[] cardHeights = new int[n];
+        for (int i = 0; i < n; i++) cardHeights[i] = calcCardHeight(relics.get(i));
+
+        // 列流式 Y
+        int[] colEndY = new int[COLS];
+        java.util.Arrays.fill(colEndY, CONTENT_START_Y);
+        for (int i = 0; i < n; i++) {
+            int col = i % COLS;
+            colEndY[col] += cardHeights[i] + COL_GAP;
+        }
+        for (int c = 0; c < COLS; c++) {
+            if (colEndY[c] > CONTENT_START_Y) colEndY[c] -= COL_GAP;
         }
 
-        // 计算图像高度
-        int totalHeight = calculateImageHeight(relics.size()) + TITLE_HEIGHT + FOOTER_HEIGHT + 100; // 为看板娘预留空间
-
-        // 创建图像合成器
-        BufferedImage image = new BufferedImage(IMAGE_WIDTH, totalHeight, BufferedImage.TYPE_INT_ARGB);
-        ImageCombiner combiner = new ImageCombiner(image, ImageCombiner.OutputFormat.PNG);
-
-        // 设置背景色
-        combiner.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, IMAGE_WIDTH, totalHeight).drawTooRoundRect().drawStandingDrawing();
-
-        // 绘制遗物卡片
-        int x = IMAGE_MARGIN;
-        int y = TITLE_HEIGHT + 25;
-        int cardIndex = 0;
-
-        for (Relics relic : relics) {
-            // 检查是否需要换行
-            if (cardIndex > 0 && cardIndex % CARDS_PER_ROW == 0) {
-                x = IMAGE_MARGIN;
-                y += CARD_HEIGHT + CARD_MARGIN_Y;
-            }
-
-            // 绘制遗物卡片
-            BufferedImage bufferedImage = drawRelicCard(new ImageCombiner(CARD_WIDTH, CARD_HEIGHT, ImageCombiner.OutputFormat.PNG), relic);
-            combiner.drawImage(bufferedImage, x, y);
-
-            // 更新坐标
-            x += CARD_WIDTH + CARD_MARGIN_X;
-            cardIndex++;
+        int totalHeight;
+        if (isOdd) {
+            int tallerEnd = Math.max(colEndY[0], colEndY[1]);
+            totalHeight = Math.max(tallerEnd, colEndY[COLS - 1] + cardW);
+        } else {
+            int maxEnd = CONTENT_START_Y;
+            for (int c = 0; c < COLS; c++) maxEnd = Math.max(maxEnd, colEndY[c]);
+            totalHeight = maxEnd + 10 + cardW;
         }
 
-        // 添加底部署名
-        addFooter(combiner, totalHeight - 40);
+        ImageCombiner cb = new ImageCombiner(CANVAS_W, totalHeight, ImageCombiner.OutputFormat.PNG);
+        cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, totalHeight);
+        cb.drawTooRoundRect();
 
-        // 合成并返回图像
-        combiner.combine();
-        return combiner.getCombinedImageOutStream().toByteArray();
+        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 44))
+                .addCenteredText("遗物查询结果", TITLE_Y);
+        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 50, CANVAS_W - CONTENT_X, TITLE_Y + 50);
+
+        int[] drawY = new int[COLS];
+        java.util.Arrays.fill(drawY, CONTENT_START_Y);
+        for (int i = 0; i < n; i++) {
+            int col = i % COLS;
+            drawCard(cb, relics.get(i), colX[col], drawY[col], cardW, cardHeights[i], textW);
+            drawY[col] += cardHeights[i] + COL_GAP;
+        }
+
+        int standingX = colX[COLS - 1];
+        int standingY = isOdd ? colEndY[COLS - 1] : totalHeight - cardW;
+        cb.drawStandingAt(standingX, standingY, cardW, cardW);
+        addFooter(cb, totalHeight - 25);
+        cb.combine();
+        try (ByteArrayOutputStream bos = cb.getCombinedImageOutStream()) {
+            return bos.toByteArray();
+        } catch (Exception e) {
+            throw new RuntimeException("无法获取图像输出流", e);
+        }
     }
 
-    /**
-     * 计算图像总高度
-     *
-     * @param relicCount 遗物数量
-     * @return 图像总高度
-     */
-    private static int calculateImageHeight(int relicCount) {
-        int rows = (int) Math.ceil((double) relicCount / CARDS_PER_ROW);
-        return rows * CARD_HEIGHT + (rows - 1) * CARD_MARGIN_Y;
+    private static int calcCardHeight(Relics relic) {
+        int h = CARD_PAD + 42 + 10; // 顶部 + 标题
+        if (relic.getRewards() != null) h += relic.getRewards().size() * 36;
+        h += CARD_PAD;
+        return Math.max(h, 140);
     }
 
-    /**
-     * 绘制单个遗物卡片
-     *
-     * @param combiner 图像合成器
-     * @param relic    遗物数据
-     */
-    private static BufferedImage drawRelicCard(ImageCombiner combiner, Relics relic) {
-        // 绘制卡片背景
-        combiner.setColor(PAGE_BACKGROUND_COLOR)
-                .fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT)
-                .setColor(CARD_BACKGROUND_COLOR)
-                .fillRoundRect(0, 0, CARD_WIDTH, CARD_HEIGHT, 15, 15)
-                .setColor(new Color(0x333333))
-                .setStroke(2)
-                .drawRoundRect(0, 0, CARD_WIDTH, CARD_HEIGHT, 15, 15)
-                .drawRoundRect(-1, -1, CARD_WIDTH, CARD_HEIGHT, 15, 15);
+    private static void drawCard(ImageCombiner cb, Relics relic,
+                                 int cardX, int cardY, int cardW, int cardH, int textW) {
+        int innerX = cardX + CARD_PAD;
+        int rightX = innerX + textW;
 
-        // 绘制遗物名称（头部）
-        combiner.setColor(TITLE_COLOR).setFont(FONT).addCenteredText(relic.getName(), 50);
+        cb.setColor(CARD_BACKGROUND_COLOR).fillRoundRect(cardX, cardY, cardW, cardH, CARD_RADIUS, CARD_RADIUS);
+        cb.setColor(DIVIDER_COLOR).setStroke(1).drawRoundRect(cardX, cardY, cardW, cardH, CARD_RADIUS, CARD_RADIUS);
 
-        // 绘制奖励列表
-        if (relic.getRewards() != null && !relic.getRewards().isEmpty()) {
-            int rewardY = 100;
+        int cy = cardY + CARD_PAD;
+
+        // 遗物名称
+        String name = relic.getName() != null ? relic.getName() : "未知遗物";
+        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 22f));
+        cb.addText(name, innerX, cy + 24);
+        cy += 36;
+
+        // 分隔线
+        cb.setColor(DIVIDER_COLOR).drawLine(innerX, cy + 4, rightX, cy + 4);
+        cy += 14;
+
+        // 奖励列表（稀有度颜色）
+        if (relic.getRewards() != null) {
+            Font rf = FONT.deriveFont(18f);
             for (Relics.Rewards reward : relic.getRewards()) {
-                Color rarityColor = getRarityColor(reward.getRarity());
-                combiner.setColor(rarityColor).addCenteredText(reward.getName(), rewardY);
-                rewardY += 45;
+                Color rc = getRarityColor(reward.getRarity());
+                String rname = reward.getName() != null ? reward.getName() : "未知";
+                if (rname.length() > 26) rname = rname.substring(0, 24) + "..";
+                cb.setColor(rc).setFont(rf);
+                cb.addText("● " + rname, innerX + 8, cy + 22);
+                cy += 36;
             }
         }
-        return combiner.getCombinedImage();
     }
 
-    /**
-     * 根据稀有度获取颜色
-     *
-     * @param rarity 稀有度枚举
-     * @return 对应的颜色
-     */
     private static Color getRarityColor(RarityEnum rarity) {
-        if (rarity == null) {
-            return TEXT_COLOR;
-        }
-
+        if (rarity == null) return TEXT_COLOR;
         return switch (rarity) {
-            case COMMON -> ACTIVE_MISSION_VOID_T2_COLOR; // #75562B
-            case UNCOMMON -> ACTIVE_MISSION_VOID_T3_COLOR; // #B3B3B3
-            case RARE -> ACTIVE_MISSION_VOID_T4_COLOR; // #C1BE39
+            case COMMON -> VOID_T2_COLOR;
+            case UNCOMMON -> VOID_T3_COLOR;
+            case RARE -> VOID_T4_COLOR;
             default -> TEXT_COLOR;
         };
     }

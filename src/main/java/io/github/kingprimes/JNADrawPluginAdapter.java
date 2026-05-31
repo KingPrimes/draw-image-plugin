@@ -597,6 +597,46 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
     }
 
     /**
+     * 绘制 深层征服 图像
+     *
+     * @param conquests 深层征服数据
+     * @return 图像流
+     */
+    @Override
+    public byte[] drawConquestImage(List<Conquest> conquests) {
+        try {
+            Pointer pointer = convertToPointer(conquests);
+            byte[] bytes = pointerToByteArray(library.nativeDrawConquestImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawConquestImage(conquests);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawConquestImage(conquests);
+        }
+    }
+
+    /**
+     * 绘制 深层下降 图像
+     *
+     * @param descents 深层下降数据
+     * @return 图像流
+     */
+    @Override
+    public byte[] drawDescentImage(List<Descent> descents) {
+        try {
+            Pointer pointer = convertToPointer(descents);
+            byte[] bytes = pointerToByteArray(library.nativeDrawDescentImage(pointer));
+            if (bytes != null && bytes.length > 0) {
+                return bytes;
+            }
+            return new DefaultDrawImagePlugin().drawDescentImage(descents);
+        } catch (Exception e) {
+            return new DefaultDrawImagePlugin().drawDescentImage(descents);
+        }
+    }
+
+    /**
      * 获取插件名称
      *
      * @return 插件名称

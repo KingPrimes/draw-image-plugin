@@ -6,210 +6,175 @@ import io.github.kingprimes.model.worldstate.Reward;
 
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
+import java.util.Comparator;
 import java.util.List;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
 /**
- * 默认入侵任务图片绘制工具类
- * <p>
- * 该类负责将入侵任务数据渲染为图像，包括节点信息、阵营对抗、进度条和奖励等元素
+ * 入侵卡片渲染器 — 单列宽卡片布局
+ * <p>对应 Python card_invasions.py：进攻/防守双色进度条 + 阵营对抗 + 奖励</p>
  *
  * @author KingPrimes
- * @version 1.0.3
+ * @version 1.0.8
  */
 final class DefaultDrawInvasionImage {
 
-    // 图像尺寸常量
-    private static final int INVASION_IMAGE_MIN_HEIGHT = 800;
-    private static final int INVASION_IMAGE_MAX_HEIGHT = 2000;
+    private static final int CANVAS_W = 1300;
+    private static final int CONTENT_X = 60;
+    private static final int CONTENT_W = 1180;
+    private static final int CARD_W = CONTENT_W;
+    private static final int CARD_H = 200;
+    private static final int CARD_RADIUS = 14;
+    private static final int CARD_PAD = 24;
+    private static final int ROW_GAP = 20;
+    private static final int ACCENT_STRIP_H = 6;
 
-    // 每行入侵任务的高度
-    private static final int INVASION_ROW_HEIGHT = 200;
+    private static final int TITLE_Y = 80;
+    private static final int CONTENT_START_Y = 150;
 
-    // 颜色常量定义
-    private static final Color ATTACKER_COLOR = new Color(0xFF6B6B); // 进攻方颜色 - 红色系
-    private static final Color DEFENDER_COLOR = new Color(0x4CAF50); // 防守方颜色 - 绿色系
-    private static final Color PROGRESS_BAR_BG_COLOR = new Color(0xDDDDDD); // 进度条背景色
-    private static final Color PROGRESS_BAR_COLOR = new Color(0x4A90E2); // 进度条前景色
+    private static final Color ATK_COLOR = DrawConstants.ATTACKER_COLOR;
+    private static final Color DEF_COLOR = DrawConstants.DEFENDER_COLOR;
 
-    /**
-     * 私有构造函数，防止实例化该工具类
-     */
     private DefaultDrawInvasionImage() {
         throw new AssertionError("Cannot instantiate DefaultDrawInvasionImage class");
     }
 
-    /**
-     * 绘制入侵任务图像
-     *
-     * @param invasions 入侵任务数据列表
-     * @return 生成的入侵任务图像的 PNG 格式字节数组
-     */
     public static byte[] drawInvasionImage(List<Invasion> invasions) {
-        // 如果没有入侵任务数据，则返回空字节数组
-        if (invasions == null || invasions.isEmpty()) {
-            return new byte[0];
+        if (invasions == null || invasions.isEmpty()) return new byte[0];
+
+        List<Invasion> sorted = invasions.stream()
+                .sorted(Comparator.comparing(Invasion::getGoal, Comparator.nullsLast(Comparator.reverseOrder())))
+                .toList();
+        int n = sorted.size();
+        int cardsH = n * CARD_H + (n - 1) * ROW_GAP;
+        box sz = scaleByPct(CANVAS_W, CANVAS_W, STANDING_RATIO);
+        int canvasH = CONTENT_START_Y + cardsH + sz.y();
+
+        ImageCombiner cb = new ImageCombiner(CANVAS_W, canvasH, ImageCombiner.OutputFormat.PNG);
+        cb.setColor(PAGE_BACKGROUND_COLOR)
+                .fillRect(0, 0, CANVAS_W, canvasH);
+        cb.drawTooRoundRect();
+
+        cb.setColor(ACCENT_COLOR).setFont(FONT.deriveFont(Font.BOLD, 48))
+                .addCenteredText("入侵任务", TITLE_Y);
+        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 55, CONTENT_X + CONTENT_W, TITLE_Y + 55);
+
+        Font nodeFont = FONT.deriveFont(Font.BOLD, 32);
+        Font factionFont = FONT.deriveFont(26f);
+        Font rewardFont = FONT.deriveFont(22f);
+        Font progressFont = FONT.deriveFont(24f);
+
+        for (int i = 0; i < sorted.size(); i++) {
+            drawInvasionCard(cb, sorted.get(i),
+                    CONTENT_START_Y + i * (CARD_H + ROW_GAP),
+                    nodeFont, factionFont, rewardFont, progressFont);
         }
+        addFooter(cb, canvasH - 25);
 
-        // 根据入侵任务数量计算图像高度
-        int height = calculateImageHeight(invasions.size());
-
-        // 创建图像合成器实例
-        ImageCombiner combiner = new ImageCombiner(
-                IMAGE_WIDTH,
-                height,
-                ImageCombiner.OutputFormat.PNG
-        );
-
-        // 填充背景色并绘制双层圆角矩形边框
-        combiner.setFont(FONT)
-                .setColor(PAGE_BACKGROUND_COLOR)
-                .fillRect(0, 0, IMAGE_WIDTH, height)
-                .drawTooRoundRect()
-                // 绘制看板娘
-                .drawStandingDrawing();
-
-        // 绘制标题
-        combiner.setColor(TITLE_COLOR)
-                .setFont(FONT.deriveFont(Font.BOLD, 36)) // 标题字体大小为36
-                .addCenteredText("入侵任务", 80);
-
-        // 绘制入侵任务列表
-        int startY = 120;
-        for (int i = 0; i < invasions.size(); i++) {
-            Invasion invasion = invasions.get(i);
-            int rowY = startY + i * INVASION_ROW_HEIGHT;
-
-            // 绘制斑马纹背景效果，提高可读性
-            if (i % 2 == 0) {
-                combiner.setColor(new Color(0xFFFFFF, true)) // 半透明白色
-                        .fillRect(IMAGE_MARGIN, rowY, IMAGE_WIDTH - 2 * IMAGE_MARGIN, INVASION_ROW_HEIGHT);
-            }
-
-            // 绘制单个入侵任务行
-            drawInvasionRow(combiner, invasion, rowY);
-        }
-
-        // 添加底部署名
-        addFooter(combiner.setFont(FONT), height - IMAGE_FOOTER_HEIGHT);
-
-        // 合并图像并获取字节数组
-        combiner.combine();
-        try (ByteArrayOutputStream bos = combiner.getCombinedImageOutStream()) {
+        cb.drawStandingAt(CANVAS_W - sz.x(), canvasH - sz.y(), sz.x(), sz.y()).combine();
+        try (ByteArrayOutputStream bos = cb.getCombinedImageOutStream()) {
             return bos.toByteArray();
         } catch (Exception e) {
-            throw new RuntimeException("无法获取图像输出流: %s".formatted(e.getMessage()), e);
+            throw new RuntimeException("无法获取图像输出流", e);
         }
     }
 
-    /**
-     * 计算图像高度
-     * 根据入侵任务数量动态计算图像高度，确保内容完整显示
-     *
-     * @param invasionCount 入侵任务数量
-     * @return 图像高度（在最小和最大高度之间）
-     */
-    private static int calculateImageHeight(int invasionCount) {
-        int headerHeight = 120; // 标题区域高度
-        int footerHeight = IMAGE_FOOTER_HEIGHT + 50; // 底部区域高度
-        int contentHeight = invasionCount * INVASION_ROW_HEIGHT; // 内容区域高度
-        int tableHeight = headerHeight + contentHeight + footerHeight; // 总高度
+    private static void drawInvasionCard(ImageCombiner cb, Invasion inv, int cardY,
+                                         Font nodeFont, Font factionFont, Font rewardFont, Font progressFont) {
+        int innerX = DefaultDrawInvasionImage.CONTENT_X + CARD_PAD;
+        int innerW = CARD_W - CARD_PAD * 2;
 
-        // 确保图像高度在指定范围内
-        return Math.min(Math.max(tableHeight, INVASION_IMAGE_MIN_HEIGHT), INVASION_IMAGE_MAX_HEIGHT);
+        double progress = inv.getGoal() != null && inv.getGoal() != 0 && inv.getCount() != null
+                ? Math.min(Math.abs(inv.getCount()) / inv.getGoal(), 1.0) : 0;
+
+        // 卡片背景
+        cb.setColor(CARD_BACKGROUND_COLOR).fillRoundRect(DefaultDrawInvasionImage.CONTENT_X, cardY, CARD_W, CARD_H, CARD_RADIUS, CARD_RADIUS);
+
+        // 顶部双色进度条
+        int splitX = DefaultDrawInvasionImage.CONTENT_X + (int) (CARD_W * progress);
+        if (splitX - DefaultDrawInvasionImage.CONTENT_X > CARD_RADIUS) {
+            cb.setColor(ATK_COLOR)
+                    .fillRect(DefaultDrawInvasionImage.CONTENT_X + CARD_RADIUS, cardY + 2, splitX - DefaultDrawInvasionImage.CONTENT_X - CARD_RADIUS, ACCENT_STRIP_H);
+        }
+        if (DefaultDrawInvasionImage.CONTENT_X + CARD_W - splitX > CARD_RADIUS) {
+            cb.setColor(DEF_COLOR)
+                    .fillRect(splitX, cardY + 2, DefaultDrawInvasionImage.CONTENT_X + CARD_W - splitX - CARD_RADIUS, ACCENT_STRIP_H);
+        }
+
+        // 行 1: 节点（左） + 进度（右）
+        cb.setColor(TEXT_COLOR).setFont(nodeFont);
+        cb.addText(inv.getNode() != null ? inv.getNode() : "未知节点", innerX, cardY + 40);
+        String pct = String.format("进度: %.1f%%", progress * 100);
+        cb.setColor(TITLE_COLOR).setFont(progressFont);
+        int pctW = cb.getFontMetrics(progressFont).stringWidth(pct);
+        cb.addText(pct, innerX + innerW - pctW, cardY + 42);
+
+        // 行 2: 阵营对抗（居中）
+        int row2Y = cardY + 88;
+        String atkName = inv.getFaction() != null ? inv.getFaction().getName() : "未知";
+        Color atkColor = inv.getFaction() != null ? inv.getFaction().getColor() : TEXT_MUTED_COLOR;
+        String atkIcon = inv.getFaction() != null ? inv.getFaction().getIcon() : "";
+        String defName = inv.getDefenderFaction() != null ? inv.getDefenderFaction().getName() : "未知";
+        Color defColor = inv.getDefenderFaction() != null ? inv.getDefenderFaction().getColor() : TEXT_MUTED_COLOR;
+        String defIcon = inv.getDefenderFaction() != null ? inv.getDefenderFaction().getIcon() : "";
+        String sep = "  VS  ";
+
+        java.awt.FontMetrics ffm = cb.getFontMetrics(factionFont);
+        Font iconFont = FONT_WARFRAME_ICON;
+        java.awt.FontMetrics ifm = cb.getFontMetrics(iconFont);
+        int atkIconW = (atkIcon != null && !atkIcon.isEmpty()) ? ifm.stringWidth(atkIcon) + 4 : 0;
+        int defIconW = (defIcon != null && !defIcon.isEmpty()) ? ifm.stringWidth(defIcon) + 4 : 0;
+        int atkW = ffm.stringWidth(atkName);
+        int sepW = ffm.stringWidth(sep);
+        int defW = ffm.stringWidth(defName);
+        int totalW = atkIconW + atkW + sepW + defIconW + defW;
+        int curX = innerX + (innerW - totalW) / 2;
+
+        if (atkIcon != null && !atkIcon.isEmpty()) {
+            cb.setColor(atkColor).setFont(iconFont).addText(atkIcon, curX, row2Y);
+            curX += atkIconW;
+        }
+        cb.setColor(atkColor).setFont(factionFont).addText(atkName, curX, row2Y + 3);
+        curX += atkW;
+        cb.setColor(TEXT_MUTED_COLOR).setFont(factionFont).addText(sep, curX, row2Y + 3);
+        curX += sepW;
+        if (defIcon != null && !defIcon.isEmpty()) {
+            cb.setColor(defColor).setFont(iconFont).addText(defIcon, curX, row2Y);
+            curX += defIconW;
+        }
+        cb.setColor(defColor).setFont(factionFont).addText(defName, curX, row2Y + 3);
+
+        // 行 3: 奖励
+        int rewardY = cardY + 140;
+        String atkReward = getFirstRewardText(inv.getAttackerReward());
+        if (!atkReward.isEmpty()) {
+            cb.setColor(ATK_COLOR).setFont(rewardFont);
+            cb.addText("进攻: " + atkReward, innerX, rewardY + 3);
+        }
+        String defReward = "";
+        if (inv.getDefenderReward() != null && inv.getDefenderReward().getCountedItems() != null
+                && !inv.getDefenderReward().getCountedItems().isEmpty()) {
+            var item = inv.getDefenderReward().getCountedItems().getFirst();
+            defReward = (item.getCount() != null ? item.getCount() : "?") + "x "
+                    + (item.getName() != null ? item.getName() : "?");
+        }
+        if (!defReward.isEmpty()) {
+            cb.setColor(DEF_COLOR).setFont(rewardFont);
+            int labelW = cb.getFontMetrics(rewardFont).stringWidth("防守: " + defReward);
+            cb.addText("防守: " + defReward, innerX + innerW - labelW, rewardY + 3);
+        }
     }
 
-    /**
-     * 绘制单个入侵任务行
-     * 包括节点名称、阵营信息、进度条和奖励信息
-     *
-     * @param combiner 图像合成器实例
-     * @param invasion 入侵任务数据
-     * @param startY   起始Y坐标
-     */
-    private static void drawInvasionRow(ImageCombiner combiner, Invasion invasion, int startY) {
-        // 绘制节点名称，使用32号粗体字体
-        combiner.setColor(TEXT_COLOR)
-                .setFont(FONT.deriveFont(Font.BOLD, 32))
-                .addText(invasion.getNode() != null ? invasion.getNode() : "未知节点",
-                        IMAGE_MARGIN + 20, startY + 40);
-
-        // 绘制阵营信息
-        String attackerFaction = invasion.getFaction() != null ? invasion.getFaction().getName() : "未知阵营";
-        String defenderFaction = invasion.getDefenderFaction() != null ? invasion.getDefenderFaction().getName() : "未知阵营";
-
-        // 绘制进攻方阵营名称
-        combiner.setColor(ATTACKER_COLOR)
-                .setFont(FONT.deriveFont(28f)) // 使用28号字体
-                .addText(attackerFaction, IMAGE_MARGIN + 20, startY + 80);
-
-        // 绘制对阵标识
-        combiner.setColor(TEXT_COLOR)
-                .setFont(FONT.deriveFont(28f))
-                .addText(" vs ", IMAGE_MARGIN + 200, startY + 80);
-
-        // 绘制防守方阵营名称
-        combiner.setColor(DEFENDER_COLOR)
-                .setFont(FONT.deriveFont(28f))
-                .addText(defenderFaction, IMAGE_MARGIN + 300, startY + 80);
-
-        // 绘制进度条背景
-        int progressBarX = IMAGE_MARGIN + 1120 - 450; // 进度条X坐标
-        int progressBarY = startY + 45; // 进度条Y坐标
-        int progressBarWidth = 400; // 进度条宽度
-        int progressBarHeight = 35; // 进度条高度
-
-        combiner.setColor(PROGRESS_BAR_BG_COLOR)
-                .fillRoundRect(progressBarX, progressBarY, progressBarWidth, progressBarHeight, 15, 15);
-
-        // 绘制进度条和进度文本
-        if (invasion.getGoal() != null && invasion.getGoal() != 0 && invasion.getCount() != null) {
-            // 计算进度百分比
-            double progress = Math.abs(invasion.getCount()) / invasion.getGoal();
-            progress = Math.min(progress, 1.0); // 确保不超过100%
-
-            // 绘制进度条前景
-            int progressWidth = (int) (progressBarWidth * progress);
-            combiner.setColor(PROGRESS_BAR_COLOR)
-                    .fillRoundRect(progressBarX, progressBarY, progressWidth, progressBarHeight, 15, 15);
-
-            // 绘制进度百分比文本
-            String progressText = String.format("%.1f%%", progress * 100);
-            combiner.setColor(TEXT_COLOR)
-                    .setFont(FONT.deriveFont(24f)) // 使用24号字体
-                    .addText(progressText, progressBarX + progressBarWidth / 2 - 40,
-                            progressBarY + progressBarHeight / 2 + 8);
-        }
-
-        // 绘制奖励信息
-        int rewardY = startY + 140; // 奖励信息Y坐标
-
-        // 绘制进攻方奖励
-        if (invasion.getAttackerReward() != null && !invasion.getAttackerReward().isEmpty()) {
-            Reward attackerReward = invasion.getAttackerReward().getFirst();
-            if (attackerReward.getCountedItems() != null && !attackerReward.getCountedItems().isEmpty()) {
-                Reward.Item item = attackerReward.getCountedItems().getFirst();
-                if (item.getCount() != null && item.getName() != null) {
-                    combiner.setColor(ATTACKER_COLOR)
-                            .setFont(FONT.deriveFont(24f)) // 使用24号字体
-                            .addText("进攻方: " + item.getCount() + "x " + item.getName(),
-                                    IMAGE_MARGIN + 20, rewardY);
-                }
+    private static String getFirstRewardText(List<Reward> rewards) {
+        if (rewards == null) return "";
+        for (Reward rw : rewards) {
+            if (rw.getCountedItems() != null && !rw.getCountedItems().isEmpty()) {
+                var item = rw.getCountedItems().getFirst();
+                return (item.getCount() != null ? item.getCount() : "?") + "x "
+                        + (item.getName() != null ? item.getName() : "?");
             }
         }
-
-        // 绘制防守方奖励
-        if (invasion.getDefenderReward() != null &&
-                invasion.getDefenderReward().getCountedItems() != null &&
-                !invasion.getDefenderReward().getCountedItems().isEmpty()) {
-            Reward.Item item = invasion.getDefenderReward().getCountedItems().getFirst();
-            if (item.getCount() != null && item.getName() != null) {
-                combiner.setColor(DEFENDER_COLOR)
-                        .setFont(FONT.deriveFont(24f)) // 使用24号字体
-                        .addText("防守方: " + item.getCount() + "x " + item.getName(),
-                                IMAGE_MARGIN + 400, rewardY);
-            }
-        }
+        return "";
     }
 }

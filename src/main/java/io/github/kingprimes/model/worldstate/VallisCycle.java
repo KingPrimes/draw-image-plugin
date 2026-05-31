@@ -15,7 +15,7 @@ import java.time.temporal.ChronoUnit;
  * @version 1.0.0
  */
 @Getter
-public final class VallisCycle {
+public final class VallisCycle implements Cycle {
 
     private static final long LOOP_TIME = 1600000; // 总周期时长（毫秒）
     private static final long WARM_TIME = 400000;  // 温暖期持续时间（毫秒）

@@ -17,7 +17,7 @@ import java.time.Instant;
  */
 @Setter(AccessLevel.NONE)
 @Getter
-public final class CambionCycle {
+public final class CambionCycle implements Cycle {
     /**
      * 活动 FASS/VOME
      * <p>表示当前魔胎之境的活动状态，FASS或VOME</p>

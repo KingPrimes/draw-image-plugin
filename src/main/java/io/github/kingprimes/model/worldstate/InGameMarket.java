@@ -77,7 +77,12 @@ public class InGameMarket {
         /**
          * 季节性分类
          */
-        SEASONAL
+        SEASONAL,
+
+        /**
+         * 快速购买
+         */
+        QUICK_BUY
 
     }
 

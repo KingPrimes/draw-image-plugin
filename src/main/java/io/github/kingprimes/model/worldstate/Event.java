@@ -1,5 +1,6 @@
 package io.github.kingprimes.model.worldstate;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +18,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Event extends BastWorldState {
     /**
      * 消息
@@ -75,5 +77,21 @@ public class Event extends BastWorldState {
      */
     @JsonProperty("HideEndDateModifier")
     private Boolean hideEndDateModifier = false;
+
+    @JsonProperty("EventLiveUrl")
+    private String eventLiveUrl;
+
+    @JsonProperty("Links")
+    private List<EventLink> links;
+
+    @Data
+    @Accessors(chain = true)
+    public static class EventLink {
+        @JsonProperty("LanguageCode")
+        private String languageCode;
+
+        @JsonProperty("Link")
+        private String link;
+    }
 
 }

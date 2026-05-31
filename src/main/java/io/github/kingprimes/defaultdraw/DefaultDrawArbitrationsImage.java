@@ -4,105 +4,129 @@ import io.github.kingprimes.image.ImageCombiner;
 import io.github.kingprimes.model.Arbitration;
 
 import java.awt.*;
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
 /**
- * 默认有价值的仲裁任务图片绘制工具类
+ * 仲裁列表卡片渲染器 — 两列卡片网格 + 双列数据布局
  *
  * @author KingPrimes
- * @version 1.0.3
+ * @version 1.0.8
  */
 final class DefaultDrawArbitrationsImage {
 
-    private static final int ARBITRATIONS_ITEM_HEIGHT = 240;
+    private static final int CANVAS_W = 1300;
+    private static final int CONTENT_X = 50;
+    private static final int CONTENT_W = 1200;
+    private static final int COLS = 2;
+    private static final int COL_GAP = 20;
+    private static final int CARD_W = (CONTENT_W - COL_GAP) / COLS;
+    private static final int[] COL_X = {CONTENT_X, CONTENT_X + CARD_W + COL_GAP};
+    private static final int CARD_H = 190;
+    private static final int CARD_RADIUS = 14;
+    private static final int CARD_PAD = 20;
+    private static final int ROW_GAP = 20;
+    private static final int CARD_ROW_H = 44;
+    private static final int TITLE_Y = 80;
+    private static final int CONTENT_START_Y = 160;
 
-    private static final Color ARBITRATION_WORTH_COLOR = new Color(0x27ae60);
+    private DefaultDrawArbitrationsImage() {
+        throw new AssertionError("Cannot instantiate");
+    }
 
-    /**
-     * 绘制多个有价值的仲裁任务图像
-     *
-     * @param arbitrations 仲裁任务数据列表
-     * @return 生成的仲裁任务图像的 PNG 格式字节数组
-     */
     public static byte[] drawArbitrationsImage(List<Arbitration> arbitrations) {
-        if (arbitrations == null || arbitrations.isEmpty()) {
-            return new byte[0];
+        if (arbitrations == null || arbitrations.isEmpty()) return new byte[0];
+
+        List<Arbitration> worthList = arbitrations.stream()
+                .filter(Arbitration::isWorth).limit(5).toList();
+        if (worthList.isEmpty()) return new byte[0];
+
+        int n = worthList.size();
+        int rows = (int) Math.ceil((double) n / COLS);
+        int cardsH = rows * CARD_H + (rows - 1) * ROW_GAP;
+        boolean isOdd = n % COLS != 0;
+        int lastRowY = CONTENT_START_Y + (rows - 1) * (CARD_H + ROW_GAP);
+
+        // 看板娘尺寸
+        box sz = scaleByPct(CANVAS_W, CANVAS_W, STANDING_RATIO);
+
+        int standingX = CANVAS_W - sz.x();
+        int standingY;
+        if (isOdd) {
+            standingY = lastRowY;
+        } else {
+            standingY = CONTENT_START_Y + cardsH + 10;
         }
 
-        // 过滤出值得参与的仲裁任务
-        List<Arbitration> worthArbitrations = arbitrations.stream()
-                .filter(Arbitration::isWorth)
-                .limit(5)
-                .toList();
+        int canvasH = standingY + sz.y();
 
-        if (worthArbitrations.isEmpty()) {
-            return new byte[0];
-        }
-
-        // 计算图像高度
-        int contentHeight = worthArbitrations.size() * ARBITRATIONS_ITEM_HEIGHT;
-        int totalHeight = IMAGE_MARGIN + IMAGE_MARGIN_TOP + contentHeight + IMAGE_FOOTER_HEIGHT + IMAGE_MARGIN;
-
-        // 创建画布
-        ImageCombiner combiner = new ImageCombiner(IMAGE_WIDTH, totalHeight, ImageCombiner.OutputFormat.PNG);
-
-        // 设置背景
-        combiner.setColor(Color.WHITE)
-                .fillRect(0, 0, IMAGE_WIDTH, totalHeight);
+        ImageCombiner cb = new ImageCombiner(CANVAS_W, canvasH, ImageCombiner.OutputFormat.PNG);
+        cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, canvasH);
+        cb.drawTooRoundRect();
 
         // 标题
-        String title = "有价值的仲裁任务列表";
-        combiner.setColor(TITLE_COLOR)
-                .setFont(FONT)
-                .addCenteredText(title, IMAGE_MARGIN + IMAGE_MARGIN_TOP / 2)
-                .drawTooRoundRect()
-                .drawStandingDrawing();
+        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 40));
+        cb.addCenteredText("有价值的仲裁任务", TITLE_Y);
+        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 55, CONTENT_X + CONTENT_W, TITLE_Y + 55);
 
-        int textY = IMAGE_MARGIN_TOP;
-        // 绘制每个仲裁任务
-        combiner.setFont(FONT);
-        for (Arbitration arbitration : worthArbitrations) {
-            textY += IMAGE_MARGIN * 2;
-            // 节点
-            combiner.setColor(TEXT_COLOR)
-                    .addText("节点: " + arbitration.getNode(), IMAGE_MARGIN, textY);
-            // 敌人
-            textY += IMAGE_MARGIN;
-            combiner.setColor(TEXT_COLOR)
-                    .addText("敌人: " + arbitration.getEnemyName(), IMAGE_MARGIN, textY);
+        Font dataFont = FONT.deriveFont(18f);
+        Font worthFont = FONT.deriveFont(Font.BOLD, 20);
 
-            // 任务类型
-            textY += IMAGE_MARGIN;
-            combiner.setColor(TEXT_COLOR)
-                    .addText("任务类型: " + arbitration.getType(), IMAGE_MARGIN, textY);
-
-            // 时间信息
-            textY += IMAGE_MARGIN;
-            if (arbitration.getExpiry() != null) {
-                combiner.setColor(TEXT_COLOR)
-                        .addText("开始时间: " + arbitration.getActivationFormat(), IMAGE_MARGIN, textY);
-            }
-            textY += IMAGE_MARGIN;
-            // 价值标识
-            String worthText = "值得参与";
-            combiner.setColor(ARBITRATION_WORTH_COLOR)
-                    .addText(worthText,
-                            IMAGE_MARGIN,
-                            textY);
+        for (int i = 0; i < n; i++) {
+            int row = i / COLS;
+            int col = i % COLS;
+            drawArbitrationCard(cb, worthList.get(i), COL_X[col],
+                    CONTENT_START_Y + row * (CARD_H + ROW_GAP),
+                    dataFont, worthFont);
         }
 
-        // 添加底部署名
-        addFooter(combiner, totalHeight - IMAGE_FOOTER_HEIGHT + 10);
+        return getBytes(sz, standingX, standingY, canvasH, cb);
+    }
 
-        // 合并图像
-        combiner.combine();
-        try (ByteArrayOutputStream bos = combiner.getCombinedImageOutStream()) {
-            return bos.toByteArray();
-        } catch (Exception e) {
-            throw new RuntimeException("无法获取图像输出流: %s".formatted(e.getMessage()), e);
+
+    private static void drawArbitrationCard(ImageCombiner cb, Arbitration a, int cardX, int cardY,
+                                            Font dataFont, Font worthFont) {
+        int innerX = cardX + CARD_PAD;
+        int innerW = CARD_W - CARD_PAD * 2;
+        int rightX = innerX + innerW / 2 + 10;
+
+        // 卡片背景
+        cb.setColor(CARD_BACKGROUND_COLOR).fillRoundRect(cardX, cardY, CARD_W, CARD_H, CARD_RADIUS, CARD_RADIUS);
+
+        int row1Y = cardY + 40;
+        int row2Y = row1Y + CARD_ROW_H;
+        int row3Y = row2Y + CARD_ROW_H;
+
+        // ---- 第一行：节点 | 敌人 ----
+        String node = a.getNode() != null ? a.getNode() : "未知节点";
+        cb.setColor(TEXT_COLOR).setFont(dataFont);
+        cb.addText("节点: " + node, innerX, row1Y);
+
+        String enemyName = a.getEnemyName();
+        String icon = a.getEnemyIcon();
+        int curX = rightX;
+        if (icon != null && !icon.isEmpty()) {
+            cb.setColor(a.getEnemyColor()).setFont(FONT_WARFRAME_ICON);
+            cb.addText(icon, curX, row1Y);
+            curX += cb.getFontMetrics(FONT_WARFRAME_ICON).stringWidth(icon) + 4;
         }
+        cb.setColor(a.getEnemyColor()).setFont(dataFont);
+        cb.addText("敌人: " + enemyName, curX, row1Y);
+
+        // ---- 第二行：任务类型 | 开始时间 ----
+        String type = a.getType() != null ? a.getType() : "未知";
+        cb.setColor(TEXT_COLOR).setFont(dataFont);
+        cb.addText("任务类型: " + type, innerX, row2Y);
+        cb.setColor(TEXT_SECONDARY_COLOR).setFont(dataFont);
+        cb.addText("开始: " + a.getActivationFormat(), rightX, row2Y);
+
+        // ---- 第三行：剩余时间 | 值得参与 ----
+        cb.setColor(ACCENT_GOLD_COLOR).setFont(dataFont);
+        cb.addText("剩余: " + a.getTimeLeft(), innerX, row3Y);
+
+        String worthText = a.isWorth() ? "值得参与" : "不值得参与";
+        cb.setColor(a.isWorth() ? WORTH_COLOR : NOT_WORTH_COLOR).setFont(worthFont);
+        cb.addText(worthText, rightX, row3Y);
     }
 }

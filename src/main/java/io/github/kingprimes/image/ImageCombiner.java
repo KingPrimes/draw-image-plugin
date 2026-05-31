@@ -1,5 +1,7 @@
 package io.github.kingprimes.image;
 
+import io.github.kingprimes.defaultdraw.DrawConstants;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -15,7 +17,8 @@ import java.io.IOException;
  */
 @SuppressWarnings("unused")
 public class ImageCombiner {
-
+    private static final Color BORDER_OUTER_COLOR = new Color(0x3C3C5A);
+    private static final Color BORDER_INNER_COLOR = new Color(0x4a4a6a);
     /**
      * 目标画布图像，所有绘制操作的最终载体（尺寸不可变）
      */
@@ -32,7 +35,6 @@ public class ImageCombiner {
      * 合并后图像的字节流缓存，需调用{@link #combine()}后才能通过{@link #getCombinedImageOutStream()}获取
      */
     protected ByteArrayOutputStream out;
-
     /**
      * 当前激活字体，用于文本绘制（null时使用g2默认字体）
      */
@@ -754,19 +756,12 @@ public class ImageCombiner {
         return this;
     }
 
-    /**
-     * 绘制双层边框
-     *
-     * @param roundRect 参数
-     * @return 当前实例
-     */
     public ImageCombiner drawTooRoundRect(RoundRect roundRect) {
-        this.setColor(new Color(0xB1B1B1))
+        this.setColor(BORDER_OUTER_COLOR)
                 .setStroke(roundRect.stroke)
                 .drawRoundRect(roundRect.x, roundRect.y, roundRect.width, roundRect.height, roundRect.arcWidth, roundRect.arcHeight);
 
-        // 内层边框（深灰色）
-        this.setColor(new Color(0x333333))
+        this.setColor(BORDER_INNER_COLOR)
                 .setStroke(roundRect.stroke)
                 .drawRoundRect(roundRect.offsetX, roundRect.offsetY, roundRect.offsetWidth, roundRect.offsetHeight, roundRect.arcWidth, roundRect.arcHeight);
         return this;
@@ -1070,45 +1065,39 @@ public class ImageCombiner {
     }
 
     /**
-     * 在图片右下角绘制两寸立绘插图
-     * <br/>
-     * 默认尺寸: 413*625 <br/>
-     * 若图片高度小于两寸，则调用 drawOneInchStandingDrawing()方法 返回一寸尺寸的图像<br/>
-     * 尺寸: 240*360
+     * 在指定位置绘制立绘插图（指定尺寸）— 对应 Python draw_standing_at
      *
+     * @param x           X坐标
+     * @param y           Y坐标
+     * @param imageWidth  最大宽度
+     * @param imageHeight 最大高度
      * @return 返回当前ImageCombiner实例，支持链式调用
      */
-    public ImageCombiner drawStandingDrawing() {
-        int width = this.target.getWidth();
-        int height = this.target.getHeight();
-        int imageWidth = 413, imageHeight = 625;
-        if (height <= imageHeight) {
-            return drawOneInchStandingDrawing();
-        }
-
-        return drawImageWithAspectRatio(ImageIOUtils.getRandomXiaoMeiWangImage(),
-                width - 433,
-                height - 645,
-                imageWidth,
-                imageHeight);
+    public ImageCombiner drawStandingAt(int x, int y, int imageWidth, int imageHeight) {
+        java.awt.image.BufferedImage img = ImageIOUtils.getRandomXiaoMeiWangImage();
+        if (img == null) return this;
+        return drawImageWithAspectRatio(img, x, y, imageWidth, imageHeight);
     }
 
     /**
-     * 在图片右下角绘制一寸立绘插图
-     * <br/>
-     * 尺寸: 240*360
+     * 在图片右下角绘制立绘插图，按 imageWidth 等比缩放为正方形盒子，自适应保持原图比例
      *
+     * @param imageWidth  画布宽度，用于计算正方形盒子大小（imageWidth * pct）
+     * @param imageHeight 画布高度，用于右下角 Y 定位
+     * @param pct         0.1 - 1.0 缩放比例
      * @return 返回当前ImageCombiner实例，支持链式调用
      */
-    public ImageCombiner drawOneInchStandingDrawing() {
-        int width = this.target.getWidth();
-        int height = this.target.getHeight();
-        int imageWidth = 240, imageHeight = 360;
-        return drawImageWithAspectRatio(ImageIOUtils.getRandomXiaoMeiWangImage(),
-                width - 265,
-                height - 382,
-                imageWidth,
-                imageHeight);
+    public ImageCombiner drawStandingAt(int imageWidth, int imageHeight, double pct) {
+        java.awt.image.BufferedImage img = ImageIOUtils.getRandomXiaoMeiWangImage();
+        if (img == null) return this;
+        if (pct < 0.1) {
+            pct = 0.1;
+        }
+        if (pct > 1.0) {
+            pct = 1.0;
+        }
+        DrawConstants.box box = DrawConstants.scaleByPct(imageWidth, imageWidth, pct);
+        return drawImageWithAspectRatio(img, imageWidth - box.x(), imageHeight - box.y(), box.x(), box.y());
     }
 
     /**

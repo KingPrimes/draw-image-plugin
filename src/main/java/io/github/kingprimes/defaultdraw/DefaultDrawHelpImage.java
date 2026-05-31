@@ -1,116 +1,111 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.utils.Fonts;
 
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
 /**
- * 默认菜单图片绘制工具类
+ * 帮助中心指令标签渲染器 — 多列标签 + 看板娘，列流式布局
  *
  * @author KingPrimes
- * @version 1.0.0
+ * @version 1.0.8
  */
 final class DefaultDrawHelpImage {
 
-    private static final Pattern PIPE_PATTERN = Pattern.compile("\\|");
+    private static final int CONTENT_X = 50;
+    private static final int COLS = 4;
+    private static final int COL_GAP = 20;
+    private static final int CARD_RADIUS = 10;
+    private static final int CARD_PAD = 16;
 
-    /**
-     * 根据提供的帮助信息列表生成一张帮助图片，并以字节数组形式返回。
-     *
-     * @param helpInfo 包含菜单指令条目的字符串列表
-     * @return 生成的帮助图片的 PNG 格式字节数组。
-     */
-    public static byte[] drawHelpImage(List<String> helpInfo) {
+    private static final int TITLE_Y = 80;
+    private static final int CONTENT_START_Y = 150;
 
-        // 预计算布局参数
-        int columnCount = (helpInfo.size() + HELP_IMAGE_ITEMS_PER_COLUMN - 1) / HELP_IMAGE_ITEMS_PER_COLUMN;
-        int maxItemsInColumn = (helpInfo.size() + columnCount - 1) / columnCount;
-        int totalHeight = IMAGE_MARGIN + IMAGE_TITLE_HEIGHT + IMAGE_HEADER_HEIGHT + (maxItemsInColumn * HELP_IMAGE_ROW_HEIGHT) + IMAGE_MARGIN + IMAGE_FOOTER_HEIGHT;
-        int rounderWidth = Math.multiplyExact(IMAGE_WIDTH, 9) / 10;
-        int centerX = (IMAGE_WIDTH - rounderWidth) / 2;
-        int columnWidth = rounderWidth / 2;  // 预计算列宽
+    private static final Color DOT_COLOR = new Color(0x8669A7);
 
+    private DefaultDrawHelpImage() {
+        throw new AssertionError("Cannot instantiate");
+    }
 
-        ImageCombiner combiner = new ImageCombiner(IMAGE_WIDTH, totalHeight, ImageCombiner.OutputFormat.PNG);
-        combiner.setFont(Fonts.FONT_TEXT)
-                .setColor(Color.WHITE)
-                .fillRect(0, 0, IMAGE_WIDTH, totalHeight).drawTooRoundRect();
+    public static byte[] drawHelpImage(List<String> commands) {
+        if (commands == null || commands.isEmpty()) return new byte[0];
 
-        // 标题绘制
-        String title = "帮助中心";
-        combiner.setColor(HELP_IMAGE_TITLE_COLOR)
-                .addCenteredText(title, IMAGE_MARGIN + IMAGE_TITLE_HEIGHT / 2);
+        int n = commands.size();
+        boolean isOdd = n % COLS != 0;
 
-        // 表头绘制
-        int y = IMAGE_MARGIN + IMAGE_TITLE_HEIGHT;
-        ImageCombiner roundedCombiner = new ImageCombiner(rounderWidth, IMAGE_HEADER_HEIGHT, ImageCombiner.OutputFormat.PNG);
-        roundedCombiner.setColor(HELP_IMAGE_HEADER_BG_COLOR)
-                .fillRect(0, 0, rounderWidth, IMAGE_HEADER_HEIGHT)
-                .combine();
-        combiner.addRoundedImage(roundedCombiner.getCombinedImage(), centerX, y - 5, 25);
-        combiner.setColor(Color.WHITE)
-                .addCenteredText("指令", y += Fonts.FONT_TEXT.getSize() + 5)
-        ;
+        int cardW = 380;
+        int CANVAS_W = CONTENT_X + COLS * cardW + (COLS - 1) * COL_GAP + CONTENT_X;
 
-        // 预计算所有行的坐标和背景信息
-        List<RowInfo> rowInfos = new ArrayList<>(helpInfo.size());
-        int currentColumn;
-        int currentRowInColumn;
+        int[] colX = new int[COLS];
+        for (int c = 0; c < COLS; c++) colX[c] = CONTENT_X + c * (cardW + COL_GAP);
 
-        for (int i = 0; i < helpInfo.size(); i++) {
-            // 计算当前行列位置
-            currentColumn = i / HELP_IMAGE_ITEMS_PER_COLUMN;
-            currentRowInColumn = i % HELP_IMAGE_ITEMS_PER_COLUMN;
+        int cardH = 60;
+        int[] cardHeights = new int[n];
+        for (int i = 0; i < n; i++) cardHeights[i] = cardH;
 
-            // 预计算坐标
-            int rowX = centerX + (currentColumn * columnWidth);
-            int rowY = y + (currentRowInColumn * HELP_IMAGE_ROW_HEIGHT) + HELP_IMAGE_ROW_HEIGHT;  // +ROW_HEIGHT是因为初始y已包含表头高度
-
-            // 预解析数据
-            String line = helpInfo.get(i);
-            String[] parts = PIPE_PATTERN.split(line, 2);
-            String command = parts.length > 0 ? parts[0] : "";
-
-            RowInfo rowInfo = new RowInfo(rowX, rowY, currentRowInColumn % 2 == 0, command);
-            rowInfos.add(rowInfo);
-            if (rowInfo.isEvenRow) {
-                combiner.setColor(HELP_IMAGE_EVEN_ROW_COLOR);
-                combiner.fillRect(rowInfo.x, rowInfo.y + (HELP_IMAGE_ROW_HEIGHT / 2) - (FONT_SIZE / 2), columnWidth, HELP_IMAGE_ROW_HEIGHT);
-            }
+        int[] colEndY = new int[COLS];
+        java.util.Arrays.fill(colEndY, CONTENT_START_Y);
+        for (int i = 0; i < n; i++) {
+            int col = i % COLS;
+            colEndY[col] += cardHeights[i] + COL_GAP;
+        }
+        for (int c = 0; c < COLS; c++) {
+            if (colEndY[c] > CONTENT_START_Y) colEndY[c] -= COL_GAP;
         }
 
-
-        combiner
-                // 绘制立绘图
-                .drawStandingDrawing()
-                .setColor(HELP_IMAGE_TEXT_COLOR);
-        // 3. 绘制所有数据行文字（批量操作）
-        for (RowInfo info : rowInfos) {
-            if (!info.command.isEmpty()) {
-                combiner.addText(info.command, info.x, info.y);
-            }
+        int totalHeight;
+        if (isOdd) {
+            int tallerEnd = Math.max(Math.max(colEndY[0], colEndY[1]), colEndY[2]);
+            totalHeight = Math.max(tallerEnd, colEndY[COLS - 1] + cardW);
+        } else {
+            int maxEnd = CONTENT_START_Y;
+            for (int c = 0; c < COLS; c++) maxEnd = Math.max(maxEnd, colEndY[c]);
+            totalHeight = maxEnd + 10 + cardW;
         }
 
-        // 底部署名
-        addFooter(combiner, totalHeight - IMAGE_FOOTER_HEIGHT);
+        ImageCombiner cb = new ImageCombiner(CANVAS_W, totalHeight, ImageCombiner.OutputFormat.PNG);
+        cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, totalHeight);
+        cb.drawTooRoundRect();
 
-        combiner.combine();
-        try (ByteArrayOutputStream bos = combiner.getCombinedImageOutStream()) {
+        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 44))
+                .addCenteredText("帮助中心", TITLE_Y);
+        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 50, CANVAS_W - CONTENT_X, TITLE_Y + 50);
+
+        int[] drawY = new int[COLS];
+        java.util.Arrays.fill(drawY, CONTENT_START_Y);
+        for (int i = 0; i < n; i++) {
+            int col = i % COLS;
+            drawTag(cb, commands.get(i), colX[col], drawY[col], cardW, cardH);
+            drawY[col] += cardH + COL_GAP;
+        }
+
+        int standingX = colX[COLS - 1];
+        int standingY = isOdd ? colEndY[COLS - 1] : totalHeight - cardW;
+        cb.drawStandingAt(standingX, standingY, cardW, cardW);
+        addFooter(cb, totalHeight - 25);
+        cb.combine();
+        try (ByteArrayOutputStream bos = cb.getCombinedImageOutStream()) {
             return bos.toByteArray();
         } catch (Exception e) {
-            throw new RuntimeException("无法获取图像输出流: %s".formatted(e.getMessage()), e);
+            throw new RuntimeException("无法获取图像输出流", e);
         }
     }
 
-    // 内部辅助类：缓存行信息（坐标、背景状态、文字内容）
-    private record RowInfo(int x, int y, boolean isEvenRow, String command) {
-    }
+    private static void drawTag(ImageCombiner cb, String cmd,
+                                int x, int y, int w, int h) {
+        cb.setColor(CARD_BACKGROUND_COLOR).fillRoundRect(x, y, w, h, CARD_RADIUS, CARD_RADIUS);
+        cb.setColor(DIVIDER_COLOR).setStroke(1)
+                .drawRoundRect(x, y, w, h, CARD_RADIUS, CARD_RADIUS);
 
+        // 左侧紫色圆点
+        cb.setColor(DOT_COLOR).fillOval(x + CARD_PAD, y + h / 2 - 5, 10, 10);
+
+        // 指令文字
+        cb.setColor(TEXT_COLOR).setFont(FONT.deriveFont(Font.BOLD, 22f));
+        cb.addText(cmd, x + CARD_PAD + 20, y + h / 2 + 8);
+    }
 }

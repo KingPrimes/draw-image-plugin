@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class ScheduleInfo extends BastWorldState{
+public class ScheduleInfo extends BastWorldState {
 
     /**
      * 物品名称<br/>

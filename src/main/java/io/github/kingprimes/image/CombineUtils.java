@@ -13,7 +13,8 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public final class CombineUtils {
-    private CombineUtils() {}
+    private CombineUtils() {
+    }
 
     /**
      * 将多个图片按指定方向（水平/垂直）拼接为单个图片，并在图片间保留指定间隙
@@ -24,8 +25,8 @@ public final class CombineUtils {
      * </ul>
      * <p>拼接背景为白色，使用高质量渲染模式保证图像清晰度</p>
      *
-     * @param images 待拼接的图片列表（BufferedImage集合），若为null或空列表则返回null
-     * @param gap 图片间的间隙大小（像素），间隙区域填充为白色
+     * @param images     待拼接的图片列表（BufferedImage集合），若为null或空列表则返回null
+     * @param gap        图片间的间隙大小（像素），间隙区域填充为白色
      * @param horizontal 拼接方向标识：true表示水平拼接，false表示垂直拼接
      * @return 拼接后的新BufferedImage对象，格式为TYPE_INT_ARGB；若输入图片列表无效则返回null
      */

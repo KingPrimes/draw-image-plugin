@@ -4,85 +4,67 @@ import io.github.kingprimes.image.ImageCombiner;
 import io.github.kingprimes.model.worldstate.SteelPathOffering;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
 /**
- * 钢铁奖励图像绘制默认实现
+ * 钢铁奖励卡片渲染器 — 对应 Python card_steel_path.py
  *
  * @author KingPrimes
- * @version 1.0.3
+ * @version 1.0.8
  */
 final class DefaultDrawSteelPathImage {
 
-    private static final int STEEL_PATH_IMAGE_WIDTH = 800;
-    private static final int STEEL_PATH_IMAGE_MIN_HEIGHT = 400;
-    private static final Color HEADER_COLOR = new Color(0x4A90E2);
+    private static final int CANVAS_W = 1200;
+    private static final int CONTENT_X = 60;
+    private static final int CONTENT_W = 1080;
+    private static final int ROW_H = 55;
+    private static final int TITLE_Y = 80;
+    private static final int DIVIDER_Y = 115;
+    private static final int CONTENT_START_Y = 155;
 
     private DefaultDrawSteelPathImage() {
         throw new AssertionError("Cannot instantiate DefaultDrawSteelPathImage class");
     }
 
-    /**
-     * 绘制钢铁奖励图像
-     *
-     * @param steelPath 钢铁奖励数据
-     * @return 图像字节数组
-     */
-    public static byte[] drawSteelPathImage(SteelPathOffering steelPath) {
-        if (steelPath == null) {
-            return new byte[0];
+    public static byte[] drawSteelPathImage(SteelPathOffering sp) {
+        if (sp == null) return new byte[0];
+
+        int rows = 0;
+        if (sp.getCurrentReward() != null) rows++;
+        if (sp.getNextReward() != null) rows++;
+        if (sp.getRemaining() != null) rows++;
+
+        int canvasH = Math.max(CONTENT_START_Y + rows * ROW_H + 360, 400);
+        ImageCombiner cb = new ImageCombiner(CANVAS_W, canvasH, ImageCombiner.OutputFormat.PNG);
+
+        cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, canvasH);
+        cb.drawTooRoundRect();
+
+        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 44))
+                .addCenteredText("钢铁奖励", TITLE_Y);
+        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, DIVIDER_Y, CONTENT_X + CONTENT_W, DIVIDER_Y);
+
+        int y = CONTENT_START_Y;
+        Font rowFont = FONT.deriveFont(28f);
+        if (sp.getCurrentReward() != null) {
+            cb.setColor(TEXT_COLOR).setFont(rowFont);
+            cb.addText("当前奖励: " + sp.getCurrentReward(), CONTENT_X, y + 18);
+            y += ROW_H;
+        }
+        if (sp.getNextReward() != null) {
+            cb.setColor(TEXT_COLOR).setFont(rowFont);
+            cb.addText("下一个奖励: " + sp.getNextReward(), CONTENT_X, y + 18);
+            y += ROW_H;
+        }
+        if (sp.getRemaining() != null) {
+            cb.setColor(ACCENT_GOLD_COLOR).setFont(rowFont);
+            cb.addText("剩余时间: " + sp.getRemaining(), CONTENT_X, y + 18);
         }
 
-        // 计算图像高度
-        int height = STEEL_PATH_IMAGE_MIN_HEIGHT;
-
-        // 创建图像组合器
-        BufferedImage image = new BufferedImage(STEEL_PATH_IMAGE_WIDTH, height, BufferedImage.TYPE_INT_ARGB);
-        ImageCombiner combiner = new ImageCombiner(image, ImageCombiner.OutputFormat.PNG);
-
-        // 填充背景色
-        combiner
-                .setColor(PAGE_BACKGROUND_COLOR)
-                .fillRect(0, 0, STEEL_PATH_IMAGE_WIDTH, height)
-                // 绘制双层边框
-                .drawTooRoundRect();
-
-        // 绘制标题
-        combiner.setColor(HEADER_COLOR)
-                .setFont(FONT.deriveFont(Font.BOLD, 40))
-                .addCenteredText("钢铁奖励", 80)
-                .drawStandingDrawing();
-
-        // 绘制当前奖励信息
-        int currentY = 120;
-        if (steelPath.getCurrentReward() != null) {
-            combiner
-                    .setColor(TEXT_COLOR)
-                    .setFont(FONT)
-                    .addText("当前奖励: " + steelPath.getCurrentReward(), IMAGE_MARGIN, currentY + 25);
-            currentY += 40;
-        }
-
-        // 绘制下一个奖励信息
-        if (steelPath.getNextReward() != null) {
-            combiner.setFont(FONT)
-                    .setColor(TEXT_COLOR)
-                    .addText("下一个奖励: " + steelPath.getNextReward(), IMAGE_MARGIN, currentY + 25);
-            currentY += 40;
-        }
-
-        // 绘制剩余时间
-        combiner.setFont(FONT)
-                .setColor(TEXT_COLOR)
-                .addText("剩余时间: " + steelPath.getRemaining(), IMAGE_MARGIN, currentY + 25);
-
-        // 添加底部署名
-        addFooter(combiner, height - IMAGE_FOOTER_HEIGHT);
-
-        // 合并图像
-        combiner.combine();
-        return combiner.getCombinedImageOutStream().toByteArray();
+        cb.drawStandingAt(CANVAS_W, canvasH, STANDING_RATIO);
+        addFooter(cb, canvasH - 25);
+        cb.combine();
+        return cb.getCombinedImageOutStream().toByteArray();
     }
 }

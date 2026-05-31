@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 /**
  * 每日特惠
  * <p>该类继承 {@link BastWorldState} 基类</p>
+ *
  * @author KingPrimes
  * @version 1.0.0
  */

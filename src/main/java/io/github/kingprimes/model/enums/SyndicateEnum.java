@@ -136,6 +136,8 @@ public enum SyndicateEnum {
     RadioLegionIntermission11Syndicate("RadioLegionIntermission11Syndicate", "\ue520"),
     RadioLegionIntermission12Syndicate("RadioLegionIntermission12Syndicate", "\ue520"),
     RadioLegionIntermission13Syndicate("RadioLegionIntermission13Syndicate", "\ue520"),
+    RadioLegionIntermission14Syndicate("RadioLegionIntermission14Syndicate", "\ue520"),
+    RadioLegionIntermission15Syndicate("RadioLegionIntermission15Syndicate", "\ue520"),
 
     ;
 

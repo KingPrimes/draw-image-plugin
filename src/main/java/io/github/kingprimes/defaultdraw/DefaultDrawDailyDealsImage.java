@@ -51,7 +51,7 @@ final class DefaultDrawDailyDealsImage {
                 // 绘制双层边框
                 .drawTooRoundRect()
                 // 绘制看板娘
-                .drawStandingDrawing();
+                .drawStandingAt(DAILY_DEALS_IMAGE_WIDTH, DAILY_DEALS_IMAGE_HEIGHT, STANDING_RATIO);
 
         // 绘制标题
         combiner.setColor(TITLE_COLOR).addCenteredText("每日特惠", 80);

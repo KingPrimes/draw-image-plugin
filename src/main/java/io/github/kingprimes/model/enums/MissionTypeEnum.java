@@ -200,6 +200,16 @@ public enum MissionTypeEnum {
     MT_ASCENSION("扬升", 90),
 
     /**
+     * 虚空腐蚀
+     */
+    MT_CORRUPTION("虚空腐蚀", 43),
+
+    /**
+     * 无尽捕获
+     */
+    MT_ENDLESS_CAPTURE("无尽捕获", 44),
+
+    /**
      * 中继站
      */
     MT_RELAY("中继站", 100),
@@ -258,6 +268,8 @@ public enum MissionTypeEnum {
             case MT_VOLATILE -> new Color(0xf39c12); // 爆发 - 太阳花黄
             case MT_ORPHEUS -> new Color(0x9b59b6); // 奥菲斯 - 紫水晶
             case MT_ASCENSION -> new Color(0x3498db); // 扬升 - 湛蓝
+            case MT_CORRUPTION -> new Color(0x8e44ad); // 虚空腐蚀 - 紫罗兰
+            case MT_ENDLESS_CAPTURE -> new Color(0xe84393); // 无尽捕获 - 热粉
             default -> Color.BLACK; // 默认黑色
         };
     }

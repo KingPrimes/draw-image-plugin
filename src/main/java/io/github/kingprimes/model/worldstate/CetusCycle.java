@@ -12,7 +12,7 @@ import java.util.Map;
 
 
 @Getter
-public final class CetusCycle {
+public final class CetusCycle implements Cycle {
     /**
      * 白昼持续时间（秒）
      */

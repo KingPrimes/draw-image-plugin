@@ -18,7 +18,7 @@ import java.time.temporal.ChronoUnit;
  */
 @Setter(AccessLevel.NONE)
 @Getter
-public final class EarthCycle {
+public final class EarthCycle implements Cycle {
 
     // 常量定义
     private static final long CYCLE_SECONDS = 28800; // 地球周期总时长（秒）

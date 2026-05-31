@@ -1,200 +1,146 @@
 package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
-import io.github.kingprimes.image.TextUtils;
 import io.github.kingprimes.model.enums.FactionEnum;
 import io.github.kingprimes.model.enums.IconEnum;
 import io.github.kingprimes.model.worldstate.AllCycle;
 
 import java.awt.*;
-import java.io.ByteArrayOutputStream;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
 /**
- * 默认所有循环图片绘制工具类
+ * 平原循环卡片渲染器 — 三列卡片网格 + 右侧看板娘
  *
  * @author KingPrimes
- * @version 1.0.3
+ * @version 1.0.8
  */
 final class DefaultDrawAllCycleImage {
 
-    final static Font FONT_STATE = FONT_WARFRAME_ICON.deriveFont(Font.PLAIN, 120f);
+    private static final int CANVAS_W = 1450;
+    private static final int CONTENT_X = 50;
+    private static final int COLS = 3;
+    private static final int COL_GAP = 20;
+    private static final int CARD_RADIUS = 14;
+    private static final int CARD_PAD = 20;
+    private static final int ROW_GAP = 20;
 
-    /**
-     * 绘制所有循环图片
-     *
-     * @param allCycle 所有循环数据
-     * @return 生成的图片字节数组，格式为 PNG
-     */
+    private static final int TITLE_Y = 80;
+    private static final int CONTENT_START_Y = 150;
+
+    private static final Font ICON_FONT = FONT_WARFRAME_ICON.deriveFont(Font.PLAIN, 80f);
+    private static final Font CARD_TITLE_FONT = new Font("Microsoft YaHei", Font.BOLD, 26);
+    private static final Font STATE_FONT = new Font("Microsoft YaHei", Font.BOLD, 22);
+    private static final Font TIME_FONT = new Font("Microsoft YaHei", Font.PLAIN, 20);
+
+    private DefaultDrawAllCycleImage() {
+        throw new AssertionError("Cannot instantiate");
+    }
+
     public static byte[] drawAllCycleImage(AllCycle allCycle) {
-        // 创建画布
-        ImageCombiner combiner = new ImageCombiner(IMAGE_WIDTH, ALL_CYCLE_HEIGHT, ImageCombiner.OutputFormat.PNG);
-        // 填充背景色
-        combiner.setFont(FONT)
-                .setColor(PAGE_BACKGROUND_COLOR)
-                .fillRect(0, 0, IMAGE_WIDTH, ALL_CYCLE_HEIGHT)
-                // 绘制双层边框
-                .drawTooRoundRect();
+        java.util.List<CycleCard> cards = new java.util.ArrayList<>();
 
-        // 绘制标题
-        combiner.setColor(TITLE_COLOR)
-                .setFont(FONT)
-                .addCenteredText("平原查询结果", IMAGE_MARGIN + IMAGE_TITLE_HEIGHT / 2)
-                .drawStandingDrawing();
+        cards.add(new CycleCard("地球",
+                allCycle.getEarthCycle().getState(),
+                allCycle.getEarthCycle().getTimeLeft(),
+                allCycle.getEarthCycle().isDay() ? IconEnum.SUN.getIcon() : IconEnum.NIGHT.getIcon(),
+                allCycle.getEarthCycle().isDay() ? ALL_CYCLE_WARM_COLOR : ALL_CYCLE_COLD_COLOR));
 
-        // 绘制表头
-        int tableY = IMAGE_MARGIN + IMAGE_TITLE_HEIGHT + ALL_CYCLE_TABLE_HEADER_HEIGHT;
-        combiner.setFont(FONT)
-                .setColor(TEXT_COLOR);
-        int headerY = tableY + FONT_SIZE;
-        combiner.addText("地球", 100, headerY);
-        combiner.addText("夜灵平野", 250, headerY);
-        combiner.addText("福尔图娜", 450, headerY);
-        combiner.addText("魔胎之境", 650, headerY);
-        combiner.addText("扎里曼", 850, headerY);
+        cards.add(new CycleCard("夜灵平野",
+                allCycle.getCetusCycle().getState(),
+                allCycle.getCetusCycle().getTimeLeft(),
+                allCycle.getCetusCycle().getIsDay() ? IconEnum.SUN.getIcon() : IconEnum.NIGHT.getIcon(),
+                allCycle.getCetusCycle().getIsDay() ? ALL_CYCLE_WARM_COLOR : ALL_CYCLE_COLD_COLOR));
 
-        // 绘制状态行
-        int stateY = headerY + 80 + FONT_SIZE;
-        String earthState = allCycle.getEarthCycle().getState();
-        String cetusState = allCycle.getCetusCycle().getState();
-        String vallisState = allCycle.getVallisCycle().getState();
-        String cambionState = allCycle.getCambionCycle().getActive();
-        String zarimanState = allCycle.getZarimanCycle().getState();
+        cards.add(new CycleCard("福尔图娜",
+                allCycle.getVallisCycle().getState(),
+                allCycle.getVallisCycle().getTimeLeft(),
+                allCycle.getVallisCycle().isWarm() ? IconEnum.SUN.getIcon() : IconEnum.COLD.getIcon(),
+                allCycle.getVallisCycle().isWarm() ? ALL_CYCLE_WARM_COLOR : ALL_CYCLE_COLD_COLOR));
 
-        int imageY = stateY + 40 + FONT_SIZE + 120;
-        int earthImageX = 70, cetusImageX = 250, vallisImageX = 450, cambionImageX = 650, zarimanImageX = 850;
+        boolean cambionWarm = "FASS".equals(allCycle.getCambionCycle().getActive());
+        cards.add(new CycleCard("魔胎之境",
+                allCycle.getCambionCycle().getActive(),
+                allCycle.getCambionCycle().getTimeLeft(),
+                cambionWarm ? IconEnum.SUN.getIcon() : IconEnum.NIGHT.getIcon(),
+                cambionWarm ? ALL_CYCLE_WARM_COLOR : ALL_CYCLE_COLD_COLOR));
 
-        // 设置地球状态颜色
-        if (allCycle.getEarthCycle().isDay()) {
-            combiner.setColor(ALL_CYCLE_WARM_COLOR)
-                    .setFont(FONT_STATE)
-                    .addText(IconEnum.SUN.getIcon(), earthImageX, imageY)
-                    .setFont(FONT);
-        } else {
-            combiner.setColor(ALL_CYCLE_COLD_COLOR)
-                    .setFont(FONT_STATE)
-                    .addText(IconEnum.NIGHT.getIcon(), earthImageX, imageY)
-                    .setFont(FONT);
+        boolean zarimanCorpus = allCycle.getZarimanCycle().isCorpus();
+        cards.add(new CycleCard("扎里曼",
+                allCycle.getZarimanCycle().getState(),
+                allCycle.getZarimanCycle().getTimeLeft(),
+                zarimanCorpus ? FactionEnum.FC_CORPUS.getIcon() : FactionEnum.FC_GRINEER.getIcon(),
+                zarimanCorpus ? ALL_CYCLE_WARM_COLOR : ALL_CYCLE_COLD_COLOR));
+
+        int n = cards.size();
+        int rows = (int) Math.ceil((double) n / COLS);
+        int lastRowY = CONTENT_START_Y + (rows - 1) * (CARD_H() + ROW_GAP);
+
+        box sz = scaleByPct(CANVAS_W, CANVAS_W, STANDING_RATIO);
+        int cardsContentW = CANVAS_W - CONTENT_X - sz.x() - 30;
+        int cardW = (cardsContentW - COL_GAP * (COLS - 1)) / COLS;
+        int[] colX = new int[COLS];
+        for (int c = 0; c < COLS; c++) {
+            colX[c] = CONTENT_X + c * (cardW + COL_GAP);
         }
-        combiner.addText(earthState, 100, stateY);
-        // 设置夜灵平野状态颜色
-        if (allCycle.getCetusCycle().getIsDay()) {
-            combiner.setColor(ALL_CYCLE_WARM_COLOR)
-                    .setFont(FONT_STATE)
-                    .addText(IconEnum.SUN.getIcon(), cetusImageX, imageY)
-                    .setFont(FONT);
-        } else {
-            combiner.setColor(ALL_CYCLE_COLD_COLOR)
-                    .setFont(FONT_STATE)
-                    .addText(IconEnum.NIGHT.getIcon(), cetusImageX, imageY)
-                    .setFont(FONT);
-        }
-        combiner.addText(cetusState, 280, stateY);
 
-        // 设置福尔图娜状态颜色
-        if (allCycle.getVallisCycle().isWarm()) {
-            combiner.setColor(ALL_CYCLE_WARM_COLOR)
-                    .setFont(FONT_STATE)
-                    .addText(IconEnum.SUN.getIcon(), vallisImageX, imageY)
-                    .setFont(FONT);
-        } else {
-            combiner.setColor(ALL_CYCLE_COLD_COLOR)
-                    .setFont(FONT_STATE)
-                    .addText(IconEnum.COLD.getIcon(), vallisImageX, imageY)
-                    .setFont(FONT);
-        }
-        combiner.addText(vallisState, 480, stateY);
+        int standingX = CANVAS_W - sz.x();
+        int standingY;
+        standingY = lastRowY;
+        int canvasH = standingY + sz.y();
 
-        // 设置魔胎之境状态颜色
-        if ("FASS".equals(allCycle.getCambionCycle().getActive())) {
-            combiner.setColor(ALL_CYCLE_WARM_COLOR);
-            combiner.setColor(ALL_CYCLE_WARM_COLOR)
-                    .setFont(FONT_STATE)
-                    .addText(IconEnum.SUN.getIcon(), cambionImageX, imageY)
-                    .setFont(FONT);
-        } else {
-            combiner.setColor(ALL_CYCLE_COLD_COLOR)
-                    .setFont(FONT_STATE)
-                    .addText(IconEnum.NIGHT.getIcon(), cambionImageX, imageY)
-                    .setFont(FONT);
-        }
-        combiner.addText(cambionState, 660, stateY);
+        ImageCombiner cb = new ImageCombiner(CANVAS_W, canvasH, ImageCombiner.OutputFormat.PNG);
+        cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, canvasH);
+        cb.drawTooRoundRect();
 
-        // 设置扎里曼状态颜色
-        if (allCycle.getZarimanCycle().isCorpus()) {
-            combiner.setColor(ALL_CYCLE_WARM_COLOR)
-                    .setFont(FONT_STATE)
-                    .addText(FactionEnum.FC_GRINEER.getIcon(), zarimanImageX, imageY)
-                    .setFont(FONT);
-        } else {
-            combiner.setColor(ALL_CYCLE_COLD_COLOR)
-                    .setFont(FONT_STATE)
-                    .addText(FactionEnum.FC_CORPUS.getIcon(), zarimanImageX, imageY)
-                    .setFont(FONT)
-            ;
-        }
-        combiner.addText(zarimanState, 850, stateY);
+        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 44))
+                .addCenteredText("平原查询结果", TITLE_Y);
+        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 55, CONTENT_X + cardsContentW, TITLE_Y + 55);
 
-        // 绘制时间行
-        int timeY = imageY + 130;
-        String earthTime = allCycle.getEarthCycle().getTimeLeft();
-        String cetusTime = allCycle.getCetusCycle().getTimeLeft();
-        String vallisTime = allCycle.getVallisCycle().getTimeLeft();
-        String cambionTime = allCycle.getCambionCycle().getTimeLeft();
-        String zarimanTime = allCycle.getZarimanCycle().getTimeLeft();
-        // 设置地球时间颜色
-        if (allCycle.getEarthCycle().isDay()) {
-            combiner.setColor(ALL_CYCLE_WARM_COLOR);
-        } else {
-            combiner.setColor(ALL_CYCLE_COLD_COLOR);
+        for (int i = 0; i < n; i++) {
+            int row = i / COLS;
+            int col = i % COLS;
+            drawCycleCard(cb, cards.get(i), colX[col],
+                    CONTENT_START_Y + row * (CARD_H() + ROW_GAP), cardW);
         }
-        int earthTimeX = 100 + (TextUtils.getFortWidth(earthState, FONT) - TextUtils.getFortWidth(earthTime, FONT)) / 2;
-        combiner.addText(earthTime, earthTimeX, timeY);
 
-        // 设置夜灵平野时间颜色
-        if (allCycle.getCetusCycle().getIsDay()) {
-            combiner.setColor(ALL_CYCLE_WARM_COLOR);
-        } else {
-            combiner.setColor(ALL_CYCLE_COLD_COLOR);
-        }
-        int cetusTimeX = 285 + (TextUtils.getFortWidth(cetusState, FONT) - TextUtils.getFortWidth(cetusTime, FONT)) / 2;
-        combiner.addText(cetusTime, cetusTimeX, timeY);
+        return getBytes(sz, standingX, standingY, canvasH, cb);
+    }
 
-        // 设置福尔图娜时间颜色
-        if (allCycle.getVallisCycle().isWarm()) {
-            combiner.setColor(ALL_CYCLE_WARM_COLOR);
-        } else {
-            combiner.setColor(ALL_CYCLE_COLD_COLOR);
-        }
-        int vallisTimeX = 485 + (TextUtils.getFortWidth(vallisState, FONT) - TextUtils.getFortWidth(vallisTime, FONT)) / 2;
-        combiner.addText(vallisTime, vallisTimeX, timeY);
+    private static int CARD_H() {
+        return 210;
+    }
 
-        // 设置魔胎之境时间颜色
-        if ("FASS".equals(allCycle.getCambionCycle().getActive())) {
-            combiner.setColor(ALL_CYCLE_WARM_COLOR);
-        } else {
-            combiner.setColor(ALL_CYCLE_COLD_COLOR);
-        }
-        int cambionTimeX = 670 + (TextUtils.getFortWidth(cambionState, FONT) - TextUtils.getFortWidth(cambionTime, FONT)) / 2;
-        combiner.addText(cambionTime, cambionTimeX, timeY);
+    private static void drawCycleCard(ImageCombiner cb, CycleCard card, int cardX, int cardY, int cardW) {
+        int cardH = CARD_H();
+        int innerX = cardX + CARD_PAD;
+        int innerW = cardW - CARD_PAD * 2;
 
-        // 绘制扎里曼时间颜色
-        if (allCycle.getZarimanCycle().isCorpus()) {
-            combiner.setColor(ALL_CYCLE_WARM_COLOR);
-        } else {
-            combiner.setColor(ALL_CYCLE_COLD_COLOR);
-        }
-        int zarimanTimeX = 860 + (TextUtils.getFortWidth(zarimanState, FONT) - TextUtils.getFortWidth(zarimanTime, FONT)) / 2;
-        combiner.addText(zarimanTime, zarimanTimeX, timeY);
+        cb.setColor(CARD_BACKGROUND_COLOR).fillRoundRect(cardX, cardY, cardW, cardH, CARD_RADIUS, CARD_RADIUS);
 
-        addFooter(combiner, ALL_CYCLE_HEIGHT - 40);
+        // 顶部强调条
+        cb.setColor(card.color).fillRect(cardX + CARD_RADIUS, cardY + 2, cardW - 2 * CARD_RADIUS, 4);
 
-        combiner.combine();
-        try (ByteArrayOutputStream bos = combiner.getCombinedImageOutStream()) {
-            return bos.toByteArray();
-        } catch (Exception e) {
-            throw new RuntimeException("无法获取图像输出流: %s".formatted(e.getMessage()), e);
-        }
+        // 区域名称
+        cb.setColor(TITLE_COLOR).setFont(CARD_TITLE_FONT);
+        cb.addText(card.name, innerX, cardY + 34);
+
+        // 状态图标 (居中)
+        cb.setColor(card.color).setFont(ICON_FONT);
+        int iconW = cb.getFontMetrics(ICON_FONT).stringWidth(card.icon);
+        cb.addText(card.icon, cardX + (cardW - iconW) / 2, cardY + 118);
+
+        // 状态文字 (图标下方)
+        cb.setColor(card.color).setFont(STATE_FONT);
+        int stateW = cb.getFontMetrics(STATE_FONT).stringWidth(card.state);
+        cb.addText(card.state, cardX + (cardW - stateW) / 2, cardY + 150);
+
+        // 剩余时间 (右下角)
+        cb.setColor(TEXT_SECONDARY_COLOR).setFont(TIME_FONT);
+        int timeW = cb.getFontMetrics(TIME_FONT).stringWidth("剩余: " + card.timeLeft);
+        cb.addText("剩余: " + card.timeLeft, innerX + innerW - timeW, cardY + cardH - 22);
+    }
+
+    private record CycleCard(String name, String state, String timeLeft, String icon, Color color) {
     }
 }
