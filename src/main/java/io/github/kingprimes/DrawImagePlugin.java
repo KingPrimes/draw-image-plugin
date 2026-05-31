@@ -25,7 +25,7 @@ public interface DrawImagePlugin {
      * @param helpInfo 帮助信息
      * @return 图像流
      */
-    byte[] drawHelpImage(Map<String, String> helpInfo);
+    byte[] drawHelpImage(List<String> helpInfo);
 
     /**
      * 绘制所有平原图像

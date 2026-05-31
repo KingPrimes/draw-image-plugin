@@ -26,7 +26,7 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      * @return 图像流
      */
     @Override
-    public byte[] drawHelpImage(Map<String, String> helpInfo) {
+    public byte[] drawHelpImage(List<String> helpInfo) {
         return DefaultDrawHelpImage.drawHelpImage(helpInfo);
     }
 

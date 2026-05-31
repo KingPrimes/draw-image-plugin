@@ -41,7 +41,7 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      * @return 图像流
      */
     @Override
-    public byte[] drawHelpImage(Map<String, String> helpInfo) {
+    public byte[] drawHelpImage(List<String> helpInfo) {
         try {
             Pointer pointer = convertToPointer(helpInfo);
             byte[] bytes = pointerToByteArray(library.nativeDrawHelpImage(pointer));
