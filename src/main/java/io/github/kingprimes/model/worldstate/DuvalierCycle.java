@@ -41,7 +41,7 @@ public final class DuvalierCycle implements Cycle {
     /**
      * 具体内容
      * -- SETTER --
-     *  设置可选内容
+     * 设置可选内容
      *
      */
     @Setter

@@ -195,22 +195,27 @@ public class WorldState {
     public EarthCycle getEarthCycle() {
         return new EarthCycle();
     }
+
     @JsonIgnore
     public CetusCycle getCetusCycle() {
         return new CetusCycle(getBountiesEndDate(SyndicateEnum.CetusSyndicate));
     }
+
     @JsonIgnore
     public CambionCycle getCambionCycle() {
         return new CambionCycle(getCetusCycle());
     }
+
     @JsonIgnore
     public VallisCycle getVallisCycle() {
         return new VallisCycle();
     }
+
     @JsonIgnore
     public DuvalierCycle getDuvalierCycle() {
         return new DuvalierCycle(this.getEndlessXpChoices());
     }
+
     @JsonIgnore
     public ZarimanCycle getZarimanCycle() {
         return new ZarimanCycle(getBountiesEndDate(SyndicateEnum.ZarimanSyndicate));

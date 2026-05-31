@@ -114,6 +114,7 @@ public final class SteelPathOffering implements Cycle {
 
     /**
      * 常驻奖励池
+     *
      * @return 常驻奖励
      */
     public List<SteelPathReward> getEvergreens() {
