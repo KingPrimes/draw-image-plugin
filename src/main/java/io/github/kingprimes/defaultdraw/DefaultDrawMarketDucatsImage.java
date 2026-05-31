@@ -4,185 +4,152 @@ import io.github.kingprimes.image.ImageCombiner;
 import io.github.kingprimes.model.Ducats;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Map;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
 /**
- * 市场金/银垃圾杜卡币图像绘制实现类
+ * 杜卡币卡片渲染器 — 列流式布局，当天/每小时双列 + 看板娘
  *
  * @author KingPrimes
- * @version 1.0.0
+ * @version 1.0.8
  */
 final class DefaultDrawMarketDucatsImage {
 
-    private static final int IMAGE_WIDTH = 1400;
-    private static final int IMAGE_MARGIN = 40;
-    private static final int COLUMN_WIDTH = (IMAGE_WIDTH - 3 * IMAGE_MARGIN) / 2;
-    private static final int TABLE_WIDTH = COLUMN_WIDTH;
-    private static final int ROW_HEIGHT = 50;
-    private static final int HEADER_HEIGHT = 50;
-    private static final int TITLE_HEIGHT = 60;
-    private static final int FOOTER_HEIGHT = 40;
-    private static final Font HEADER_FONT = FONT.deriveFont(Font.BOLD, 18f);
-    private static final Font ROW_FONT = FONT.deriveFont(16f);
+    private static final int CONTENT_X = 50;
+    private static final int COLS = 4;
+    private static final int COL_GAP = 20;
+    private static final int CARD_RADIUS = 14;
+    private static final int CARD_PAD = 20;
 
-    /**
-     * 绘制市场金垃圾杜卡币图像
-     *
-     * @param dump 金垃圾数据
-     * @return 图像流
-     */
-    public static byte[] drawMarketDucatsImage(Map<Ducats.DumpType, java.util.List<Ducats.Ducat>> dump, String title) {
-        if (dump == null || dump.isEmpty()) {
-            return new byte[0];
-        }
+    private static final int TITLE_Y = 80;
+    private static final int CONTENT_START_Y = 150;
 
-        java.util.List<Ducats.Ducat> dayList = dump.get(Ducats.DumpType.DAY);
-        List<Ducats.Ducat> hourList = dump.get(Ducats.DumpType.HOUR);
-
-        // 计算图像高度
-        int maxListSize = Math.max(
-                dayList != null ? dayList.size() : 0,
-                hourList != null ? hourList.size() : 0
-        );
-
-        int contentHeight = HEADER_HEIGHT * 2 + Math.max(1, maxListSize) * ROW_HEIGHT;
-        int totalHeight = TITLE_HEIGHT + contentHeight + FOOTER_HEIGHT + 100; // 为看板娘预留空间
-
-        // 创建图像合成器
-        BufferedImage image = new BufferedImage(IMAGE_WIDTH, totalHeight, BufferedImage.TYPE_INT_ARGB);
-        ImageCombiner combiner = new ImageCombiner(image, ImageCombiner.OutputFormat.PNG);
-
-        // 设置背景色
-        combiner.setColor(PAGE_BACKGROUND_COLOR)
-                .fillRect(0, 0, IMAGE_WIDTH, totalHeight)
-                .drawTooRoundRect();
-
-        // 绘制标题
-        int currentY = TITLE_HEIGHT;
-        combiner.setColor(TITLE_COLOR)
-                .setFont(FONT)
-                .addCenteredText(title, currentY);
-
-        // 绘制表头
-        currentY += 30;
-
-        // 左右列的起始X坐标
-        int leftColumnX = IMAGE_MARGIN;
-        int rightColumnX = IMAGE_MARGIN + COLUMN_WIDTH + IMAGE_MARGIN;
-
-        // 绘制"当天"和"每小时"标题
-        combiner.setColor(CARD_BACKGROUND_COLOR)
-                .fillRect(leftColumnX, currentY, TABLE_WIDTH, HEADER_HEIGHT)
-                .fillRect(rightColumnX, currentY, TABLE_WIDTH, HEADER_HEIGHT);
-
-        combiner
-                .setColor(TEXT_COLOR)
-                .addText("当天", TABLE_WIDTH / 2, currentY + HEADER_HEIGHT / 2 + 8)
-                .addText("每小时", rightColumnX + TABLE_WIDTH / 2, currentY + HEADER_HEIGHT / 2 + 8);
-
-        currentY += HEADER_HEIGHT + 10;
-
-        // 绘制详细表头
-        combiner.setColor(CARD_BACKGROUND_COLOR)
-                .fillRect(leftColumnX, currentY, TABLE_WIDTH, HEADER_HEIGHT)
-                .fillRect(rightColumnX, currentY, TABLE_WIDTH, HEADER_HEIGHT);
-
-        combiner.setColor(TEXT_COLOR)
-                .setFont(HEADER_FONT)
-                .addText("名称", leftColumnX + 10, currentY + HEADER_HEIGHT / 2 + 8)
-                .addText("杜卡币", leftColumnX + 250, currentY + HEADER_HEIGHT / 2 + 8)
-                .addText("?杜卡币/白金", leftColumnX + 350, currentY + HEADER_HEIGHT / 2 + 8)
-                .addText("均价", leftColumnX + 500, currentY + HEADER_HEIGHT / 2 + 8)
-                .addText("库存", leftColumnX + 600, currentY + HEADER_HEIGHT / 2 + 8)
-                .addText("名称", rightColumnX + 10, currentY + HEADER_HEIGHT / 2 + 8)
-                .addText("杜卡币", rightColumnX + 250, currentY + HEADER_HEIGHT / 2 + 8)
-                .addText("?杜卡币/白金", rightColumnX + 350, currentY + HEADER_HEIGHT / 2 + 8)
-                .addText("均价", rightColumnX + 500, currentY + HEADER_HEIGHT / 2 + 8)
-                .addText("库存", rightColumnX + 600, currentY + HEADER_HEIGHT / 2 + 8);
-
-        currentY += HEADER_HEIGHT + 5;
-
-        // 绘制数据行
-        int maxRows = Math.max(
-                dayList != null ? dayList.size() : 0,
-                hourList != null ? hourList.size() : 0
-        );
-
-        for (int i = 0; i < maxRows; i++) {
-            // 绘制当天数据
-            if (dayList != null && i < dayList.size()) {
-                drawDucatRow(combiner, dayList.get(i), leftColumnX, currentY, i);
-            } else {
-                // 绘制空白行
-                if (i % 2 == 1) {
-                    combiner.setColor(CARD_BACKGROUND_ALT_COLOR)
-                            .fillRect(leftColumnX, currentY, TABLE_WIDTH, ROW_HEIGHT);
-                } else {
-                    combiner.setColor(CARD_BACKGROUND_COLOR)
-                            .fillRect(leftColumnX, currentY, TABLE_WIDTH, ROW_HEIGHT);
-                }
-            }
-
-            // 绘制每小时数据
-            if (hourList != null && i < hourList.size()) {
-                drawDucatRow(combiner, hourList.get(i), rightColumnX, currentY, i);
-            } else {
-                // 绘制空白行
-                if (i % 2 == 1) {
-                    combiner.setColor(CARD_BACKGROUND_ALT_COLOR)
-                            .fillRect(rightColumnX, currentY, TABLE_WIDTH, ROW_HEIGHT);
-                } else {
-                    combiner.setColor(CARD_BACKGROUND_COLOR)
-                            .fillRect(rightColumnX, currentY, TABLE_WIDTH, ROW_HEIGHT);
-                }
-            }
-
-            currentY += ROW_HEIGHT;
-        }
-        // 添加底部署名
-        addFooter(combiner, totalHeight - 40);
-
-        // 合成并返回图像
-        combiner.combine();
-        return combiner.getCombinedImageOutStream().toByteArray();
+    private DefaultDrawMarketDucatsImage() {
+        throw new AssertionError("Cannot instantiate");
     }
 
-    /**
-     * 绘制单行杜卡币数据
-     *
-     * @param combiner 图像合成器
-     * @param ducat    杜卡币数据
-     * @param startX   起始X坐标
-     * @param y        Y坐标
-     * @param index    行索引，用于交替背景色
-     */
-    private static void drawDucatRow(ImageCombiner combiner, Ducats.Ducat ducat, int startX, int y, int index) {
-        // 交替行背景色
-        if (index % 2 == 1) {
-            combiner.setColor(CARD_BACKGROUND_ALT_COLOR)
-                    .fillRect(startX, y, TABLE_WIDTH, ROW_HEIGHT);
-        } else {
-            combiner.setColor(CARD_BACKGROUND_COLOR)
-                    .fillRect(startX, y, TABLE_WIDTH, ROW_HEIGHT);
+    public static byte[] drawMarketDucatsImage(Map<Ducats.DumpType, List<Ducats.Ducat>> dump, String title) {
+        if (dump == null || dump.isEmpty()) return new byte[0];
+
+        List<Ducats.Ducat> dayList = dump.get(Ducats.DumpType.DAY);
+        List<Ducats.Ducat> hourList = dump.get(Ducats.DumpType.HOUR);
+        int maxRows = Math.max(dayList != null ? dayList.size() : 0,
+                hourList != null ? hourList.size() : 0);
+        if (maxRows == 0) return new byte[0];
+
+        // 4列数据 + 右列看板娘
+        int cardW = 400;
+        int textW = cardW - CARD_PAD * 2;
+        int CANVAS_W = CONTENT_X + COLS * cardW + (COLS - 1) * COL_GAP + COL_GAP + cardW + CONTENT_X;
+
+        int[] colX = new int[COLS];
+        for (int c = 0; c < COLS; c++) colX[c] = CONTENT_X + c * (cardW + COL_GAP);
+
+        int cardH = 180;
+
+        int contentEnd = getContentEnd(dayList, hourList, cardH);
+        int totalHeight = Math.max(contentEnd, cardW) + 60;
+
+        ImageCombiner cb = new ImageCombiner(CANVAS_W, totalHeight, ImageCombiner.OutputFormat.PNG);
+        cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, totalHeight);
+        cb.drawTooRoundRect();
+
+        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 44))
+                .addCenteredText(title, TITLE_Y);
+        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 50, CANVAS_W - CONTENT_X, TITLE_Y + 50);
+
+        // 当天：col0, col1 交替
+        int[] dayY = {CONTENT_START_Y, CONTENT_START_Y};
+        if (dayList != null) {
+            for (int i = 0; i < dayList.size(); i++) {
+                int c = i % 2;
+                drawCard(cb, "当天", dayList.get(i), colX[c], dayY[c], cardW, cardH, textW);
+                dayY[c] += cardH + COL_GAP;
+            }
         }
 
-        combiner.setColor(TEXT_COLOR)
-                .setFont(ROW_FONT);
-
-        // 截取物品名称，避免过长
-        String itemName = ducat.getItem();
-        if (itemName != null && itemName.length() > 15) {
-            itemName = itemName.substring(0, 12) + "...";
+        // 每小时：col2, col3 交替
+        int[] hourY = {CONTENT_START_Y, CONTENT_START_Y};
+        if (hourList != null) {
+            for (int i = 0; i < hourList.size(); i++) {
+                int c = i % 2;
+                drawCard(cb, "每小时", hourList.get(i), colX[2 + c], hourY[c], cardW, cardH, textW);
+                hourY[c] += cardH + COL_GAP;
+            }
         }
 
-        combiner.addText(itemName != null ? itemName : "未知物品", startX + 10, y + ROW_HEIGHT / 2 + 8)
-                .addText(ducat.getDucats() != null ? ducat.getDucats().toString() : "N/A", startX + 250, y + ROW_HEIGHT / 2 + 8)
-                .addText(ducat.getDucatsPerPlatinumWa() != null ? String.format("%.2f", ducat.getDucatsPerPlatinumWa()) : "N/A", startX + 350, y + ROW_HEIGHT / 2 + 8)
-                .addText(ducat.getWaPrice() != null ? String.format("%.2f", ducat.getWaPrice()) : "N/A", startX + 500, y + ROW_HEIGHT / 2 + 8)
-                .addText(ducat.getVolume() != null ? ducat.getVolume().toString() : "N/A", startX + 600, y + ROW_HEIGHT / 2 + 8);
+        // 看板娘 — 右侧独立列，底部对齐
+        int standingColX = CANVAS_W - CONTENT_X - cardW;
+        cb.drawStandingAt(standingColX, totalHeight - cardW, cardW, cardW);
+        addFooter(cb, totalHeight - 25);
+        cb.combine();
+        try (ByteArrayOutputStream bos = cb.getCombinedImageOutStream()) {
+            return bos.toByteArray();
+        } catch (Exception e) {
+            throw new RuntimeException("无法获取图像输出流", e);
+        }
+    }
+
+    private static int getContentEnd(List<Ducats.Ducat> dayList, List<Ducats.Ducat> hourList, int cardH) {
+        int daySize = dayList != null ? dayList.size() : 0;
+        int hourSize = hourList != null ? hourList.size() : 0;
+        int dayRows = (daySize + 1) / 2;
+        int hourRows = (hourSize + 1) / 2;
+        int dayEndY = CONTENT_START_Y + dayRows * (cardH + COL_GAP) - COL_GAP;
+        int hourEndY = CONTENT_START_Y + hourRows * (cardH + COL_GAP) - COL_GAP;
+        if (daySize == 0) dayEndY = CONTENT_START_Y;
+        if (hourSize == 0) hourEndY = CONTENT_START_Y;
+
+        return Math.max(dayEndY, hourEndY);
+    }
+
+    private static void drawCard(ImageCombiner cb, String label, Ducats.Ducat d,
+                                 int cardX, int cardY, int cardW, int cardH, int textW) {
+        int innerX = cardX + CARD_PAD;
+        int rightX = innerX + textW;
+
+        Color labelBg = "当天".equals(label) ? new Color(0x6C5CE7) : new Color(0xE67E22);
+        cb.setColor(CARD_BACKGROUND_COLOR).fillRoundRect(cardX, cardY, cardW, cardH, CARD_RADIUS, CARD_RADIUS);
+        cb.setColor(labelBg).fillRect(cardX + CARD_RADIUS, cardY + 2, cardW - 2 * CARD_RADIUS, 5);
+        cb.setColor(DIVIDER_COLOR).setStroke(1)
+                .drawRoundRect(cardX, cardY, cardW, cardH, CARD_RADIUS, CARD_RADIUS);
+
+        Font bodyFont = FONT.deriveFont(20f);
+        Font smallFont = FONT.deriveFont(18f);
+
+        int cy = cardY + CARD_PAD;
+
+        // 标签 + 物品名
+        cb.setColor(labelBg).setFont(FONT.deriveFont(Font.BOLD, 18f));
+        cb.addText("[" + label + "]", innerX, cy + 22);
+        cb.setColor(TEXT_COLOR).setFont(FONT.deriveFont(Font.BOLD, 22f));
+        String item = d.getItem() != null ? d.getItem() : "未知";
+        if (item.length() > 22) item = item.substring(0, 20) + "..";
+        cb.addText(item, innerX + 70, cy + 22);
+        cy += 42;
+
+        // 杜卡币 + 杜卡币/白金
+        String ducats = d.getDucats() != null ? "杜卡币 " + d.getDucats() : "杜卡币 -";
+        cb.setColor(ACCENT_GOLD_COLOR).setFont(bodyFont);
+        cb.addText(ducats, innerX, cy + 20);
+
+        String ratio = d.getDucatsPerPlatinumWa() != null
+                ? String.format("比率 %.1f/P", d.getDucatsPerPlatinumWa()) : "比率 -";
+        cb.setColor(TEXT_SECONDARY_COLOR).setFont(smallFont);
+        cb.addText(ratio, innerX + textW / 2, cy + 20);
+        cy += 36;
+
+        // 均价 + 库存
+        String avgPrice = d.getWaPrice() != null ? String.format("均价 %.1f", d.getWaPrice()) : "均价 -";
+        cb.setColor(TEXT_COLOR).setFont(smallFont);
+        cb.addText(avgPrice, innerX, cy + 20);
+
+        String volume = d.getVolume() != null ? "库存 " + d.getVolume() : "库存 -";
+        cb.setColor(TEXT_SECONDARY_COLOR).setFont(smallFont);
+        int vW = cb.getFontMetrics(smallFont).stringWidth(volume);
+        cb.addText(volume, rightX - vW, cy + 20);
     }
 }

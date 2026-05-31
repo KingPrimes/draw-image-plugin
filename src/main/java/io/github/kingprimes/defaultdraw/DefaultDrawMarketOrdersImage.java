@@ -2,6 +2,7 @@ package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
 import io.github.kingprimes.model.enums.IconEnum;
+import io.github.kingprimes.model.enums.MarketStatusEnum;
 import io.github.kingprimes.model.market.OrderWithUser;
 import io.github.kingprimes.model.market.Orders;
 
@@ -15,7 +16,7 @@ import static io.github.kingprimes.defaultdraw.DrawConstants.*;
  * 市场订单图像绘制实现类
  *
  * @author KingPrimes
- * @version 1.0.3
+ * @version 1.0.8
  */
 final class DefaultDrawMarketOrdersImage {
 
@@ -26,12 +27,19 @@ final class DefaultDrawMarketOrdersImage {
     private static final int ROW_HEIGHT = 60;
     private static final int FOOTER_HEIGHT = 40;
 
-    /**
-     * 绘制市场订单图像
-     *
-     * @param orders 市场订单数据
-     * @return 图像流
-     */
+    private static final Color PLATFORM_BG = new Color(0x6C5CE7);
+    private static final Color ACTIVE_BG = new Color(0x27AE60);
+    private static final Color INACTIVE_BG = CARD_BACKGROUND_COLOR;
+    private static final Color PRICE_COLOR = new Color(0xE8D5A3);
+    private static final Color ONLINE_COLOR = new Color(0x27AE60);
+    private static final Color INGAME_COLOR = new Color(0x3498DB);
+    private static final Color OFFLINE_COLOR = new Color(0xE74C3C);
+    private static final Color INVISIBLE_COLOR = TEXT_MUTED_COLOR;
+
+    private DefaultDrawMarketOrdersImage() {
+        throw new AssertionError("Cannot instantiate");
+    }
+
     public static byte[] drawMarketOrdersImage(Orders orders) {
         if (orders == null || orders.getOrders() == null) {
             return new byte[0];
@@ -39,29 +47,33 @@ final class DefaultDrawMarketOrdersImage {
 
         List<OrderWithUser> orderList = orders.getOrders();
 
-        // 计算图像高度
+        box sz = scaleByPct(IMAGE_WIDTH, IMAGE_WIDTH, STANDING_RATIO);
         int contentHeight = HEADER_HEIGHT + orderList.size() * ROW_HEIGHT;
-        int totalHeight = TITLE_HEIGHT + contentHeight + FOOTER_HEIGHT + 200; // 为看板娘预留空间
+        int totalHeight;
 
-        // 创建图像合成器
+        int startY = TITLE_HEIGHT + 20;
+
+        // 预计算：标题下方 info 区域占 Y: startY ~ startY+100
+        int infoEndY = startY + 100;
+        int tableStartY = infoEndY + 30;
+        int standingY = tableStartY + contentHeight + 50;
+        totalHeight = standingY + sz.y();
+
         BufferedImage image = new BufferedImage(IMAGE_WIDTH, totalHeight, BufferedImage.TYPE_INT_ARGB);
         ImageCombiner combiner = new ImageCombiner(image, ImageCombiner.OutputFormat.PNG);
 
-        // 设置背景色
         combiner.setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, IMAGE_WIDTH, totalHeight)
-                .drawTooRoundRect()
-                .drawStandingAt(IMAGE_WIDTH, totalHeight, STANDING_RATIO);
+                .drawTooRoundRect();
 
         // 绘制标题
-        int currentY = TITLE_HEIGHT + 20;
-
+        int currentY = startY;
         combiner.setColor(TITLE_COLOR)
                 .setFont(FONT.deriveFont(48f))
                 .addCenteredText(orders.getName(), currentY)
                 .setFont(FONT);
         int lineX = 50;
-        // 绘制物品图标
+
         if (orders.getIcon() != null) {
             BufferedImage icon = orders.getIcon();
             int width = icon.getWidth();
@@ -70,139 +82,146 @@ final class DefaultDrawMarketOrdersImage {
             combiner.drawImage(orders.getIcon(), 40, 25, width / 3, height / 3);
         }
 
-        // 绘制物品信息
         currentY += 80;
-        // 绘制分割线
         combiner.drawLine(lineX, currentY - 70, IMAGE_WIDTH - 30, currentY - 70);
 
-        // 绘制平台类型
-        combiner
-                .setColor(TEXT_COLOR)
+        // ---- 平台标签 ----
+        combiner.setColor(PLATFORM_BG)
                 .fillRoundRect(lineX += 50, currentY - 40, 120, 60, 20, 20)
                 .setColor(Color.WHITE)
-                .addText(orders.getForm().name(), lineX += 35, currentY);
-        // 绘制卖家按钮
-        combiner.setColor(orders.getIsBy() ? Color.GREEN : TEXT_COLOR)
-                .fillRoundRect(lineX += 300, currentY - 40, 120, 60, 20, 20)
-                .setColor(Color.WHITE)
-                .addText("卖家", lineX += 25, currentY);
-        // 绘制买家按钮
-        combiner.setColor(orders.getIsBy() ? TEXT_COLOR : Color.GREEN)
+                .addText(orders.getForm().name(), lineX + 20, currentY);
+
+        // ---- 卖家/买家切换按钮 ----
+        boolean isBuy = orders.getIsBy() != null && orders.getIsBy();
+        // 卖家
+        combiner.setColor(isBuy ? ACTIVE_BG : INACTIVE_BG)
+                .fillRoundRect(lineX += 250, currentY - 40, 120, 60, 20, 20)
+                .setColor(isBuy ? Color.WHITE : TEXT_SECONDARY_COLOR)
+                .addText("卖家", lineX + 25, currentY);
+        // 买家
+        combiner.setColor(isBuy ? INACTIVE_BG : ACTIVE_BG)
                 .fillRoundRect(lineX += 120, currentY - 40, 120, 60, 20, 20)
-                .setColor(Color.WHITE)
-                .addText("买家", lineX += 25, currentY);
-        // 绘制价值杜卡币
-        combiner.setColor(ACCENT_GOLD_COLOR)
-                .addText("杜卡币", lineX += 350, currentY - 32)
+                .setColor(isBuy ? TEXT_SECONDARY_COLOR : Color.WHITE)
+                .addText("买家", lineX + 25, currentY);
+
+        // ---- 杜卡币 ----
+        combiner.setColor(ACCENT_GOLD_COLOR).setFont(FONT)
+                .addText("杜卡币", lineX += 280, currentY - 32)
                 .setFont(FONT_WARFRAME_ICON)
                 .addText(IconEnum.DUCATS.getIcon(), lineX, currentY + 15)
                 .setFont(FONT)
                 .addText(orders.getDucats().toString(), lineX += 50, currentY + 15);
 
-        // 绘制交易税
-        combiner.setColor(TITLE_COLOR)
-                .addText("交易税", lineX += 150, currentY - 32)
+        // ---- 交易税 ----
+        combiner.setColor(TEXT_SECONDARY_COLOR).setFont(FONT)
+                .addText("交易税", lineX += 120, currentY - 32)
                 .setFont(FONT_WARFRAME_ICON)
                 .addText(IconEnum.CREDITS.getIcon(), lineX, currentY + 15)
                 .setFont(FONT)
                 .addText(orders.getTradingTax().toString(), lineX + 50, currentY + 15);
 
-        // 绘制表头
+        // ---- 表头 ----
         currentY += 30;
-        combiner.setColor(TITLE_COLOR).drawLine(30, currentY, IMAGE_WIDTH - 30, currentY);
+        combiner.setColor(DIVIDER_COLOR).drawLine(30, currentY, IMAGE_WIDTH - 30, currentY);
         currentY += 20;
-        combiner.setColor(TEXT_COLOR)
+        combiner.setColor(TEXT_SECONDARY_COLOR).setFont(FONT.deriveFont(20f))
                 .addText("价格", IMAGE_MARGIN + 10, currentY + HEADER_HEIGHT / 2 + 8)
-                .addText("数量", IMAGE_MARGIN + 150, currentY + HEADER_HEIGHT / 2 + 8)
-                .addText("等级", IMAGE_MARGIN + 350, currentY + HEADER_HEIGHT / 2 + 8)
+                .addText("数量", IMAGE_MARGIN + 180, currentY + HEADER_HEIGHT / 2 + 8)
+                .addText("等级", IMAGE_MARGIN + 380, currentY + HEADER_HEIGHT / 2 + 8)
                 .addText("卖家", IMAGE_MARGIN + 600, currentY + HEADER_HEIGHT / 2 + 8)
-                .addText("状态", IMAGE_MARGIN + 980, currentY + HEADER_HEIGHT / 2 + 8);
+                .addText("状态", IMAGE_MARGIN + 1000, currentY + HEADER_HEIGHT / 2 + 8);
 
         currentY += HEADER_HEIGHT + 5;
 
-        // 绘制数据行
+        // ---- 数据行 ----
         for (OrderWithUser order : orderList) {
-            // 获取订单信息
-            String platinum = order.getPlatinum() != null ? order.getPlatinum().toString() : "未知";
-            String quantity = order.getQuantity() != null ? order.getQuantity().toString() : "未知";
+            String platinum = order.getPlatinum() != null ? order.getPlatinum().toString() : "-";
+            String quantity = order.getQuantity() != null ? order.getQuantity().toString() : "-";
             String rank = order.getRank() != null ? order.getRank().toString() : "-";
 
-            // 获取用户信息
-            String sellerName = "未知";
-            String status = "未知";
+            String sellerName = "-";
+            String status = "-";
+            MarketStatusEnum statusEnum = null;
 
             if (order.getUser() != null) {
-                sellerName = order.getUser().getIngameName() != null ?
-                        order.getUser().getIngameName() : "-";
-                status = order.getUser().getStatus() != null ?
-                        order.getUser().getStatus().getStatus() : "-";
+                sellerName = order.getUser().getIngameName() != null
+                        ? order.getUser().getIngameName() : "-";
+                statusEnum = order.getUser().getStatus();
+                status = statusEnum != null ? statusEnum.getStatus() : "-";
             }
 
-            // 绘制行数据
-            combiner.setColor(TEXT_COLOR)
-                    .setFont(FONT_WARFRAME_ICON)
+            // 价格 — 白金色
+            combiner.setColor(PRICE_COLOR).setFont(FONT_WARFRAME_ICON)
                     .addText(IconEnum.PLATINUM.getIcon(), IMAGE_MARGIN, currentY + ROW_HEIGHT / 2 + 8)
                     .setFont(FONT)
-                    .addText(platinum, IMAGE_MARGIN + 40, currentY + ROW_HEIGHT / 2 + 8)
-                    .setFont(FONT_WARFRAME_ICON)
-                    .addText(IconEnum.CUBES.getIcon(), IMAGE_MARGIN + 140, currentY + ROW_HEIGHT / 2 + 8)
-                    .setFont(FONT)
-                    .addText(quantity, IMAGE_MARGIN + 180, currentY + ROW_HEIGHT / 2 + 8)
-                    .addText(rank, IMAGE_MARGIN + 360, currentY + ROW_HEIGHT / 2 + 8)
-                    .addText(sellerName, IMAGE_MARGIN + 500, currentY + ROW_HEIGHT / 2 + 8)
-                    .addText(status, IMAGE_MARGIN + 960, currentY + ROW_HEIGHT / 2 + 8);
+                    .addText(platinum, IMAGE_MARGIN + 40, currentY + ROW_HEIGHT / 2 + 8);
+
+            // 数量 — 浅灰色
+            combiner.setColor(TEXT_SECONDARY_COLOR).setFont(FONT)
+                    .addText(quantity, IMAGE_MARGIN + 180, currentY + ROW_HEIGHT / 2 + 8);
+
+            // 等级
+            combiner.setColor(TEXT_COLOR).setFont(FONT)
+                    .addText(rank, IMAGE_MARGIN + 380, currentY + ROW_HEIGHT / 2 + 8);
+
+            // 卖家
+            combiner.setColor(TEXT_COLOR)
+                    .addText(sellerName, IMAGE_MARGIN + 600, currentY + ROW_HEIGHT / 2 + 8);
+
+            // 状态 — 颜色跟随状态
+            Color statusColor = getStatusColor(statusEnum);
+            combiner.setColor(statusColor)
+                    .addText(status, IMAGE_MARGIN + 1000, currentY + ROW_HEIGHT / 2 + 8);
 
             currentY += ROW_HEIGHT;
         }
 
-        // 添加底部署名
-        addFooter(combiner, totalHeight - 40);
-
-        // 合成并返回图像
+        combiner.drawStandingAt(IMAGE_WIDTH - sz.x(), totalHeight - sz.y(), sz.x(), sz.y());
+        addFooter(combiner, totalHeight - 25);
         combiner.combine();
         return combiner.getCombinedImageOutStream().toByteArray();
     }
 
+    private static Color getStatusColor(MarketStatusEnum status) {
+        if (status == null) return TEXT_MUTED_COLOR;
+        return switch (status) {
+            case ONLINE -> ONLINE_COLOR;
+            case INGAME -> INGAME_COLOR;
+            case OFFLINE -> OFFLINE_COLOR;
+            case INVISIBLE -> INVISIBLE_COLOR;
+        };
+    }
+
     /**
      * 绘制可能要查询的订单图像
-     *
-     * @param possibleItems 可能要查询的物品列表
-     * @return 图像流
      */
     public static byte[] drawMarketOrdersImage(List<String> possibleItems) {
         if (possibleItems == null || possibleItems.isEmpty()) {
             return new byte[0];
         }
 
-        // 计算图像高度
         int contentHeight = possibleItems.size() * ROW_HEIGHT;
-        int totalHeight = TITLE_HEIGHT + contentHeight + FOOTER_HEIGHT + 150; // 为看板娘预留空间
+        int totalHeight = TITLE_HEIGHT + contentHeight + FOOTER_HEIGHT + 150;
 
-        // 创建图像合成器
         BufferedImage image = new BufferedImage(IMAGE_WIDTH, totalHeight, BufferedImage.TYPE_INT_ARGB);
         ImageCombiner combiner = new ImageCombiner(image, ImageCombiner.OutputFormat.PNG);
 
-        // 设置背景色
         combiner.setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, IMAGE_WIDTH, totalHeight)
-                .drawTooRoundRect()
-                .drawStandingAt(IMAGE_WIDTH, totalHeight, STANDING_RATIO);
+                .drawTooRoundRect();
 
-        // 绘制标题
         int currentY = TITLE_HEIGHT;
         combiner.setColor(TITLE_COLOR)
                 .setFont(FONT)
                 .addCenteredText("可能要查询的物品列表", currentY);
 
-        // 绘制表头
         currentY += 50;
-        combiner.setColor(TEXT_COLOR)
+        combiner.setColor(TEXT_SECONDARY_COLOR).setFont(FONT.deriveFont(20f))
                 .addText("序号", IMAGE_MARGIN + 10, currentY + HEADER_HEIGHT / 2 + 8)
                 .addText("物品名称", IMAGE_MARGIN + 150, currentY + HEADER_HEIGHT / 2 + 8);
 
         currentY += HEADER_HEIGHT + 5;
 
-        // 绘制数据行
         int index = 1;
         for (String item : possibleItems) {
             combiner.setColor(TEXT_COLOR)
@@ -213,10 +232,7 @@ final class DefaultDrawMarketOrdersImage {
             index++;
         }
 
-        // 添加底部署名
         addFooter(combiner, totalHeight - 40);
-
-        // 合成并返回图像
         combiner.combine();
         return combiner.getCombinedImageOutStream().toByteArray();
     }
