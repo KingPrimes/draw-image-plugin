@@ -4,155 +4,184 @@ import io.github.kingprimes.image.ImageCombiner;
 import io.github.kingprimes.model.RivenAnalyseTrendModel;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.List;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
 /**
- * 紫卡分析趋势图像绘制实现类
+ * 紫卡分析趋势卡片渲染器 — 两列卡片 + 右侧看板娘，卡片高度自适应属性数量
  *
  * @author KingPrimes
- * @version 1.0.3
+ * @version 1.0.8
  */
 final class DefaultDrawRivenAnalyseTrendImage {
 
-    private static final Color UP = new Color(0x3B9A21);
-    private static final Color DOW = new Color(0xAC1818);
+    private static final int CANVAS_W = 1750;
+    private static final int CONTENT_X = 50;
+    private static final int COLS = 2;
+    private static final int COL_GAP = 50;
+    private static final int CARD_RADIUS = 14;
+    private static final int CARD_PAD = 24;
 
-    // 私有构造函数防止实例化
+    private static final int TITLE_Y = 80;
+    private static final int CONTENT_START_Y = 150;
+
+    private static final Color UP_COLOR = new Color(0x3B9A21);
+    private static final Color DOWN_COLOR = new Color(0xAC1818);
+
     private DefaultDrawRivenAnalyseTrendImage() {
-        throw new AssertionError("Cannot instantiate DefaultDrawRivenAnalyseTrendImage class");
+        throw new AssertionError("Cannot instantiate");
     }
 
-    /**
-     * 绘制紫卡分析趋势图像
-     *
-     * @param rivenAnalyseTrendModels 紫卡分析数据列表
-     * @return 图像字节数组
-     */
-    public static byte[] drawRivenAnalyseTrendImage(List<RivenAnalyseTrendModel> rivenAnalyseTrendModels) {
-        if (rivenAnalyseTrendModels == null || rivenAnalyseTrendModels.isEmpty()) {
-            return new byte[0];
+    public static byte[] drawRivenAnalyseTrendImage(List<RivenAnalyseTrendModel> models) {
+        if (models == null || models.isEmpty()) return new byte[0];
+
+        int n = models.size();
+        boolean isOdd = n % COLS != 0;
+
+        box sz = scaleByPct(CANVAS_W, CANVAS_W, STANDING_RATIO);
+        int cardsContentW = CANVAS_W - CONTENT_X - sz.x() - 30;
+        int cardW = (cardsContentW - COL_GAP * (COLS - 1)) / COLS;
+        int textW = cardW - CARD_PAD * 2;
+
+        // 预计算卡片高度
+        int[] cardHeights = new int[n];
+        for (int i = 0; i < n; i++) {
+            cardHeights[i] = calcCardHeight(models.get(i));
         }
 
-        // 计算图像尺寸
-        int cardWidth = 700;
-        int cardHeight = 400;
-        int cardMargin = 60;
-        int columns = Math.min(2, rivenAnalyseTrendModels.size());
-        int rows = (int) Math.ceil((double) rivenAnalyseTrendModels.size() / columns);
-
-        int totalWidth = cardWidth * columns + cardMargin * (columns + 1) + 400;
-        int totalHeight = cardHeight * rows + cardMargin * (rows + 1) + 200; // 为标题和看板娘预留空间
-
-        // 创建图像合成器
-        BufferedImage image = new BufferedImage(totalWidth, totalHeight, BufferedImage.TYPE_INT_ARGB);
-        ImageCombiner combiner = new ImageCombiner(image, ImageCombiner.OutputFormat.PNG);
-
-        // 设置背景色
-        combiner.setColor(PAGE_BACKGROUND_COLOR)
-                .fillRect(0, 0, totalWidth, totalHeight)
-                .drawTooRoundRect();
-
-        // 绘制标题
-        int titleY = 100;
-        combiner.setColor(TITLE_COLOR)
-                .setFont(FONT.deriveFont(48f))
-                .addCenteredText("紫卡分析趋势", titleY);
-
-        // 绘制紫卡分析卡片
-        int currentY = titleY + 40;
-        for (int i = 0; i < rivenAnalyseTrendModels.size(); i++) {
-            RivenAnalyseTrendModel trend = rivenAnalyseTrendModels.get(i);
-            int row = i / columns;
-            int col = i % columns;
-
-            int cardX = cardMargin + col * (cardWidth + cardMargin);
-            int cardY = currentY + cardMargin + row * (cardHeight + cardMargin);
-
-            combiner.drawImage(
-                    drawRivenAnalyseTrendCard(
-                            new ImageCombiner(cardWidth, cardHeight, ImageCombiner.OutputFormat.PNG),
-                            trend),
-                    cardX, cardY);
+        // 行高度（同列卡片取最大）
+        int rows = (int) Math.ceil((double) n / COLS);
+        int[] rowHeights = new int[rows];
+        int cardsH = 0;
+        for (int r = 0; r < rows; r++) {
+            int maxH = 0;
+            for (int c = 0; c < COLS && r * COLS + c < n; c++) {
+                maxH = Math.max(maxH, cardHeights[r * COLS + c]);
+            }
+            rowHeights[r] = maxH;
+            cardsH += maxH;
+            if (r < rows - 1) cardsH += COL_GAP;
         }
 
-        // 添加底部署名
-        addFooter(combiner, totalHeight - 40);
+        int lastRowY = CONTENT_START_Y;
+        for (int r = 0; r < rows - 1; r++) {
+            lastRowY += rowHeights[r] + COL_GAP;
+        }
 
-        // 添加看板娘图片
-        combiner.drawStandingAt(totalWidth, totalHeight, STANDING_RATIO);
+        int standingX = CANVAS_W - sz.x();
+        int standingY;
+        if (isOdd) {
+            standingY = lastRowY;
+        } else {
+            standingY = CONTENT_START_Y + cardsH + 10;
+        }
+        int canvasH = standingY + sz.y();
 
-        // 合成并返回图像
-        combiner.combine();
-        return combiner.getCombinedImageOutStream().toByteArray();
-    }
+        int[] colX = new int[COLS];
+        for (int c = 0; c < COLS; c++) {
+            colX[c] = CONTENT_X + c * (cardW + COL_GAP);
+        }
 
-    /**
-     * 绘制单个紫卡分析卡片
-     *
-     * @param combiner 图像合成器
-     * @param trend    紫卡分析数据
-     * @return 绘制完成的图像
-     */
-    private static BufferedImage drawRivenAnalyseTrendCard(ImageCombiner combiner, RivenAnalyseTrendModel trend) {
-        int width = combiner.getCanvasWidth();
-        int height = combiner.getCanvasHeight();
+        ImageCombiner cb = new ImageCombiner(CANVAS_W, canvasH, ImageCombiner.OutputFormat.PNG);
+        cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, canvasH);
+        cb.drawTooRoundRect();
 
-        // 绘制卡片背景
-        combiner.setColor(PAGE_BACKGROUND_COLOR)
-                .fillRect(0, 0, width, height)
-                .setStroke(2)
-                .setColor(CARD_BACKGROUND_COLOR)
-                .fillRoundRect(0, 0, width, height, 20, 20)
-                .setColor(BLACK_COLOR)
-                .drawRoundRect(0, 0, width - 2, height - 2, 20, 20);
+        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 44))
+                .addCenteredText("紫卡分析趋势", TITLE_Y);
+        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 50,
+                CONTENT_X + cardsContentW + sz.x() + 30, TITLE_Y + 50);
 
-        // 绘制武器名称和紫卡名称
-        combiner.setColor(TEXT_COLOR)
-                .setFont(FONT.deriveFont(24f))
-                .addCenteredText("武器: " + trend.getWeaponName(), 50)
-                .addCenteredText("紫卡: " + trend.getRivenName(), 80);
-
-        // 绘制倾向点和数值
-        combiner
-                .addText("倾向点: " + trend.getDot(), 20, 120)
-                .addText("倾向数值: " + (trend.getNum() != null ? trend.getNum() : "N/A"), 20, 150)
-                .addText("武器类型: " + trend.getWeaponType(), 20, 180);
-
-        // 绘制属性信息
-        if (trend.getAttributes() != null && !trend.getAttributes().isEmpty()) {
-            int attrY = 220;
-
-            for (RivenAnalyseTrendModel.Attribute attribute : trend.getAttributes()) {
-                String attrText = formatAttributeText(attribute);
-                combiner.setColor(attribute.getAttrDiff().contains("-") ? DOW : UP)
-                        .addText(attrText, 20, attrY);
-                attrY += 30;
+        int currentY = CONTENT_START_Y;
+        for (int i = 0; i < n; i++) {
+            int row = i / COLS;
+            int col = i % COLS;
+            drawCard(cb, models.get(i), colX[col], currentY, cardW, cardHeights[i], textW);
+            if (col == COLS - 1 || i == n - 1) {
+                currentY += rowHeights[row] + COL_GAP;
             }
         }
 
-        combiner.combine();
-        return combiner.getCombinedImage();
+        return getBytes(sz, standingX, standingY, canvasH, cb);
     }
 
-    /**
-     * 格式化属性文本
-     *
-     * @param attribute 属性对象
-     * @return 格式化后的文本
-     */
-    private static String formatAttributeText(RivenAnalyseTrendModel.Attribute attribute) {
-        if (attribute == null) {
-            return "";
-        }
+    private static int calcCardHeight(RivenAnalyseTrendModel m) {
+        int h = CARD_PAD;                    // 顶部内边距
+        h += 34;                              // 武器名称
+        h += 28;                              // 紫卡名称
+        h += 16;                              // 间距 + 分隔线
+        h += 30;                              // 倾向 + 数值
+        h += 26;                              // 武器类型
+        h += 16;                              // 间距 + 分隔线
+        List<RivenAnalyseTrendModel.Attribute> attrs = m.getAttributes();
+        if (attrs != null) h += attrs.size() * 32;
+        h += CARD_PAD;                        // 底部内边距
+        return Math.max(h, 200);
+    }
 
-        // 按照 attributeName (lowAttr% - highAttr%) | attrDiff 格式绘制
-        return String.format("%s (%s%% - %s%%) | %s",
-                attribute.getAttributeName() != null ? attribute.getAttributeName() : "N/A",
-                attribute.getLowAttr() != null ? attribute.getLowAttr() : "N/A",
-                attribute.getHighAttr() != null ? attribute.getHighAttr() : "N/A",
-                attribute.getAttrDiff() != null ? attribute.getAttrDiff() : "N/A");
+    private static void drawCard(ImageCombiner cb, RivenAnalyseTrendModel m,
+                                 int cardX, int cardY, int cardW, int cardH, int textW) {
+        int innerX = cardX + CARD_PAD;
+        int rightX = innerX + textW;
+
+        cb.setColor(CARD_BACKGROUND_COLOR).fillRoundRect(cardX, cardY, cardW, cardH, CARD_RADIUS, CARD_RADIUS);
+        cb.setColor(DIVIDER_COLOR).setStroke(1)
+                .drawRoundRect(cardX, cardY, cardW, cardH, CARD_RADIUS, CARD_RADIUS);
+
+        int cy = cardY + CARD_PAD;
+        Font nameFont = FONT.deriveFont(Font.BOLD, 24f);
+        Font bodyFont = FONT.deriveFont(20f);
+
+        // 武器名称
+        String weapon = "武器: " + (m.getWeaponName() != null ? m.getWeaponName() : "未知");
+        cb.setColor(TITLE_COLOR).setFont(nameFont);
+        cb.addText(weapon, innerX, cy + 26);
+        cy += 34;
+
+        // 紫卡名称
+        String riven = "紫卡: " + (m.getRivenName() != null ? m.getRivenName() : "未知");
+        cb.setColor(TEXT_COLOR).setFont(bodyFont);
+        cb.addText(riven, innerX, cy + 22);
+        cy += 30;
+
+        // 分隔线
+        cb.setColor(DIVIDER_COLOR).drawLine(innerX, cy + 6, rightX, cy + 6);
+        cy += 14;
+
+        // 倾向 + 数值
+        String dotStr = m.getDot() != null ? m.getDot() : "-";
+        String numStr = m.getNum() != null ? String.format("%.2f", m.getNum()) : "-";
+        cb.setColor(ACCENT_GOLD_COLOR).setFont(bodyFont);
+        cb.addText("倾向 " + dotStr + "  " + numStr, innerX, cy + 20);
+        cy += 30;
+
+        // 武器类型
+        String type = "类型 " + (m.getWeaponType() != null ? m.getWeaponType() : "未知");
+        cb.setColor(TEXT_SECONDARY_COLOR).setFont(bodyFont);
+        cb.addText(type, innerX, cy + 20);
+        cy += 28;
+
+        // 分隔线
+        cb.setColor(DIVIDER_COLOR).drawLine(innerX, cy + 6, rightX, cy + 6);
+        cy += 16;
+
+        // 属性列表
+        List<RivenAnalyseTrendModel.Attribute> attrs = m.getAttributes();
+        if (attrs != null) {
+            for (RivenAnalyseTrendModel.Attribute attr : attrs) {
+                String diff = attr.getAttrDiff() != null ? attr.getAttrDiff() : "";
+                boolean isUp = !diff.contains("-");
+                Color attrColor = isUp ? UP_COLOR : DOWN_COLOR;
+
+                String name = attr.getAttributeName() != null ? attr.getAttributeName() : "?";
+                String low = attr.getLowAttr() != null ? attr.getLowAttr() : "?";
+                String high = attr.getHighAttr() != null ? attr.getHighAttr() : "?";
+                String line = name + " (" + low + "%-" + high + "%)" + "    " + diff;
+
+                cb.setColor(attrColor).setFont(bodyFont);
+                cb.addText(line, innerX, cy + 20);
+                cy += 32;
+            }
+        }
     }
 }

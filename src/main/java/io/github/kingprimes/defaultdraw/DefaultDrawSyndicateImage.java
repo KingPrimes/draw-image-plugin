@@ -8,7 +8,7 @@ import io.github.kingprimes.model.worldstate.SyndicateMission;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
@@ -21,11 +21,9 @@ import static io.github.kingprimes.defaultdraw.DrawConstants.*;
  */
 final class DefaultDrawSyndicateImage {
 
-    private static final int CARD_WIDTH = 480;
     private static final int CARD_MIN_HEIGHT = 250;
     private static final int CARD_MARGIN_X = 35;
     private static final int CARD_MARGIN_Y = 30;
-    private static final int CARDS_PER_ROW = 3;
 
     private DefaultDrawSyndicateImage() {
         throw new AssertionError("Cannot instantiate DefaultDrawSyndicateImage class");
@@ -66,7 +64,7 @@ final class DefaultDrawSyndicateImage {
 
         // 计算图像高度
         int nodeHeight = nodes.size() * 50;
-        int totalHeight = IMAGE_MARGIN_TOP + IMAGE_TITLE_HEIGHT + nodeHeight + IMAGE_FOOTER_HEIGHT + 100;
+        int totalHeight = IMAGE_MARGIN_TOP + IMAGE_TITLE_HEIGHT + nodeHeight + IMAGE_FOOTER_HEIGHT;
 
         // 创建图像合成器
         BufferedImage image = new BufferedImage(IMAGE_WIDTH, totalHeight, BufferedImage.TYPE_INT_ARGB);
@@ -110,82 +108,91 @@ final class DefaultDrawSyndicateImage {
      */
     private static byte[] drawJobsView(SyndicateMission sm) {
         int IMAGE_WIDTH = 1600;
+        int CONTENT_X = IMAGE_MARGIN;
+        int COLS = 3;
 
         List<Job> jobs = sm.getJobs();
         if (jobs == null || jobs.isEmpty()) {
             return new byte[0];
         }
+        int n = jobs.size();
+        boolean isOdd = n % COLS != 0;
 
-        // 第一步：计算每个Job卡片的高度
-        List<Integer> cardHeights = new ArrayList<>();
-        for (Job job : jobs) {
-            int cardHeight = calculateJobCardHeight(job);
-            cardHeights.add(cardHeight);
+        // 看板娘盒子 + 卡片列宽
+        box sz = scaleByPct(IMAGE_WIDTH, IMAGE_WIDTH, STANDING_RATIO);
+        int cardsContentW = IMAGE_WIDTH - CONTENT_X * 2;
+        int cardW = (cardsContentW - CARD_MARGIN_X * (COLS - 1)) / COLS;
+        int textMaxW = cardW - 40;
+
+        int[] colX = new int[COLS];
+        for (int c = 0; c < COLS; c++) {
+            colX[c] = CONTENT_X + c * (cardW + CARD_MARGIN_X);
         }
 
-        // 第二步：计算总高度
-        int totalHeight = IMAGE_MARGIN_TOP + IMAGE_TITLE_HEIGHT;
-        for (int i = 0; i < cardHeights.size(); i += CARDS_PER_ROW) {
-            int rowHeight = cardHeights.get(i);
-            for (int j = 1; j < CARDS_PER_ROW && i + j < cardHeights.size(); j++) {
-                rowHeight = Math.max(rowHeight, cardHeights.get(i + j));
+        // 预计算卡片高度 + 列流式 Y 终点
+        int[] cardHeights = new int[n];
+        for (int i = 0; i < n; i++) {
+            cardHeights[i] = calculateJobCardHeight(jobs.get(i), textMaxW);
+        }
+
+        int startY = IMAGE_MARGIN_TOP + IMAGE_TITLE_HEIGHT + 25;
+        int[] colEndY = new int[COLS];
+        Arrays.fill(colEndY, startY);
+        for (int i = 0; i < n; i++) {
+            int col = i % COLS;
+            colEndY[col] += cardHeights[i] + CARD_MARGIN_Y;
+        }
+        for (int c = 0; c < COLS; c++) {
+            if (colEndY[c] > startY) colEndY[c] -= CARD_MARGIN_Y;
+        }
+
+        int standingX = IMAGE_WIDTH - sz.x();
+        int standingY;
+        if (isOdd) {
+            // 右列有空白：取左+中列的最大底部
+            standingY = Math.max(colEndY[0], colEndY[1]);
+        } else {
+            // 三列全满：看板娘在所有卡片下方
+            int maxEnd = startY;
+            for (int c = 0; c < COLS; c++) {
+                maxEnd = Math.max(maxEnd, colEndY[c]);
             }
-            totalHeight += rowHeight + CARD_MARGIN_Y;
+            standingY = maxEnd + 10;
         }
-        totalHeight += IMAGE_FOOTER_HEIGHT + 200; // 为看板娘预留空间
+        int totalHeight = standingY + sz.y();
 
         // 创建图像合成器
         BufferedImage image = new BufferedImage(IMAGE_WIDTH, totalHeight, BufferedImage.TYPE_INT_ARGB);
         ImageCombiner combiner = new ImageCombiner(image, ImageCombiner.OutputFormat.PNG);
 
-        // 设置背景色
         combiner.setColor(PAGE_BACKGROUND_COLOR)
                 .fillRect(0, 0, IMAGE_WIDTH, totalHeight)
-                .drawTooRoundRect()
-                .drawStandingAt(IMAGE_WIDTH, totalHeight, STANDING_RATIO);
+                .drawTooRoundRect();
 
-        // 绘制标题
         String title = sm.getTag() != null ? sm.getTag().getName() + " - 赏金任务" : "集团任务";
         combiner.setColor(TITLE_COLOR)
                 .setFont(FONT.deriveFont(Font.BOLD, 32))
                 .addCenteredText(title, IMAGE_MARGIN_TOP + 30);
 
-        // 绘制Job卡片
-        int x = IMAGE_MARGIN;
-        int y = IMAGE_MARGIN_TOP + IMAGE_TITLE_HEIGHT + 25;
-        int cardIndex = 0;
+        // 列流式绘制：每列独立 Y 跟踪
+        int[] drawY = new int[COLS];
+        Arrays.fill(drawY, startY);
 
-        for (int i = 0; i < jobs.size(); i++) {
-            Job job = jobs.get(i);
-            int cardHeight = cardHeights.get(i);
+        for (int i = 0; i < n; i++) {
+            int col = i % COLS;
+            int cardHeight = cardHeights[i];
 
-            // 检查是否需要换行
-            if (cardIndex > 0 && cardIndex % CARDS_PER_ROW == 0) {
-                x = IMAGE_MARGIN;
-                int prevRowMaxHeight = 0;
-                for (int j = 1; j <= CARDS_PER_ROW && i - j >= 0; j++) {
-                    prevRowMaxHeight = Math.max(prevRowMaxHeight, cardHeights.get(i - j));
-                }
-                y += prevRowMaxHeight + CARD_MARGIN_Y;
-            }
-
-            // 绘制Job卡片
             BufferedImage cardImage = drawJobCard(
-                    new ImageCombiner(CARD_WIDTH, cardHeight, ImageCombiner.OutputFormat.PNG),
-                    job,
-                    cardHeight
+                    new ImageCombiner(cardW, cardHeight, ImageCombiner.OutputFormat.PNG),
+                    jobs.get(i), cardHeight, cardW
             );
-            combiner.drawImage(cardImage, x, y);
-
-            // 更新坐标
-            x += CARD_WIDTH + CARD_MARGIN_X;
-            cardIndex++;
+            combiner.drawImage(cardImage, colX[col], drawY[col]);
+            drawY[col] += cardHeight + CARD_MARGIN_Y;
         }
 
-        // 添加底部署名
+        combiner.drawStandingAt(standingX, standingY, sz.x(), sz.y());
         addFooter(combiner, totalHeight - IMAGE_FOOTER_HEIGHT);
 
-        // 合成并返回图像
         combiner.combine();
         return combiner.getCombinedImageOutStream().toByteArray();
     }
@@ -198,18 +205,18 @@ final class DefaultDrawSyndicateImage {
      * @param cardHeight 卡片高度
      * @return 卡片图像
      */
-    private static BufferedImage drawJobCard(ImageCombiner combiner, Job job, int cardHeight) {
+    private static BufferedImage drawJobCard(ImageCombiner combiner, Job job, int cardHeight, int cardW) {
         // 获取边框颜色
         Color borderColor = getJobBorderColor(job);
 
         // 绘制卡片背景和边框
         combiner.setColor(PAGE_BACKGROUND_COLOR)
-                .fillRect(0, 0, CARD_WIDTH, cardHeight)
+                .fillRect(0, 0, cardW, cardHeight)
                 .setColor(CARD_BACKGROUND_COLOR)
-                .fillRoundRect(0, 0, CARD_WIDTH, cardHeight, 15, 15)
+                .fillRoundRect(0, 0, cardW, cardHeight, 15, 15)
                 .setColor(borderColor)
                 .setStroke(5)
-                .drawRoundRect(0, 0, CARD_WIDTH, cardHeight, 15, 15);
+                .drawRoundRect(0, 0, cardW, cardHeight, 15, 15);
 
         int y = 30;
 
@@ -246,7 +253,7 @@ final class DefaultDrawSyndicateImage {
 
         // 4. 任务描述（完整显示，自动换行）
         if (job.getDesc() != null && !job.getDesc().isEmpty()) {
-            String[] descLines = wrapText(combiner, job.getDesc());
+            String[] descLines = combiner.wrapText(job.getDesc(), cardW - 40);
             combiner.setColor(TEXT_COLOR)
                     .setFont(FONT.deriveFont(18f));
             for (String line : descLines) {
@@ -296,7 +303,7 @@ final class DefaultDrawSyndicateImage {
      * @param job 任务数据
      * @return 卡片高度
      */
-    private static int calculateJobCardHeight(Job job) {
+    private static int calculateJobCardHeight(Job job, int textMaxW) {
         int height = 30; // 顶部任务类型
         height += 40;    // 敌人等级
 
@@ -307,7 +314,7 @@ final class DefaultDrawSyndicateImage {
 
         // 任务描述（动态计算行数）
         if (job.getDesc() != null && !job.getDesc().isEmpty()) {
-            int descLines = calculateTextLines(job.getDesc());
+            int descLines = calculateTextLines(job.getDesc(), textMaxW);
             height += descLines * 25 + 10;
         }
 
@@ -336,7 +343,7 @@ final class DefaultDrawSyndicateImage {
      * @param text 文本内容
      * @return 行数
      */
-    private static int calculateTextLines(String text) {
+    private static int calculateTextLines(String text, int maxWidth) {
         if (text == null || text.isEmpty()) {
             return 0;
         }
@@ -355,7 +362,7 @@ final class DefaultDrawSyndicateImage {
             String testLine = currentLine.isEmpty() ? word : currentLine + " " + word;
             int lineWidth = metrics.stringWidth(testLine);
 
-            if (lineWidth > 510) {
+            if (lineWidth > maxWidth) {
                 lines++;
                 currentLine = new StringBuilder(word);
             } else {
@@ -367,20 +374,6 @@ final class DefaultDrawSyndicateImage {
         return lines;
     }
 
-    /**
-     * 文本自动换行
-     *
-     * @param combiner 图像合成器
-     * @param text     文本内容
-     * @return 换行后的文本数组
-     */
-    private static String[] wrapText(ImageCombiner combiner, String text) {
-        if (text == null || text.isEmpty()) {
-            return new String[]{""};
-        }
-
-        return combiner.wrapText(text, 510);
-    }
 
     /**
      * 根据任务类型获取边框颜色

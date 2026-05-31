@@ -72,7 +72,7 @@ final class DefaultDrawDescentImage {
         int cardWidth = DESCENT_IMAGE_WIDTH - 2 * IMAGE_MARGIN;
         long extraRows = challenges.stream().filter(c ->
                 (c.getSpecs() != null && !c.getSpecs().isEmpty()) ||
-                (c.getAuras() != null && !c.getAuras().isEmpty())).count();
+                        (c.getAuras() != null && !c.getAuras().isEmpty())).count();
         int extraH = (int) (extraRows * 26);
         int cardHeight = 55 + challenges.size() * CHALLENGE_CARD_HEIGHT + 20 + extraH;
 
@@ -217,7 +217,7 @@ final class DefaultDrawDescentImage {
             long extraRows = d.getChallenges() != null ?
                     d.getChallenges().stream().filter(c ->
                             (c.getSpecs() != null && !c.getSpecs().isEmpty()) ||
-                            (c.getAuras() != null && !c.getAuras().isEmpty())).count() : 0;
+                                    (c.getAuras() != null && !c.getAuras().isEmpty())).count() : 0;
             int cardHeight = 55 + challengeCount * CHALLENGE_CARD_HEIGHT + 20 + (int) (extraRows * 26);
             height += cardHeight + 15;
         }

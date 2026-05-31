@@ -5,351 +5,234 @@ import io.github.kingprimes.model.*;
 
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
 /**
- * 默认所有系统信息图片绘制工具类
+ * 系统信息卡片渲染器 — 两列卡片 + 看板娘，列流式布局
  *
  * @author KingPrimes
- * @version 1.0.3
+ * @version 1.0.8
  */
 final class DefaultDrawAllInfoImage {
 
+    private static final int CONTENT_X = 50;
+    private static final int COLS = 2;
+    private static final int COL_GAP = 20;
+    private static final int CARD_RADIUS = 14;
+    private static final int CARD_PAD = 20;
 
-    /**
-     * 计算图像所需的高度
-     *
-     * @param allInfo 所有系统信息数据
-     * @return 图像所需的高度
-     */
-    private static int calculateImageHeight(AllInfo allInfo) {
-        int height = IMAGE_MARGIN_TOP + IMAGE_TITLE_HEIGHT + IMAGE_ROW_HEIGHT; // 顶部边距 + 标题高度 + 第一个部分间距
+    private static final int TITLE_Y = 80;
+    private static final int CONTENT_START_Y = 150;
 
-        // CPU信息部分高度
-        if (allInfo.getCpuInfo() != null) {
-            height += IMAGE_ROW_HEIGHT + 10; // 部分标题行高 + 上边距
-            // CPU信息行数 (按新布局: 型号1行 + 核心数/线程数1行 + 频率/缓存1行 + 用户/系统使用率1行 + 等待/空闲率1行)
-            height += IMAGE_ROW_HEIGHT * 5; // 5行信息
-        }
-
-        // JVM信息部分高度
-        if (allInfo.getJvmInfo() != null) {
-            height += IMAGE_ROW_HEIGHT + 10; // 部分标题行高 + 上边距
-            // JVM信息行数 (按新布局: 版本1行 + 内存信息1行 + 使用率/空闲率1行)
-            height += IMAGE_ROW_HEIGHT * 3; // 3行信息
-        }
-
-        // 系统信息部分高度
-        if (allInfo.getSystemInfo() != null) {
-            height += IMAGE_ROW_HEIGHT + 10; // 部分标题行高 + 上边距
-            // 系统信息行数 (按新布局: 操作系统/架构1行 + 计算机名/IP1行)
-            height += IMAGE_ROW_HEIGHT * 2; // 2行信息
-        }
-
-        // 磁盘信息部分高度
-        if (allInfo.getSysFileInfos() != null && allInfo.getSysFileInfos().getSysFileInfos() != null) {
-            height += (IMAGE_ROW_HEIGHT * 2) + 10; // 部分标题行高 + 上边距
-            // 磁盘信息行数 (按新布局: 每个磁盘2行信息 + 10像素间距)
-            int diskCount = allInfo.getSysFileInfos().getSysFileInfos().size();
-            height += diskCount * (FONT_SIZE * 2 + IMAGE_ROW_HEIGHT); // 每个磁盘2行信息 + 10像素间距
-        }
-
-        if (allInfo.getPackageVersion() != null) {
-            height += (IMAGE_ROW_HEIGHT * 2) + 10; // 部分标题行高 + 上边距
-            // 包版本信息行数 (按新布局: 包名/版本1行)
-            height += IMAGE_ROW_HEIGHT; // 1行信息
-        }
-
-        // 底部边距
-        height += IMAGE_MARGIN + IMAGE_FOOTER_HEIGHT; // 底部边距 + 底部署名区域
-
-        return Math.max(height, 800); // 最小高度为800像素
+    private DefaultDrawAllInfoImage() {
+        throw new AssertionError("Cannot instantiate");
     }
 
-    /**
-     * 绘制所有系统信息图片
-     *
-     * @param allInfo 所有系统信息数据
-     * @return 生成的图片字节数组，格式为 PNG
-     */
     public static byte[] drawAllInfoImage(AllInfo allInfo) {
-        // 计算图像高度
-        int height = calculateImageHeight(allInfo);
+        List<InfoCard> cards = getInfoCards(allInfo);
+        if (cards.isEmpty()) return new byte[0];
 
-        // 创建画布
-        ImageCombiner combiner = new ImageCombiner(IMAGE_WIDTH, height, ImageCombiner.OutputFormat.PNG);
+        int n = cards.size();
+        boolean isOdd = n % COLS != 0;
+        int cardW = 562;
+        int textW = cardW - CARD_PAD * 2;
+        int CANVAS_W = CONTENT_X + COLS * cardW + (COLS - 1) * COL_GAP + CONTENT_X;
 
-        // 填充背景色
-        combiner.setFont(FONT)
-                .setColor(PAGE_BACKGROUND_COLOR)
-                .fillRect(0, 0, IMAGE_WIDTH, height)
-                // 绘制双层边框
-                .drawTooRoundRect()
-                .drawStandingAt(IMAGE_WIDTH, height, STANDING_RATIO);
+        int[] colX = new int[COLS];
+        for (int c = 0; c < COLS; c++) colX[c] = CONTENT_X + c * (cardW + COL_GAP);
 
-        // 绘制标题
-        combiner.setColor(TITLE_COLOR)
-                .setFont(FONT.deriveFont(Font.BOLD, 48))
-                .addCenteredText("系统信息", IMAGE_MARGIN * 2);
+        // 预计算高度
+        int[] cardHeights = new int[n];
+        for (int i = 0; i < n; i++) cardHeights[i] = cards.get(i).height();
 
-        int startY = IMAGE_MARGIN + IMAGE_TITLE_HEIGHT + IMAGE_ROW_HEIGHT;
-
-        // 绘制CPU信息
-        if (allInfo.getCpuInfo() != null) {
-            startY = drawCpuInfo(combiner, allInfo.getCpuInfo(), startY);
+        // 列流式 Y 终点
+        int[] colEndY = new int[COLS];
+        java.util.Arrays.fill(colEndY, CONTENT_START_Y);
+        for (int i = 0; i < n; i++) {
+            int col = i % COLS;
+            colEndY[col] += cardHeights[i] + COL_GAP;
+        }
+        for (int c = 0; c < COLS; c++) {
+            if (colEndY[c] > CONTENT_START_Y) colEndY[c] -= COL_GAP;
         }
 
-        // 绘制包版本信息
-        if (allInfo.getPackageVersion() != null) {
-            startY = drawPackageVersion(combiner, allInfo.getPackageVersion(), startY);
+        int totalHeight;
+        if (isOdd) {
+            int tallerEnd = Math.max(colEndY[0], colEndY[1]);
+            totalHeight = Math.max(tallerEnd, colEndY[1] + cardW);
+        } else {
+            int maxEnd = CONTENT_START_Y;
+            for (int c = 0; c < COLS; c++) maxEnd = Math.max(maxEnd, colEndY[c]);
+            totalHeight = maxEnd + 10 + cardW;
         }
 
-        // 绘制JVM信息
-        if (allInfo.getJvmInfo() != null) {
-            startY = drawJvmInfo(combiner, allInfo.getJvmInfo(), startY);
+        ImageCombiner cb = new ImageCombiner(CANVAS_W, totalHeight, ImageCombiner.OutputFormat.PNG);
+        cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, totalHeight);
+        cb.drawTooRoundRect();
+
+        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 44))
+                .addCenteredText("系统信息", TITLE_Y);
+        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 50, CANVAS_W - CONTENT_X, TITLE_Y + 50);
+
+        int[] drawY = new int[COLS];
+        java.util.Arrays.fill(drawY, CONTENT_START_Y);
+        for (int i = 0; i < n; i++) {
+            int col = i % COLS;
+            cards.get(i).draw(cb, colX[col], drawY[col], cardW, cardHeights[i], textW);
+            drawY[col] += cardHeights[i] + COL_GAP;
         }
 
-        // 绘制系统信息
-        if (allInfo.getSystemInfo() != null) {
-            startY = drawSystemInfo(combiner, allInfo.getSystemInfo(), startY);
-        }
-
-        // 绘制磁盘信息
-        if (allInfo.getSysFileInfos() != null && allInfo.getSysFileInfos().getSysFileInfos() != null) {
-            drawDiskInfo(combiner, allInfo.getSysFileInfos(), startY);
-        }
-
-        addFooter(combiner, height - 40);
-
-        combiner.combine();
-        try (ByteArrayOutputStream bos = combiner.getCombinedImageOutStream()) {
+        int standingX = colX[1];
+        int standingY = isOdd ? colEndY[1] : totalHeight - cardW;
+        cb.drawStandingAt(standingX, standingY, cardW, cardW);
+        addFooter(cb, totalHeight - 25);
+        cb.combine();
+        try (ByteArrayOutputStream bos = cb.getCombinedImageOutStream()) {
             return bos.toByteArray();
         } catch (Exception e) {
-            throw new RuntimeException("无法获取图像输出流: %s".formatted(e.getMessage()), e);
+            throw new RuntimeException("无法获取图像输出流", e);
         }
     }
 
-    /**
-     * 绘制CPU信息部分
-     *
-     * @param combiner ImageCombiner实例
-     * @param cpuInfo  CPU信息
-     * @param startY   起始Y坐标
-     * @return 更新后的Y坐标
-     */
-    private static int drawCpuInfo(ImageCombiner combiner, CpuInfo cpuInfo, int startY) {
-        combiner.setColor(TITLE_COLOR)
-                .drawLine(IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT, IMAGE_WIDTH - IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT);
-
-        combiner.setColor(TITLE_COLOR)
-                .setFont(FONT)
-                .addCenteredText("CPU 信息", startY + IMAGE_ROW_HEIGHT - 10);
-
-        int y = startY + IMAGE_ROW_HEIGHT + 10 + FONT_SIZE;
-
-        // 绘制CPU详细信息
-        combiner.setColor(TEXT_COLOR);
-
-        // 型号为单独一行
-        if (cpuInfo.getModel() != null) {
-            combiner.addText("型号: " + cpuInfo.getModel(), IMAGE_MARGIN + 20, y);
-            y += IMAGE_ROW_HEIGHT;
+    private static List<InfoCard> getInfoCards(AllInfo allInfo) {
+        List<InfoCard> cards = new ArrayList<>();
+        if (allInfo.getCpuInfo() != null) cards.add(new CpuCard(allInfo.getCpuInfo()));
+        if (allInfo.getPackageVersion() != null) cards.add(new VersionCard(allInfo.getPackageVersion()));
+        if (allInfo.getJvmInfo() != null) cards.add(new JvmCard(allInfo.getJvmInfo()));
+        if (allInfo.getSystemInfo() != null) cards.add(new SystemCard(allInfo.getSystemInfo()));
+        if (allInfo.getSysFileInfos() != null && allInfo.getSysFileInfos().getSysFileInfos() != null) {
+            for (SysFileInfos.SysFileInfo fi : allInfo.getSysFileInfos().getSysFileInfos()) {
+                cards.add(new DiskCard(fi));
+            }
         }
-
-        // 核心数、线程数为一行
-        combiner.addText("核心数: " + cpuInfo.getCores(), IMAGE_MARGIN + 20, y);
-        combiner.addText("线程数: " + cpuInfo.getThreads(), IMAGE_MARGIN + 500, y);
-        y += IMAGE_ROW_HEIGHT;
-
-        // 频率、缓存大小为一行
-        combiner.addText("频率: " + cpuInfo.getFrequency() + " GHz", IMAGE_MARGIN + 20, y);
-        if (cpuInfo.getCacheSize() > 0) {
-            combiner.addText("缓存大小: " + cpuInfo.getCacheSize() + " KB", IMAGE_MARGIN + 500, y);
-        }
-        y += IMAGE_ROW_HEIGHT;
-
-        // 用户、系统使用率为一行
-        combiner.addText("用户使用率: " + ALL_INFO_PERCENT_FORMAT.format(cpuInfo.getUserUsage()) + "%", IMAGE_MARGIN + 20, y);
-        combiner.addText("系统使用率: " + ALL_INFO_PERCENT_FORMAT.format(cpuInfo.getSysUsage()) + "%", IMAGE_MARGIN + 500, y);
-        y += IMAGE_ROW_HEIGHT;
-
-        // 等待、空闲率为一行
-        combiner.addText("等待率: " + ALL_INFO_PERCENT_FORMAT.format(cpuInfo.getWaitUsage()) + "%", IMAGE_MARGIN + 20, y);
-        combiner.addText("空闲率: " + ALL_INFO_PERCENT_FORMAT.format(cpuInfo.getIdleUsage()) + "%", IMAGE_MARGIN + 500, y);
-        y += IMAGE_ROW_HEIGHT;
-
-        return y;
+        return cards;
     }
 
-    private static int drawPackageVersion(ImageCombiner combiner, AllInfo.PackageVersion packageVersion, int startY) {
-
-        combiner.setColor(TITLE_COLOR)
-                .drawLine(IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT, IMAGE_WIDTH - IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT);
-
-        combiner.setColor(TITLE_COLOR)
-                .setFont(FONT)
-                .addCenteredText("版本 信息", startY + IMAGE_ROW_HEIGHT - 10);
-
-        int y = startY + IMAGE_ROW_HEIGHT + 10 + FONT_SIZE;
-
-        combiner.setColor(TEXT_COLOR);
-
-        if (packageVersion != null) {
-            combiner.addText("名称: " + packageVersion.name(), IMAGE_MARGIN + 20, y);
-            combiner.addText("版本: " + packageVersion.version(), IMAGE_MARGIN + 500, y);
-        }
-        y += IMAGE_ROW_HEIGHT;
-        return y;
+    static int cardPad(int lines) {
+        return CARD_PAD * 2 + 10 + lines * 34 + 40;
     }
 
-    /**
-     * 绘制JVM信息部分
-     *
-     * @param combiner ImageCombiner实例
-     * @param jvmInfo  JVM信息
-     * @param startY   起始Y坐标
-     * @return 更新后的Y坐标
-     */
-    private static int drawJvmInfo(ImageCombiner combiner, JvmInfo jvmInfo, int startY) {
-
-        combiner.setColor(TITLE_COLOR)
-                .drawLine(IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT, IMAGE_WIDTH - IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT);
-
-        combiner.setColor(TITLE_COLOR)
-                .setFont(FONT)
-                .addCenteredText("JVM 信息", startY + IMAGE_ROW_HEIGHT - 10);
-
-        int y = startY + IMAGE_ROW_HEIGHT + 10 + FONT_SIZE;
-
-        // 绘制JVM详细信息
-        combiner.setColor(TEXT_COLOR);
-
-        // 版本为一行
-        if (jvmInfo.getVersion() != null) {
-            combiner.addText("版本: " + jvmInfo.getVersion(), IMAGE_MARGIN + 20, y);
-            y += IMAGE_ROW_HEIGHT;
-        }
-
-        // 最大、已用、空闲内存为一行
-        // 转换为MB显示
-        long maxMemoryMB = jvmInfo.getMaxMemory() / (1024 * 1024);
-        long usedMemoryMB = jvmInfo.getUsedMemory() / (1024 * 1024);
-        long freeMemoryMB = jvmInfo.getFreeMemory() / (1024 * 1024);
-
-        combiner.addText("最大内存: " + ALL_INFO_MEMORY_FORMAT.format(maxMemoryMB) + " MB", IMAGE_MARGIN + 20, y);
-        combiner.addText("已用内存: " + ALL_INFO_MEMORY_FORMAT.format(usedMemoryMB) + " MB", IMAGE_MARGIN + 380, y);
-        combiner.addText("空闲内存: " + ALL_INFO_MEMORY_FORMAT.format(freeMemoryMB) + " MB", IMAGE_MARGIN + 740, y);
-        y += IMAGE_ROW_HEIGHT;
-
-        // 使用率空闲率为一行
-        combiner.addText("内存使用率: " + ALL_INFO_PERCENT_FORMAT.format(jvmInfo.getUsedMemoryRatio()) + "%", IMAGE_MARGIN + 20, y);
-        combiner.addText("内存空闲率: " + ALL_INFO_PERCENT_FORMAT.format(jvmInfo.getFreeMemoryRatio()) + "%", IMAGE_MARGIN + 380, y);
-        y += IMAGE_ROW_HEIGHT;
-
-        return y;
+    static void drawHeader(ImageCombiner cb, int x, int y, int w, int h, String title, Color accent) {
+        cb.setColor(CARD_BACKGROUND_COLOR).fillRoundRect(x, y, w, h, CARD_RADIUS, CARD_RADIUS);
+        cb.setColor(accent).fillRect(x + CARD_RADIUS, y + 2, w - 2 * CARD_RADIUS, 5);
+        cb.setColor(DIVIDER_COLOR).setStroke(1).drawRoundRect(x, y, w, h, CARD_RADIUS, CARD_RADIUS);
+        int ix = x + CARD_PAD;
+        cb.setColor(accent).setFont(FONT.deriveFont(Font.BOLD, 24f));
+        cb.addText(title, ix, y + CARD_PAD + 28);
     }
 
-    /**
-     * 绘制系统信息部分
-     *
-     * @param combiner   ImageCombiner实例
-     * @param systemInfo 系统信息
-     * @param startY     起始Y坐标
-     * @return 更新后的Y坐标
-     */
-    private static int drawSystemInfo(ImageCombiner combiner, SystemInfo systemInfo, int startY) {
-
-        combiner.setColor(TITLE_COLOR)
-                .drawLine(IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT, IMAGE_WIDTH - IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT);
-
-        combiner.setColor(TITLE_COLOR)
-                .setFont(FONT)
-                .addCenteredText("系统信息", startY + IMAGE_ROW_HEIGHT - 10);
-
-        int y = startY + IMAGE_ROW_HEIGHT + 10 + FONT_SIZE;
-
-        // 绘制系统详细信息
-        combiner.setColor(TEXT_COLOR);
-
-        // 操作系统、系统架构为一行
-        if (systemInfo.getOsName() != null) {
-            combiner.addText("操作系统: " + systemInfo.getOsName(), IMAGE_MARGIN + 20, y);
+    static void drawLine(ImageCombiner cb, int x, int y, int tw, String label, String value,
+                         String label2, String value2, Font font, Color color) {
+        int ix = x + CARD_PAD;
+        cb.setColor(color).setFont(font);
+        cb.addText(label + value, ix, y);
+        if (label2 != null && value2 != null) {
+            cb.addText(label2 + value2, ix + tw / 2 + 20, y);
         }
-        if (systemInfo.getOsArch() != null) {
-            combiner.addText("系统架构: " + systemInfo.getOsArch(), IMAGE_MARGIN + 500, y);
-        }
-        y += IMAGE_ROW_HEIGHT;
-
-        // 计算机名、IP地址为一行
-        if (systemInfo.getComputerName() != null) {
-            combiner.addText("计算机名: " + systemInfo.getComputerName(), IMAGE_MARGIN + 20, y);
-        }
-        if (systemInfo.getComputerIp() != null) {
-            combiner.addText("IP地址: " + systemInfo.getComputerIp(), IMAGE_MARGIN + 500, y);
-        }
-        y += IMAGE_ROW_HEIGHT;
-
-        return y;
     }
 
-    /**
-     * 绘制磁盘信息部分
-     *
-     * @param combiner     ImageCombiner实例
-     * @param sysFileInfos 磁盘信息
-     * @param startY       起始Y坐标
-     */
-    private static void drawDiskInfo(ImageCombiner combiner, SysFileInfos sysFileInfos, int startY) {
-        List<SysFileInfos.SysFileInfo> fileInfos = sysFileInfos.getSysFileInfos();
-        if (fileInfos == null || fileInfos.isEmpty()) {
-            return;
+    static String fmt(Number n) {
+        return ALL_INFO_PERCENT_FORMAT.format(n);
+    }
+
+    static String fmtMem(double d) {
+        return ALL_INFO_MEMORY_FORMAT.format(d);
+    }
+
+    interface InfoCard {
+        int height();
+
+        void draw(ImageCombiner cb, int x, int y, int w, int h, int tw);
+    }
+
+    record CpuCard(CpuInfo cpu) implements InfoCard {
+        public int height() {
+            return cardPad(6);
         }
 
+        public void draw(ImageCombiner cb, int x, int y, int w, int h, int tw) {
+            drawHeader(cb, x, y, w, h, "CPU 信息", TITLE_COLOR);
+            Font f = FONT.deriveFont(18f);
+            int cy = y + CARD_PAD + 42;
+            cb.setColor(TEXT_COLOR).setFont(f);
+            String model = cpu.getModel() != null ? cpu.getModel() : "未知";
+            if (model.length() > 28) model = model.substring(0, 26) + "..";
+            cb.addText("型号 " + model, x + CARD_PAD, cy += 34);
+            drawLine(cb, x, cy += 34, tw, "核心 ", String.valueOf(cpu.getCores()), "线程 ", String.valueOf(cpu.getThreads()), f, TEXT_COLOR);
+            drawLine(cb, x, cy += 34, tw, "频率 ", cpu.getFrequency() + " GHz", "缓存 ", cpu.getCacheSize() + " KB", f, TEXT_SECONDARY_COLOR);
+            drawLine(cb, x, cy += 34, tw, "用户 ", fmt(cpu.getUserUsage()) + "%", "系统 ", fmt(cpu.getSysUsage()) + "%", f, ACCENT_GOLD_COLOR);
+            drawLine(cb, x, cy + 34, tw, "等待 ", fmt(cpu.getWaitUsage()) + "%", "空闲 ", fmt(cpu.getIdleUsage()) + "%", f, TEXT_SECONDARY_COLOR);
+        }
+    }
 
-        combiner.setColor(TITLE_COLOR)
-                .drawLine(IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT, IMAGE_WIDTH - IMAGE_MARGIN, startY + IMAGE_ROW_HEIGHT);
+    record VersionCard(AllInfo.PackageVersion pv) implements InfoCard {
+        public int height() {
+            return cardPad(1);
+        }
 
-        combiner.setColor(TITLE_COLOR)
-                .setFont(FONT)
-                .addCenteredText("磁盘信息", startY + IMAGE_ROW_HEIGHT - 10);
+        public void draw(ImageCombiner cb, int x, int y, int w, int h, int tw) {
+            drawHeader(cb, x, y, w, h, "版本信息", new Color(0x3498DB));
+            Font f = FONT.deriveFont(20f);
+            int cy = y + CARD_PAD + 42;
+            cb.setColor(TEXT_COLOR).setFont(f);
+            cb.addText("名称 " + pv.name(), x + CARD_PAD, cy += 34);
+            cb.setColor(TEXT_SECONDARY_COLOR).setFont(f);
+            cb.addText("版本 " + pv.version(), x + CARD_PAD + tw / 2 + 20, cy);
+        }
+    }
 
-        int y = startY + IMAGE_ROW_HEIGHT + 10 + FONT_SIZE;
+    record JvmCard(JvmInfo jvm) implements InfoCard {
+        public int height() {
+            return cardPad(4);
+        }
 
-        // 绘制每个磁盘的信息
-        combiner.setColor(TEXT_COLOR);
+        public void draw(ImageCombiner cb, int x, int y, int w, int h, int tw) {
+            drawHeader(cb, x, y, w, h, "JVM 信息", new Color(0xE67E22));
+            Font f = FONT.deriveFont(18f);
+            int cy = y + CARD_PAD + 42;
+            cb.setColor(TEXT_COLOR).setFont(f);
+            cb.addText("版本 " + (jvm.getVersion() != null ? jvm.getVersion() : "未知"), x + CARD_PAD, cy += 34);
+            long max = jvm.getMaxMemory() / (1024 * 1024);
+            long used = jvm.getUsedMemory() / (1024 * 1024);
+            long free = jvm.getFreeMemory() / (1024 * 1024);
+            drawLine(cb, x, cy += 34, tw, "最大 ", max + " MB", "已用 ", used + " MB", f, TEXT_COLOR);
+            cb.setColor(TEXT_SECONDARY_COLOR).setFont(f);
+            cb.addText("空闲 " + free + " MB", x + CARD_PAD, cy += 34);
+            drawLine(cb, x, cy + 34, tw, "使用率 ", fmt(jvm.getUsedMemoryRatio()) + "%", "空闲率 ", fmt(jvm.getFreeMemoryRatio()) + "%", f, ACCENT_GOLD_COLOR);
+        }
+    }
 
-        for (SysFileInfos.SysFileInfo fileInfo : fileInfos) {
+    record SystemCard(SystemInfo si) implements InfoCard {
+        public int height() {
+            return cardPad(2);
+        }
 
-            // 盘符、类型、文件系统为一行
-            if (fileInfo.getDirName() != null) {
-                combiner.addText("盘符: " + fileInfo.getDirName(), IMAGE_MARGIN + 20, y);
-            }
-            if (fileInfo.getTypeName() != null) {
-                combiner.addText("类型: " + fileInfo.getTypeName(), IMAGE_MARGIN + 360, y);
-            }
-            if (fileInfo.getFileType() != null) {
-                combiner.addText("文件系统: " + fileInfo.getFileType(), IMAGE_MARGIN + 720, y);
-            }
-            y += IMAGE_ROW_HEIGHT;
+        public void draw(ImageCombiner cb, int x, int y, int w, int h, int tw) {
+            drawHeader(cb, x, y, w, h, "系统信息", new Color(0x27AE60));
+            Font f = FONT.deriveFont(20f);
+            int cy = y + CARD_PAD + 42;
+            drawLine(cb, x, cy += 34, tw, "OS ", si.getOsName(), "架构 ", si.getOsArch(), f, TEXT_COLOR);
+            drawLine(cb, x, cy + 34, tw, "计算机 ", si.getComputerName(), "IP ", si.getComputerIp(), f, TEXT_SECONDARY_COLOR);
+        }
+    }
 
-            // 总大小、已使用、使用率为一行
-            if (fileInfo.getTotal() != null) {
-                double totalGB = fileInfo.getTotal() / (1024.0 * 1024.0 * 1024.0);
-                combiner.addText("总大小: " + ALL_INFO_MEMORY_FORMAT.format(totalGB) + " GB", IMAGE_MARGIN + 20, y);
-            }
-            if (fileInfo.getUsed() != null) {
-                double usedGB = fileInfo.getUsed() / (1024.0 * 1024.0 * 1024.0);
-                combiner.addText("已使用: " + ALL_INFO_MEMORY_FORMAT.format(usedGB) + " GB", IMAGE_MARGIN + 360, y);
-            }
-            if (fileInfo.getTotal() != null && fileInfo.getUsed() != null) {
-                double total = fileInfo.getTotal();
-                double used = fileInfo.getUsed();
-                double usagePercent = (used / total) * 100;
-                combiner.addText("使用率: " + ALL_INFO_PERCENT_FORMAT.format(usagePercent) + "%", IMAGE_MARGIN + 720, y);
-            }
-            y += IMAGE_ROW_HEIGHT + FONT_SIZE;
+    record DiskCard(SysFileInfos.SysFileInfo fi) implements InfoCard {
+        public int height() {
+            return cardPad(2);
+        }
+
+        public void draw(ImageCombiner cb, int x, int y, int w, int h, int tw) {
+            drawHeader(cb, x, y, w, h, "磁盘 " + fi.getDirName(), new Color(0x9B59B6));
+            Font f = FONT.deriveFont(20f);
+            int cy = y + CARD_PAD + 42;
+            drawLine(cb, x, cy += 34, tw, "类型 ", fi.getTypeName(), "文件系统 ", fi.getFileType(), f, TEXT_COLOR);
+            double total = fi.getTotal() != null ? fi.getTotal() / (1024.0 * 1024.0 * 1024.0) : 0;
+            double used = fi.getUsed() != null ? fi.getUsed() / (1024.0 * 1024.0 * 1024.0) : 0;
+            double pct = total > 0 ? (used / total) * 100 : 0;
+            drawLine(cb, x, cy + 34, tw, "总 ", fmtMem(total) + " GB", "已用 ", fmtMem(used) + " GB (" + fmt(pct) + "%)", f, ACCENT_GOLD_COLOR);
         }
     }
 }

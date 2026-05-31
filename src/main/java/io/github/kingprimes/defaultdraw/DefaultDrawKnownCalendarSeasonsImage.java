@@ -2,8 +2,6 @@ package io.github.kingprimes.defaultdraw;
 
 import io.github.kingprimes.image.ImageCombiner;
 import io.github.kingprimes.model.worldstate.KnownCalendarSeasons;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
 
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
@@ -14,347 +12,251 @@ import java.util.TreeMap;
 import static io.github.kingprimes.defaultdraw.DrawConstants.*;
 
 /**
- * 默认1999日历季节图片绘制工具类
- * <p>
- * 该类负责将1999日历季节数据渲染为图像，包括季节信息、年份迭代次数和每日事件等元素
+ * 1999日历季节卡片渲染器 — 两列卡片网格 + 看板娘
  *
  * @author KingPrimes
- * @version 1.0.3
+ * @version 1.0.8
  */
 final class DefaultDrawKnownCalendarSeasonsImage {
 
-    // 每个月份区域的尺寸
-    private static final int IMAGE_WIDTH = 1500;
-    private static final int MONTH_WIDTH = 650;
-    private static final int MONTH_HEADER_HEIGHT = 40;
-    private static final int DAY_HEIGHT = 30; // 每天的高度
-    private static final int EVENT_HEIGHT = 30; // 每个事件的高度
-    private static final int MONTH_FOOTER_HEIGHT = 30;
-    private static final int EVENT_MAX_WIDTH = 580; // 事件文本最大宽度
+    private static final int CONTENT_X = 50;
+    private static final int COLS = 2;
+    private static final int COL_GAP = 20;
+    private static final int CARD_RADIUS = 14;
+    private static final int CARD_PAD = 20;
 
-    // 每行显示的月份数量
-    private static final int MONTHS_PER_ROW = 2;
+    private static final int TITLE_Y = 80;
+    private static final int CONTENT_START_Y = 220;
 
-    // 颜色常量定义（使用项目中已有的颜色常量）
-    private static final Color SEASON_COLOR = TITLE_COLOR; // 季节标题颜色
+    // 季节主题色
+    private static final Color SPRING_COLOR = new Color(0xE91E8C);
+    private static final Color SUMMER_COLOR = new Color(0xFF9800);
+    private static final Color FALL_COLOR = new Color(0xC0392B);
+    private static final Color WINTER_COLOR = new Color(0x3498DB);
 
-    /**
-     * 私有构造函数，防止实例化该工具类
-     */
+    // 事件颜色
+    private static final Color CHALLENGE_COLOR = new Color(0xFF6B6B);
+    private static final Color REWARD_COLOR = new Color(0x4CAF50);
+    private static final Color UPGRADE_COLOR = new Color(0xB8860B);
+    private static final SeasonCard[] SEASONS = {
+            new SeasonCard(WINTER_COLOR, new int[]{1, 2, 3}),
+            new SeasonCard(SPRING_COLOR, new int[]{4, 5, 6}),
+            new SeasonCard(SUMMER_COLOR, new int[]{7, 8, 9}),
+            new SeasonCard(FALL_COLOR, new int[]{10, 11, 12}),
+    };
+
     private DefaultDrawKnownCalendarSeasonsImage() {
-        throw new AssertionError("Cannot instantiate DefaultDrawKnownCalendarSeasonsImage class");
+        throw new AssertionError("Cannot instantiate");
     }
 
-    /**
-     * 绘制1999日历季节图像
-     *
-     * @param knownCalendarSeasonsList 1999日历季节数据列表
-     * @return 生成的日历季节图像的 PNG 格式字节数组
-     */
-    public static byte[] drawKnownCalendarSeasonsImage(List<KnownCalendarSeasons> knownCalendarSeasonsList) {
-        // 如果没有日历季节数据，则返回空字节数组
-        if (knownCalendarSeasonsList == null || knownCalendarSeasonsList.isEmpty()) {
-            return new byte[0];
-        }
-
-        // 获取第一个日历季节数据（通常只有一个）
-        KnownCalendarSeasons calendar = knownCalendarSeasonsList.getFirst();
-
-        // 根据事件数量计算图像高度
-        int height = calculateImageHeight(calendar);
-
-        // 创建图像合成器实例
-        ImageCombiner combiner = new ImageCombiner(
-                IMAGE_WIDTH,
-                height,
-                ImageCombiner.OutputFormat.PNG
-        );
-
-        // 填充背景色并绘制双层圆角矩形边框
-        combiner.setFont(FONT)
-                .setColor(PAGE_BACKGROUND_COLOR)
-                .fillRect(0, 0, IMAGE_WIDTH, height)
-                .drawTooRoundRect()
-                // 绘制看板娘
-                .drawStandingAt(IMAGE_WIDTH, height, STANDING_RATIO);
-
-        // 绘制标题
-        combiner.setColor(TITLE_COLOR)
-                .setFont(FONT.deriveFont(Font.BOLD, 36)) // 标题字体大小为36
-                .addCenteredText("1999日历季节信息", 80);
-
-        // 绘制季节基本信息
-        int startY = 120;
-        drawCalendarInfo(combiner, calendar, startY);
-
-        // 更新起始Y坐标
-        startY += 100;
-
-        // 绘制每月事件列表
-        if (calendar.getMonthDays() != null && !calendar.getMonthDays().isEmpty()) {
-            // 按月份排序
-
-            // 将monthDays转换为正确的类型
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, List<KnownCalendarSeasons.Days>> monthDays = mapper.convertValue(
-                    calendar.getMonthDays(),
-                    new TypeReference<>() {
-                    }
-            );
-
-            Map<String, List<KnownCalendarSeasons.Days>> sortedMonthDays = new TreeMap<>(monthDays);
-
-            // 计算行数和列数
-            Object[] months = sortedMonthDays.keySet().toArray();
-            int rows = (int) Math.ceil((double) months.length / MONTHS_PER_ROW);
-
-            // 绘制月份区域
-            int currentY = startY;
-            for (int row = 0; row < rows; row++) {
-                int rowHeight = getMaxMonthHeightForRow(sortedMonthDays, row);
-                for (int col = 0; col < MONTHS_PER_ROW; col++) {
-                    int monthIndex = row * MONTHS_PER_ROW + col;
-                    if (monthIndex >= months.length) {
-                        break;
-                    }
-
-                    String monthKey = (String) months[monthIndex];
-                    List<KnownCalendarSeasons.Days> days = sortedMonthDays.get(monthKey);
-
-                    // 计算月份区域的X坐标
-                    int monthX = IMAGE_MARGIN + col * (MONTH_WIDTH + 50);
-
-                    // 绘制月份区域
-                    drawMonthSection(combiner, Integer.parseInt(monthKey), days, monthX, currentY);
-                }
-                // 更新下一行的Y坐标
-                currentY += rowHeight + 30; // 30是行间距
+    private static Color getSeasonColor(int month) {
+        for (SeasonCard sc : SEASONS) {
+            for (int m : sc.months) {
+                if (m == month) return sc.color;
             }
         }
+        return TEXT_COLOR;
+    }
 
-        // 添加底部署名
-        addFooter(combiner.setFont(FONT), height - IMAGE_FOOTER_HEIGHT);
+    public static byte[] drawKnownCalendarSeasonsImage(List<KnownCalendarSeasons> knownCalendarSeasonsList) {
+        if (knownCalendarSeasonsList == null || knownCalendarSeasonsList.isEmpty()) return new byte[0];
 
-        // 合并图像并获取字节数组
-        combiner.combine();
-        try (ByteArrayOutputStream bos = combiner.getCombinedImageOutStream()) {
+        KnownCalendarSeasons calendar = knownCalendarSeasonsList.getFirst();
+        if (calendar.getMonthDays() == null || calendar.getMonthDays().isEmpty()) return new byte[0];
+
+        Map<Integer, List<KnownCalendarSeasons.Days>> sorted = new TreeMap<>(calendar.getMonthDays());
+
+        List<MonthCard> cards = new java.util.ArrayList<>();
+        for (Map.Entry<Integer, List<KnownCalendarSeasons.Days>> e : sorted.entrySet()) {
+            cards.add(new MonthCard(e.getKey(), e.getValue()));
+        }
+        int n = cards.size();
+        boolean isOdd = n % COLS != 0;
+
+        // 卡片宽度固定 562，看板娘盒子等宽
+        int cardW = 562;
+        int textW = cardW - CARD_PAD * 2;
+        int CANVAS_W = CONTENT_X + COLS * cardW + (COLS - 1) * COL_GAP + CONTENT_X;
+
+        int[] colX = new int[COLS];
+        for (int c = 0; c < COLS; c++) {
+            colX[c] = CONTENT_X + c * (cardW + COL_GAP);
+        }
+
+        // 预计算卡片高度
+        int[] cardHeights = new int[n];
+        for (int i = 0; i < n; i++) {
+            cardHeights[i] = calcCardHeight(cards.get(i));
+        }
+
+        // 列流式：每列独立 Y，短列不拖长列
+        int[] colEndY = new int[COLS];
+        java.util.Arrays.fill(colEndY, CONTENT_START_Y);
+        for (int i = 0; i < n; i++) {
+            int col = i % COLS;
+            colEndY[col] += cardHeights[i] + COL_GAP;
+        }
+        for (int c = 0; c < COLS; c++) {
+            if (colEndY[c] > CONTENT_START_Y) colEndY[c] -= COL_GAP;
+        }
+
+        int standingX = colX[1];
+        int totalHeight;
+        if (isOdd) {
+            // 看板娘从右列底部开始，与左列共享垂直空间
+            totalHeight = Math.max(colEndY[0], colEndY[1] + cardW);
+        } else {
+            int maxEnd = CONTENT_START_Y;
+            for (int c = 0; c < COLS; c++) {
+                maxEnd = Math.max(maxEnd, colEndY[c]);
+            }
+            totalHeight = maxEnd + 10 + cardW + 30;
+        }
+
+        ImageCombiner cb = new ImageCombiner(CANVAS_W, totalHeight, ImageCombiner.OutputFormat.PNG);
+        cb.setColor(PAGE_BACKGROUND_COLOR).fillRect(0, 0, CANVAS_W, totalHeight);
+        cb.drawTooRoundRect();
+
+        // 标题
+        cb.setColor(TITLE_COLOR).setFont(FONT.deriveFont(Font.BOLD, 44))
+                .addCenteredText("1999 日历季节信息", TITLE_Y);
+        cb.setColor(DIVIDER_COLOR).drawLine(CONTENT_X, TITLE_Y + 50,
+                CANVAS_W - CONTENT_X, TITLE_Y + 50);
+
+        // 季节基本信息
+        String seasonName = calendar.getSeason() != null ? calendar.getSeason().getName() : "未知";
+        String iter = calendar.getYearIteration() != null ? "第 " + calendar.getYearIteration() + " 次" : "未知";
+        String ver = calendar.getVersion() != null ? calendar.getVersion().toString() : "未知";
+        String info = "季节: " + seasonName + "    |    年份迭代: " + iter + "    |    版本: " + ver;
+        cb.setColor(TEXT_SECONDARY_COLOR).setFont(FONT.deriveFont(22f));
+        int infoW = cb.getFontMetrics(FONT.deriveFont(22f)).stringWidth(info);
+        cb.addText(info, (CANVAS_W - infoW) / 2, TITLE_Y + 95);
+
+        // 列流式绘制
+        int[] drawY = new int[COLS];
+        java.util.Arrays.fill(drawY, CONTENT_START_Y);
+        for (int i = 0; i < n; i++) {
+            int col = i % COLS;
+            drawMonthCard(cb, cards.get(i), colX[col], drawY[col], cardW, cardHeights[i], textW);
+            drawY[col] += cardHeights[i] + COL_GAP;
+        }
+
+        // 看板娘：isOdd 从右列底部，否则画布底部
+        int standingY = isOdd ? colEndY[1] : totalHeight - cardW;
+        cb.drawStandingAt(standingX, standingY, cardW, cardW);
+        addFooter(cb, totalHeight - 25);
+        cb.combine();
+        try (ByteArrayOutputStream bos = cb.getCombinedImageOutStream()) {
             return bos.toByteArray();
         } catch (Exception e) {
-            throw new RuntimeException("无法获取图像输出流: %s".formatted(e.getMessage()), e);
+            throw new RuntimeException("无法获取图像输出流", e);
         }
     }
 
-    /**
-     * 计算图像高度
-     * 根据日历事件数量动态计算图像高度，确保内容完整显示
-     *
-     * @param calendar 日历季节数据
-     * @return 图像高度
-     */
-    private static int calculateImageHeight(KnownCalendarSeasons calendar) {
-        int headerHeight = 120; // 标题区域高度
-        int infoHeight = 100; // 基本信息区域高度
-        int footerHeight = IMAGE_FOOTER_HEIGHT + 50; // 底部区域高度
-
-        // 计算月份区域高度
-        int monthContentHeight = 0;
-        if (calendar.getMonthDays() != null) {
-            // 将monthDays转换为正确的类型
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, List<KnownCalendarSeasons.Days>> monthDays = mapper.convertValue(
-                    calendar.getMonthDays(),
-                    new TypeReference<>() {
-                    }
-            );
-
-            Map<String, List<KnownCalendarSeasons.Days>> sortedMonthDays = new TreeMap<>(monthDays);
-
-            // 计算行数
-            int rows = (int) Math.ceil((double) sortedMonthDays.keySet().toArray().length / MONTHS_PER_ROW);
-
-            // 计算每行的实际高度
-            for (int row = 0; row < rows; row++) {
-                monthContentHeight += getMaxMonthHeightForRow(sortedMonthDays, row) + 30; // 30是行间距
-            }
-        }
-
-        int tableHeight = headerHeight + infoHeight + monthContentHeight + footerHeight; // 总高度
-
-        return Math.max(tableHeight, 800); // 最小高度800
-    }
-
-    /**
-     * 获取指定行中月份区域的最大高度
-     *
-     * @param sortedMonthDays 排序后的月份数据
-     * @param row             行号
-     * @return 该行中月份区域的最大高度
-     */
-    private static int getMaxMonthHeightForRow(Map<String, List<KnownCalendarSeasons.Days>> sortedMonthDays, int row) {
-        Object[] months = sortedMonthDays.keySet().toArray();
-        int maxHeight = 0;
-
-        for (int col = 0; col < MONTHS_PER_ROW; col++) {
-            int monthIndex = row * MONTHS_PER_ROW + col;
-            if (monthIndex >= months.length) {
-                break;
-            }
-
-            String monthKey = (String) months[monthIndex];
-            List<KnownCalendarSeasons.Days> days = sortedMonthDays.get(monthKey);
-
-            // 计算当前月份区域的实际高度，要考虑每天的事件数量
-            int maxEventsPerDay = 0;
-            for (KnownCalendarSeasons.Days day : days) {
-                if (day.getEvents() != null) {
-                    maxEventsPerDay = Math.max(maxEventsPerDay, day.getEvents().size());
-                }
-            }
-
-            // 每天的高度取决于事件数量
-            int dayHeightWithEvents = Math.max(DAY_HEIGHT, maxEventsPerDay * (EVENT_HEIGHT + 10));
-            int monthHeight = MONTH_HEADER_HEIGHT + (days.size() * dayHeightWithEvents) + MONTH_FOOTER_HEIGHT;
-            maxHeight = Math.max(maxHeight, monthHeight);
-        }
-
-        return maxHeight;
-    }
-
-    /**
-     * 绘制日历基本信息
-     * 包括季节名称、年份迭代次数等
-     *
-     * @param combiner 图像合成器实例
-     * @param calendar 日历季节数据
-     * @param startY   起始Y坐标
-     */
-    private static void drawCalendarInfo(ImageCombiner combiner, KnownCalendarSeasons calendar, int startY) {
-        // 绘制季节信息
-        String seasonText = "当前季节: " + (calendar.getSeason() != null ? calendar.getSeason().getName() : "未知");
-        combiner.setColor(SEASON_COLOR)
-                .setFont(FONT.deriveFont(Font.BOLD, 28))
-                .addText(seasonText, IMAGE_MARGIN + 300, startY + 30);
-
-        // 绘制年份迭代次数
-        String yearIterationText = "年份迭代: 第" + (calendar.getYearIteration() != null ? calendar.getYearIteration() : "未知") + "次";
-        combiner
-                .setFont(FONT.deriveFont(28f))
-                .addText(yearIterationText, IMAGE_MARGIN + 600, startY + 30);
-
-        // 绘制版本号
-        String versionText = "版本: " + (calendar.getVersion() != null ? calendar.getVersion() : "未知");
-        combiner.setFont(FONT.deriveFont(28f))
-                .addText(versionText, IMAGE_MARGIN + 900, startY + 30)
-                .setColor(TEXT_COLOR);
-    }
-
-    /**
-     * 绘制月份区域
-     * 包括月份标题和该月的所有天事件
-     *
-     * @param combiner 图像合成器实例
-     * @param month    月份
-     * @param days     该月的日期列表
-     * @param startX   起始X坐标
-     * @param startY   起始Y坐标
-     */
-    private static void drawMonthSection(ImageCombiner combiner, Integer month, List<KnownCalendarSeasons.Days> days, int startX, int startY) {
-        // 计算当前月份区域的实际高度
-        int maxEventsPerDay = 0;
-        for (KnownCalendarSeasons.Days day : days) {
+    private static int calcCardHeight(MonthCard card) {
+        int h = CARD_PAD;                    // 顶部
+        h += 40;                              // 月份标题
+        h += 8;                               // 分隔线
+        for (KnownCalendarSeasons.Days day : card.days) {
+            h += 30;                           // 日期行
             if (day.getEvents() != null) {
-                maxEventsPerDay = Math.max(maxEventsPerDay, day.getEvents().size());
+                h += day.getEvents().size() * 30;
             }
         }
-
-        // 每天的高度取决于事件数量
-        int dayHeightWithEvents = Math.max(DAY_HEIGHT, maxEventsPerDay * (EVENT_HEIGHT + 10));
-        int monthHeight = MONTH_HEADER_HEIGHT + (days.size() * dayHeightWithEvents) + MONTH_FOOTER_HEIGHT;
-
-        // 绘制月份背景框
-        combiner.setColor(CARD_BACKGROUND_COLOR)
-                .fillRoundRect(startX, startY, MONTH_WIDTH, monthHeight, 15, 15)
-                .setColor(TEXT_COLOR)
-                .drawRoundRect(startX, startY, MONTH_WIDTH, monthHeight, 15, 15);
-
-        // 绘制月份标题
-        combiner.setColor(SEASON_COLOR)
-                .setFont(FONT.deriveFont(Font.BOLD, 28))
-                .addText(String.format("%d月", month), startX + 20, startY + 40);
-
-        // 绘制该月的所有天事件
-        int currentDayY = startY + MONTH_HEADER_HEIGHT + 30;
-        for (KnownCalendarSeasons.Days day : days) {
-            // 绘制单个日期事件
-            int eventsHeight = drawDayEvents(combiner, day, startX + 20, currentDayY);
-
-            // 计算下一个日期的Y坐标
-            int eventsCount = (day.getEvents() != null) ? day.getEvents().size() : 0;
-
-            currentDayY = eventsHeight + eventsCount + DAY_HEIGHT;
-        }
-
+        h += CARD_PAD;                        // 底部
+        return Math.max(h, 100);
     }
 
-    /**
-     * 绘制单个日期的事件
-     * 包括日期和该日期的所有事件
-     *
-     * @param combiner 图像合成器实例
-     * @param day      日期事件数据
-     * @param startX   起始X坐标
-     * @param startY   起始Y坐标
-     */
-    private static int drawDayEvents(ImageCombiner combiner, KnownCalendarSeasons.Days day, int startX, int startY) {
-        // 绘制日期
-        String dayText = String.format("%d月%d日", day.getMonth(), day.getDay());
-        combiner.setColor(TEXT_COLOR)
-                .setFont(FONT.deriveFont(Font.BOLD, 24))
-                .addText(dayText, startX, startY);
+    private static void drawMonthCard(ImageCombiner cb, MonthCard card,
+                                      int cardX, int cardY, int cardW, int cardH, int textW) {
+        int innerX = cardX + CARD_PAD;
+        int rightX = innerX + textW;
+        Color seasonColor = getSeasonColor(card.month);
 
-        // 绘制该日期的事件（在日期下方纵向排列）
-        if (day.getEvents() != null && !day.getEvents().isEmpty()) {
-            int eventStartY = startY + 30; // 日期下方30像素开始绘制事件
+        // 卡片背景 + 顶部季节色强调条
+        cb.setColor(CARD_BACKGROUND_COLOR).fillRoundRect(cardX, cardY, cardW, cardH, CARD_RADIUS, CARD_RADIUS);
+        cb.setColor(seasonColor).fillRect(cardX + CARD_RADIUS, cardY + 2, cardW - 2 * CARD_RADIUS, 5);
+        cb.setColor(DIVIDER_COLOR).setStroke(1)
+                .drawRoundRect(cardX, cardY, cardW, cardH, CARD_RADIUS, CARD_RADIUS);
 
-            // 显示所有事件，每个事件占EVENT_HEIGHT像素高度
-            for (int i = 0; i < day.getEvents().size(); i++) {
-                KnownCalendarSeasons.Events event = day.getEvents().get(i);
+        int cy = cardY + CARD_PAD;
 
-                StringBuilder eventText = new StringBuilder();
-                Color eventColor = TEXT_COLOR;
+        // 月份标题
+        cb.setColor(seasonColor).setFont(FONT.deriveFont(Font.BOLD, 28f));
+        cb.addText(card.month + "月", innerX, cy + 30);
+        cy += 40;
 
-                if (event.getType() != null) {
-                    switch (event.getType()) {
-                        case CET_CHALLENGE:
-                            eventText.append("[任务] ");
-                            if (event.getChallengeInfo() != null) {
-                                eventText.append(event.getChallengeInfo().challenge());
+        // 分隔线
+        cb.setColor(DIVIDER_COLOR).drawLine(innerX, cy + 4, rightX, cy + 4);
+        cy += 12;
+
+        // 日期事件
+        Font dayFont = FONT.deriveFont(Font.BOLD, 20f);
+        Font eventFont = FONT.deriveFont(18f);
+
+        for (KnownCalendarSeasons.Days day : card.days) {
+            // 日期
+            String dayText = String.format("%d月%d日", day.getMonth(), day.getDay());
+            cb.setColor(TEXT_COLOR).setFont(dayFont);
+            cb.addText(dayText, innerX, cy + 22);
+            cy += 30;
+
+            // 事件
+            if (day.getEvents() != null) {
+                for (KnownCalendarSeasons.Events event : day.getEvents()) {
+                    String label;
+                    Color eventColor;
+                    if (event.getType() != null) {
+                        eventColor = switch (event.getType()) {
+                            case CET_CHALLENGE -> {
+                                label = "[任务] ";
+                                yield CHALLENGE_COLOR;
                             }
-                            eventColor = new Color(0xFF6B6B); // 挑战事件颜色 - 红色系
-                            break;
-                        case CET_REWARD:
-                            eventText.append("[奖励] ").append(event.getReward());
-                            eventColor = new Color(0x4CAF50); // 奖励事件颜色 - 绿色系
-                            break;
-                        case CET_UPGRADE:
-                            eventText.append("[加成] ");
-                            if (event.getUpgradeInfo() != null) {
-                                eventText.append(event.getUpgradeInfo().upgrade());
+                            case CET_REWARD -> {
+                                label = "[奖励] ";
+                                yield REWARD_COLOR;
                             }
-                            eventColor = new Color(0x554820); // 加成事件颜色 - 橙色系
-                            break;
+                            case CET_UPGRADE -> {
+                                label = "[加成] ";
+                                yield UPGRADE_COLOR;
+                            }
+                            default -> {
+                                label = "";
+                                yield TEXT_SECONDARY_COLOR;
+                            }
+                        };
+                    } else {
+                        label = "";
+                        eventColor = TEXT_SECONDARY_COLOR;
                     }
+                    String desc = getEventDesc(event, label);
+                    cb.setColor(eventColor).setFont(eventFont);
+                    cb.addText(desc != null ? desc : "-", innerX + 15, cy + 20);
+                    cy += 30;
                 }
-
-                int y = combiner.calculateWrappedTextHeight(eventText.toString(), EVENT_MAX_WIDTH, 5);
-
-                combiner.setColor(eventColor)
-                        .setFont(FONT.deriveFont(24f))
-                        .addMultilineTextWithWrap(eventText.toString(), startX + 20, eventStartY, EVENT_MAX_WIDTH, 24, 5);
-                eventStartY = eventStartY + y;
-                startY += y;
             }
         }
-        return startY;
+    }
+
+    private static String getEventDesc(KnownCalendarSeasons.Events event, String label) {
+        String desc = switch (event.getType()) {
+            case CET_CHALLENGE -> event.getChallenge();
+            case CET_REWARD -> event.getReward();
+            case CET_UPGRADE -> event.getUpgrade();
+        };
+        if (desc == null || desc.isEmpty()) return label;
+        // 路径(含/)未翻译 → 取尾段；否则直接使用翻译后的显示名
+        if (desc.contains("/")) {
+            int lastSlash = desc.lastIndexOf('/');
+            return label + desc.substring(lastSlash + 1);
+        }
+        return label + desc;
+    }
+
+    record MonthCard(int month, List<KnownCalendarSeasons.Days> days) {
+    }
+
+    // 季节卡片颜色数据
+    record SeasonCard(Color color, int[] months) {
     }
 }

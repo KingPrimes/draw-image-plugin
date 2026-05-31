@@ -55,9 +55,8 @@ final class DefaultDrawConquestImage {
         int currentY = 130;
 
         // 遍历每个征服
-        for (int c = 0; c < conquests.size(); c++) {
-            Conquest conquest = conquests.get(c);
-            currentY = drawConquestCard(combiner, conquest, c, currentY);
+        for (Conquest conquest : conquests) {
+            currentY = drawConquestCard(combiner, conquest, currentY);
             currentY += 20; // 间隔
         }
 
@@ -67,7 +66,7 @@ final class DefaultDrawConquestImage {
         return combiner.getCombinedImageOutStream().toByteArray();
     }
 
-    private static int drawConquestCard(ImageCombiner combiner, Conquest conquest, int index, int startY) {
+    private static int drawConquestCard(ImageCombiner combiner, Conquest conquest, int startY) {
         List<Conquest.Mission> missions = conquest.getMissions();
         if (missions == null || missions.isEmpty()) return startY;
 
@@ -237,7 +236,6 @@ final class DefaultDrawConquestImage {
     private static int calculateImageHeight(List<Conquest> conquests) {
         int height = 160; // header
         for (Conquest c : conquests) {
-            int missions = c.getMissions() != null ? c.getMissions().size() : 0;
             int difficultyRows = c.getMissions() != null
                     ? c.getMissions().stream().mapToInt(m -> m.getDifficulties() != null ? m.getDifficulties().size() : 1).sum()
                     : 0;
