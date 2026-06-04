@@ -312,11 +312,13 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      *
      * @param subscribe   订阅类型数据
      * @param missionType 订阅任务类型数据
+     * @param invasionReward 入侵奖励数据
      * @return 图像流
      */
     @Override
-    public byte[] drawWarframeSubscribeImage(Map<Integer, String> subscribe, Map<Integer, String> missionType) {
-        return DefaultDrawWarframeSubscribeImage.drawWarframeSubscribeImage(subscribe, missionType);
+    public byte[] drawWarframeSubscribeImage(Map<Integer, String> subscribe, Map<Integer, String> missionType,
+                                             Map<Integer, String> invasionReward) {
+        return DefaultDrawWarframeSubscribeImage.drawWarframeSubscribeImage(subscribe, missionType, invasionReward);
     }
 
     /**

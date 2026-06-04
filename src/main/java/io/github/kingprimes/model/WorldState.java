@@ -15,15 +15,19 @@ import java.util.List;
 @Accessors(chain = true)
 public class WorldState {
     // 地球循环
+    @JsonIgnore
     EarthCycle earthCycle;
 
     // 夜灵平原
+    @JsonIgnore
     CetusCycle cetusCycle;
 
     // 魔胎之境
+    @JsonIgnore
     CambionCycle cambionCycle;
 
     // 奥布山谷 轮换
+    @JsonIgnore
     VallisCycle vallisCycle;
 
     // 裂隙任务
@@ -159,6 +163,7 @@ public class WorldState {
     @JsonProperty("WorldSeed")
     String worldSeed;
 
+    @JsonIgnore
     SteelPathOffering steelPath = new SteelPathOffering();
 
     @JsonProperty("SkuSales")

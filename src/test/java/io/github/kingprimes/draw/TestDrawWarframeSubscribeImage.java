@@ -16,6 +16,7 @@ public class TestDrawWarframeSubscribeImage {
 
     Map<Integer, String> subscribeEnums = createSubscribeEnumsMap();
     Map<Integer, String> subscribeMissionTypeEnums = createSubscribeMissionTypeEnumsMap();
+    Map<Integer, String> subscribeInvasionReward = createInvasionRewardMap();
 
     private Map<Integer, String> createSubscribeEnumsMap() {
         Map<Integer, String> map = new HashMap<>();
@@ -65,9 +66,22 @@ public class TestDrawWarframeSubscribeImage {
         return map;
     }
 
+    private Map<Integer, String> createInvasionRewardMap() {
+        Map<Integer, String> map = new HashMap<>();
+        map.put(0, "无");
+        map.put(1, "突变原聚合物");
+        map.put(2, "力场装置样本");
+        map.put(3, "诱变剂物质");
+        map.put(4, "Orokin 催化剂");
+        map.put(5, "Orokin 反应堆");
+        map.put(6, "Forma");
+        map.put(7, "特殊功能槽连接器");
+        return map;
+    }
+
     @Test
     public void testDrawWarframeSubscribeImage() throws IOException {
-        byte[] bytes = new DefaultDrawImagePlugin().drawWarframeSubscribeImage(subscribeEnums, subscribeMissionTypeEnums);
+        byte[] bytes = new DefaultDrawImagePlugin().drawWarframeSubscribeImage(subscribeEnums, subscribeMissionTypeEnums, subscribeInvasionReward);
         ImageIO.write(ImageIO.read(new ByteArrayInputStream(bytes)), Constant.PNG, new File(Constant.DRAW_PATH.formatted("draw_warframe_subscribe.png")));
 
     }

@@ -581,7 +581,7 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      * @return 图像流
      */
     @Override
-    public byte[] drawWarframeSubscribeImage(Map<Integer, String> subscribe, Map<Integer, String> missionType) {
+    public byte[] drawWarframeSubscribeImage(Map<Integer, String> subscribe, Map<Integer, String> missionType, Map<Integer, String> invasionReward) {
         try {
             Pointer sp = convertToPointer(subscribe);
             Pointer mp = convertToPointer(missionType);
@@ -589,10 +589,10 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
             if (bytes != null && bytes.length > 0) {
                 return bytes;
             } else {
-                return new DefaultDrawImagePlugin().drawWarframeSubscribeImage(subscribe, missionType);
+                return new DefaultDrawImagePlugin().drawWarframeSubscribeImage(subscribe, missionType, invasionReward);
             }
         } catch (Exception e) {
-            return new DefaultDrawImagePlugin().drawWarframeSubscribeImage(subscribe, missionType);
+            return new DefaultDrawImagePlugin().drawWarframeSubscribeImage(subscribe, missionType, invasionReward);
         }
     }
 

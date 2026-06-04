@@ -14,7 +14,7 @@ import static io.github.kingprimes.defaultdraw.DrawConstants.*;
  * 订阅指令表卡片渲染器
  *
  * @author KingPrimes
- * @version 1.0.8
+ * @version 1.1.0
  */
 final class DefaultDrawWarframeSubscribeImage {
 
@@ -36,7 +36,7 @@ final class DefaultDrawWarframeSubscribeImage {
     }
 
     public static byte[] drawWarframeSubscribeImage(Map<Integer, String> subscribe,
-                                                    Map<Integer, String> missionType) {
+                                                    Map<Integer, String> missionType, Map<Integer, String> invasionReward) {
         box sz = scaleByPct(CANVAS_W, CANVAS_W, STANDING_RATIO);
         int contentW = CANVAS_W - CONTENT_X * 2;
 
@@ -47,19 +47,23 @@ final class DefaultDrawWarframeSubscribeImage {
         Font tableFont = FONT.deriveFont(Font.BOLD, 24f);
         Font smallFont = FONT.deriveFont(22f);
 
-        // 用法说明卡片高度
-        int usageH = CARD_PAD + 40 + 4 * 36 + CARD_PAD;
+        // 用法说明卡片高度（5 行说明）
+        int usageH = CARD_PAD + 40 + 5 * 36 + CARD_PAD;
 
         // 订阅类型表卡片高度
-        int subscribeRows = subscribe != null ? (subscribe.size() + 5) / 6 : 0;
+        int subscribeRows = subscribe != null ? (subscribe.size() + 4) / 5 : 0;
         int subscribeH = CARD_PAD + 42 + 8 + subscribeRows * 38 + CARD_PAD;
 
         // 任务类型表卡片高度
-        int missionRows = missionType != null ? (missionType.size() + 5) / 6 : 0;
+        int missionRows = missionType != null ? (missionType.size() + 4) / 5 : 0;
         int missionH = CARD_PAD + 42 + 8 + missionRows * 38 + CARD_PAD;
 
+        // 入侵奖励表卡片高度
+        int invasionRows = invasionReward != null ? (invasionReward.size() + 4) / 5 : 0;
+        int invasionH = invasionRows > 0 ? CARD_PAD + 42 + 8 + invasionRows * 38 + CARD_PAD : 0;
+
         // 构建各节卡片 Y
-        int[] sectionHeights = {usageH, subscribeH, missionH};
+        int[] sectionHeights = {usageH, subscribeH, missionH, invasionH};
         int[] sectionY = new int[sectionHeights.length];
         int cy = currentY;
         for (int i = 0; i < sectionHeights.length; i++) {
@@ -83,10 +87,15 @@ final class DefaultDrawWarframeSubscribeImage {
         drawUsageCard(cb, sectionY[0], contentW, usageH, bodyFont, smallFont);
         // ---- 订阅类型表 ----
         drawTableCard(cb, sectionY[1], contentW, subscribeH,
-                "订阅内容类型数值", subscribe, PURPLE_COLOR, tableFont);
+                "订阅内容类型数值", subscribe, RED_COLOR, tableFont);
         // ---- 任务类型表 ----
         drawTableCard(cb, sectionY[2], contentW, missionH,
-                "订阅任务类型数值", missionType, RED_COLOR, tableFont);
+                "订阅任务类型数值", missionType, PURPLE_COLOR, tableFont);
+        // ---- 入侵奖励表 ----
+        if (invasionH > 0) {
+            drawTableCard(cb, sectionY[3], contentW, invasionH,
+                    "入侵奖励类型数值", invasionReward, BLUE_COLOR, tableFont);
+        }
 
         cb.drawStandingAt(CANVAS_W - sz.x(), totalHeight - sz.y(), sz.x(), sz.y());
         addFooter(cb, totalHeight - 25);
@@ -115,55 +124,29 @@ final class DefaultDrawWarframeSubscribeImage {
         cb.addText("使用方式：", innerX, cy + 8);
         cb.setFont(smallFont);
         int x = innerX + cb.getFontMetrics(bodyFont).stringWidth("使用方式：");
-        cb.setColor(BLUE_COLOR).addText("订阅 ", x, cy + 8);
+        cb.setColor(RED_COLOR).addText("订阅 ", x, cy + 8);
         x += cb.getFontMetrics(smallFont).stringWidth("订阅 ");
-        cb.setColor(PURPLE_COLOR).addText("[订阅类型]", x, cy + 8);
-        x += cb.getFontMetrics(smallFont).stringWidth("[订阅类型]");
-        cb.setColor(RED_COLOR).addText(" [-任务类型]", x, cy + 8);
-        x += cb.getFontMetrics(smallFont).stringWidth(" [-任务类型]");
-        cb.setColor(BROWN_COLOR).addText(" [-遗物等级]", x, cy + 8);
+        cb.setColor(TEXT_COLOR).addText("<类型编号>[-<子参数>]", x+10, cy + 8);
         cy += 36;
 
-        // 示例
-        cb.setColor(TEXT_COLOR).setFont(bodyFont);
-        cb.addText("示例：", innerX, cy + 8);
-        cb.setFont(smallFont);
-        x = innerX + cb.getFontMetrics(bodyFont).stringWidth("示例：");
-        cb.setColor(BLUE_COLOR).addText("订阅 ", x, cy + 8);
-        x += cb.getFontMetrics(smallFont).stringWidth("订阅 ");
-        cb.setColor(PURPLE_COLOR).addText("裂隙", x, cy + 8);
-        x += cb.getFontMetrics(smallFont).stringWidth("裂隙");
-        cb.setColor(RED_COLOR).addText(" 生存模式", x, cy + 8);
-        x += cb.getFontMetrics(smallFont).stringWidth(" 生存模式");
-        cb.setColor(BROWN_COLOR).addText(" 后纪", x, cy + 8);
-        cy += 36;
+        // 各类型参数说明
+        String[][] typeParams = {
+                {"裂隙 9", "类型编号-任务类型-遗物等级", "9-11-4"},
+                {"入侵 6", "类型编号-奖励类型", "6-3"},
+                {"仲裁 2", "类型编号-任务类型", "2-1"},
+                {"其他", "仅类型编号", "1"},
+        };
 
-        // 指令例子
-        cb.setColor(TEXT_COLOR).setFont(bodyFont);
-        cb.addText("指令例子：", innerX, cy + 8);
-        cb.setFont(smallFont);
-        x = innerX + cb.getFontMetrics(bodyFont).stringWidth("指令例子：");
-        cb.setColor(BLUE_COLOR).addText("订阅 ", x, cy + 8);
-        x += cb.getFontMetrics(smallFont).stringWidth("订阅 ");
-        cb.setColor(PURPLE_COLOR).addText("9", x, cy + 8);
-        x += cb.getFontMetrics(smallFont).stringWidth("9");
-        cb.setColor(RED_COLOR).addText(" -11", x, cy + 8);
-        x += cb.getFontMetrics(smallFont).stringWidth(" -11");
-        cb.setColor(BROWN_COLOR).addText(" -4", x, cy + 8);
-        cy += 36;
-
-        // 注意事项
-        cb.setColor(TEXT_COLOR).setFont(bodyFont);
-        cb.addText("注意事项：", innerX, cy + 8);
-        cb.setFont(smallFont);
-        x = innerX + cb.getFontMetrics(bodyFont).stringWidth("注意事项：");
-        cb.setColor(BROWN_COLOR).addText("遗物等级 ", x, cy + 8);
-        x += cb.getFontMetrics(smallFont).stringWidth("遗物等级 ");
-        cb.setColor(TEXT_COLOR).addText("仅在订阅 ", x, cy + 8);
-        x += cb.getFontMetrics(smallFont).stringWidth("仅在订阅 ");
-        cb.setColor(PURPLE_COLOR).addText("裂隙", x, cy + 8);
-        x += cb.getFontMetrics(smallFont).stringWidth("裂隙");
-        cb.setColor(TEXT_COLOR).addText(" 时有效", x, cy + 8);
+        for (String[] row : typeParams) {
+            cb.setFont(smallFont);
+            x = innerX;
+            cb.setColor(RED_COLOR).addText(row[0], x, cy + 8);
+            x += cb.getFontMetrics(smallFont).stringWidth(row[0] + "  ");
+            cb.setColor(TEXT_COLOR).addText(row[1], x, cy + 8);
+            x += cb.getFontMetrics(smallFont).stringWidth(row[1] + "  ");
+            cb.setColor(BROWN_COLOR).addText("例: " + row[2], x, cy + 8);
+            cy += 36;
+        }
     }
 
     private static void drawTableCard(ImageCombiner cb, int cardY,
@@ -194,12 +177,11 @@ final class DefaultDrawWarframeSubscribeImage {
             int colW = (cardW - CARD_PAD * 2) / cols;
             Font cellFont = font.deriveFont(20f);
 
-            int rowY;
             for (int i = 0; i < entries.size(); i++) {
                 int col = i % cols;
                 int row = i / cols;
                 int cx = innerX + col * colW;
-                rowY = cy + row * 38;
+                int rowY = cy + row * 38;
                 String text = entries.get(i).getKey() + " = " + entries.get(i).getValue();
                 cb.setColor(TEXT_COLOR).setFont(cellFont);
                 cb.addText(text, cx, rowY + 24);

@@ -1,5 +1,6 @@
 package io.github.kingprimes.model.worldstate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.kingprimes.utils.TimeUtils;
 import lombok.Getter;
 
@@ -20,8 +21,11 @@ import java.util.List;
  */
 @Getter
 public final class SteelPathOffering implements Cycle {
+    @JsonIgnore
     private static final LocalDateTime START_DATE = LocalDateTime.of(2020, 11, 16, 0, 0, 0);
+    @JsonIgnore
     private static final List<SteelPathReward> rotation = new ArrayList<>();
+    @JsonIgnore
     private static final List<SteelPathReward> evergreens = new ArrayList<>();
 
     static {
@@ -61,15 +65,18 @@ public final class SteelPathOffering implements Cycle {
     /**
      * 开始时间
      */
+    @JsonIgnore
     private final LocalDateTime activation;
     /**
      * 结束时间
      */
+    @JsonIgnore
     private final Instant expiry;
     /**
      * 剩余时间
      */
     private final String remaining;
+    @JsonIgnore
     private final Incursions incursions;
 
     /**
