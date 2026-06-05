@@ -80,5 +80,21 @@ public class RivenAnalyseTrendModel {
          * 属性数值差异
          */
         String attrDiff;
+        /**
+         * 比率 — 紫卡值与该武器类型现有MOD的比值
+         */
+        String ratio;
+        /**
+         * 评分 — S/A/B/C/D
+         */
+        String grade;
+        /**
+         * 致命度 — 仅负属性有值: fatal/serious/harmful/beneficial
+         */
+        String lethalLevel;
+        /**
+         * 综合分析文本
+         */
+        String analysis;
     }
 }

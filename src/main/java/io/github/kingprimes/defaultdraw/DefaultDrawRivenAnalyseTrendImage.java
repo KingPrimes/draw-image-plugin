@@ -28,6 +28,19 @@ final class DefaultDrawRivenAnalyseTrendImage {
 
     private static final Color UP_COLOR = new Color(0x3B9A21);
     private static final Color DOWN_COLOR = new Color(0xAC1818);
+    private static final Color LETHAL_COLOR = new Color(0xCC6600);
+
+    private static String lethalLabel(String level) {
+        if (level == null) return "";
+        return switch (level) {
+            case "fatal" -> "⚡致命";
+            case "serious" -> "⚠严重";
+            case "harmful" -> "△有害";
+            case "acceptable" -> "可接受";
+            case "beneficial" -> "✓有益";
+            default -> level;
+        };
+    }
 
     private DefaultDrawRivenAnalyseTrendImage() {
         throw new AssertionError("Cannot instantiate");
@@ -114,8 +127,8 @@ final class DefaultDrawRivenAnalyseTrendImage {
         h += 26;                              // 武器类型
         h += 16;                              // 间距 + 分隔线
         List<RivenAnalyseTrendModel.Attribute> attrs = m.getAttributes();
-        if (attrs != null) h += attrs.size() * 32;
-        h += CARD_PAD;                        // 底部内边距
+        if (attrs != null) h += attrs.size() * 52;  // 主行 32 + 副行 20
+        h += CARD_PAD;
         return Math.max(h, 200);
     }
 
@@ -168,6 +181,7 @@ final class DefaultDrawRivenAnalyseTrendImage {
         // 属性列表
         List<RivenAnalyseTrendModel.Attribute> attrs = m.getAttributes();
         if (attrs != null) {
+            Font subFont = FONT.deriveFont(16f);
             for (RivenAnalyseTrendModel.Attribute attr : attrs) {
                 String diff = attr.getAttrDiff() != null ? attr.getAttrDiff() : "";
                 boolean isUp = !diff.contains("-");
@@ -176,11 +190,23 @@ final class DefaultDrawRivenAnalyseTrendImage {
                 String name = attr.getAttributeName() != null ? attr.getAttributeName() : "?";
                 String low = attr.getLowAttr() != null ? attr.getLowAttr() : "?";
                 String high = attr.getHighAttr() != null ? attr.getHighAttr() : "?";
-                String line = name + " (" + low + "%-" + high + "%)" + "    " + diff;
+                String grade = attr.getGrade() != null && !"-".equals(attr.getGrade()) ? " [" + attr.getGrade() + "]" : "";
+                String line = name + " (" + low + "%-" + high + "%)" + "    " + diff + grade;
 
                 cb.setColor(attrColor).setFont(bodyFont);
                 cb.addText(line, innerX, cy + 20);
                 cy += 32;
+
+                // 副行：比率 + 综合分析
+                String ratio = attr.getRatio() != null && !"-".equals(attr.getRatio()) ? "比率 " + attr.getRatio() : "";
+                String analysis = attr.getAnalysis() != null ? attr.getAnalysis() : "";
+                String lethal = attr.getLethalLevel() != null ? " " + lethalLabel(attr.getLethalLevel()) : "";
+                String subLine = (ratio + "  " + analysis + lethal).trim();
+                if (!subLine.isEmpty()) {
+                    cb.setColor(TEXT_SECONDARY_COLOR).setFont(subFont);
+                    cb.addText(subLine, innerX + 8, cy + 18);
+                    cy += 20;
+                }
             }
         }
     }

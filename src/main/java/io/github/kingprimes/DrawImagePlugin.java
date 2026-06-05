@@ -238,7 +238,8 @@ public interface DrawImagePlugin {
      * @param missionType 订阅任务类型数据
      * @return 图像流
      */
-    byte[] drawWarframeSubscribeImage(Map<Integer, String> subscribe, Map<Integer, String> missionType);
+    byte[] drawWarframeSubscribeImage(Map<Integer, String> subscribe, Map<Integer, String> missionType,
+                                      Map<Integer, String> invasionReward);
 
     /**
      * 绘制 深层征服 图像
