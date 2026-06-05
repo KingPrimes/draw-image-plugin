@@ -29,9 +29,9 @@ final class DefaultDrawAllCycleImage {
     private static final int CONTENT_START_Y = 150;
 
     private static final Font ICON_FONT = FONT_WARFRAME_ICON.deriveFont(Font.PLAIN, 80f);
-    private static final Font CARD_TITLE_FONT = new Font("Microsoft YaHei", Font.BOLD, 26);
-    private static final Font STATE_FONT = new Font("Microsoft YaHei", Font.BOLD, 22);
-    private static final Font TIME_FONT = new Font("Microsoft YaHei", Font.PLAIN, 20);
+    private static final Font CARD_TITLE_FONT = FONT.deriveFont(Font.BOLD,26);
+    private static final Font STATE_FONT = FONT.deriveFont(Font.BOLD,22);
+    private static final Font TIME_FONT = FONT.deriveFont(Font.BOLD,20);
 
     private DefaultDrawAllCycleImage() {
         throw new AssertionError("Cannot instantiate");
