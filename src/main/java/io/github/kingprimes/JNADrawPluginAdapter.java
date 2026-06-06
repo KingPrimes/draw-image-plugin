@@ -13,9 +13,17 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * JNA 适配器
+ * <p>
+ * Virtual Thread 兼容说明：所有 JNA 原生调用会 pin 住 VT 载体线程。
+ * 本类提供静态平台线程池 {@link #PLATFORM_EXECUTOR}，
+ * 调用方可使用 {@link #supplyOnPlatformThread(Callable)} 将原生调用委托到平台线程执行。
+ * </p>
  *
  * @author KingPrimes
  * @version 1.0.2
@@ -23,14 +31,45 @@ import java.util.Map;
 public final class JNADrawPluginAdapter implements DrawImagePlugin {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    private final NativeDrawLibrary library;
+    private static final int JNA_POOL_SIZE = Math.max(1,
+            Integer.getInteger("draw.plugin.jna.pool.size", 1));
+    private static final ExecutorService PLATFORM_EXECUTOR =
+            Executors.newFixedThreadPool(JNA_POOL_SIZE, r -> {
+                Thread t = new Thread(r, "jna-platform-worker");
+                t.setDaemon(true);
+                return t;
+            });
 
+    private final NativeDrawLibrary library;
 
     public JNADrawPluginAdapter(String libraryName) {
         try {
             this.library = Native.load(libraryName, NativeDrawLibrary.class);
         } catch (Exception e) {
             throw new RuntimeException("无法加载本地库: %s".formatted(libraryName), e);
+        }
+    }
+
+    public JNADrawPluginAdapter(String libraryName, String absolutePath) {
+        try {
+            this.library = Native.load(absolutePath, NativeDrawLibrary.class);
+        } catch (Exception e) {
+            throw new RuntimeException("无法加载本地库: %s @ %s".formatted(libraryName, absolutePath), e);
+        }
+    }
+
+    /**
+     * 将原生调用委托到平台线程执行，避免 Virtual Thread pin 住 carrier。
+     * 调用方可自行包装 JNA 调用：
+     * <pre>{@code
+     *   adapter.supplyOnPlatformThread(() -> adapter.drawHelpImage(data));
+     * }</pre>
+     */
+    public static <T> T supplyOnPlatformThread(Callable<T> task) {
+        try {
+            return PLATFORM_EXECUTOR.submit(task).get();
+        } catch (Exception e) {
+            throw new RuntimeException("平台线程执行失败", e);
         }
     }
 

@@ -42,3 +42,4 @@ build/
 .lingma
 .flattened-pom.xml
 .kilocode/mcp.json
+/.workflow

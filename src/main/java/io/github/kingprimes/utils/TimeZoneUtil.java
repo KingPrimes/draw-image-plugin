@@ -15,6 +15,8 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public class TimeZoneUtil {
 
+    private static volatile String cachedEffectiveTimeZone;
+
     /**
      * 获取系统默认时区
      *
@@ -90,22 +92,18 @@ public class TimeZoneUtil {
      * @return 有效的时区ID字符串
      */
     public static String getEffectiveTimeZone() {
-        // 尝试获取启动参数中设置的时区
-        String startupTimeZone = System.getProperty("user.timezone");
+        String cached = cachedEffectiveTimeZone;
+        if (cached != null) return cached;
 
-        // 如果启动参数中的时区有效，则使用它
-        if (isValidTimeZone(startupTimeZone)) {
-            return startupTimeZone;
+        String tz = System.getProperty("user.timezone");
+        if (!isValidTimeZone(tz)) {
+            tz = getSystemTimeZone();
+            if (!isValidTimeZone(tz)) {
+                tz = "UTC";
+            }
         }
-
-        // 否则尝试使用系统默认时区
-        String systemTZ = getSystemTimeZone();
-        if (isValidTimeZone(systemTZ)) {
-            return systemTZ;
-        }
-
-        // 如果以上都无效，则使用UTC作为兜底时区
-        return "UTC";
+        cachedEffectiveTimeZone = tz;
+        return tz;
     }
 
     /**

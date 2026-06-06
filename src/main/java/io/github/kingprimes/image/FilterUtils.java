@@ -1,6 +1,5 @@
 package io.github.kingprimes.image;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
@@ -30,18 +29,17 @@ public final class FilterUtils {
      * @return 转换后的灰度图像BufferedImage对象，尺寸与原始图片一致，格式为TYPE_INT_ARGB，透明度通道保持不变
      */
     public static BufferedImage grayScale(BufferedImage image) {
-        BufferedImage result = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        for (int y = 0; y < image.getHeight(); y++) {
-            for (int x = 0; x < image.getWidth(); x++) {
-                int rgb = image.getRGB(x, y);
-                int a = (rgb >> 24) & 0xFF;
-                int r = (rgb >> 16) & 0xFF;
-                int g = (rgb >> 8) & 0xFF;
-                int b = rgb & 0xFF;
-                int gray = (int) (0.299 * r + 0.587 * g + 0.114 * b);
-                result.setRGB(x, y, (a << 24) | (gray << 16) | (gray << 8) | gray);
-            }
+        int w = image.getWidth(), h = image.getHeight();
+        int[] pixels = image.getRGB(0, 0, w, h, null, 0, w);
+        for (int i = 0; i < pixels.length; i++) {
+            int rgb = pixels[i];
+            int gray = (int) (0.299 * ((rgb >> 16) & 0xFF)
+                    + 0.587 * ((rgb >> 8) & 0xFF)
+                    + 0.114 * (rgb & 0xFF));
+            pixels[i] = (rgb & 0xFF000000) | (gray << 16) | (gray << 8) | gray;
         }
+        BufferedImage result = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        result.setRGB(0, 0, w, h, pixels, 0, w);
         return result;
     }
 
@@ -88,18 +86,8 @@ public final class FilterUtils {
         if (radius < 1) return image;
         int size = radius * 2 + 1;
         float[] kernel = createGaussianKernel(size, radius);
-
-        BufferedImage result = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = result.createGraphics();
-        g2.drawImage(image, 0, 0, null);
-        g2.dispose();
-
-        // 横向模糊
-        result = convolve(result, kernel, size, 1);
-        // 纵向模糊
-        result = convolve(result, kernel, 1, size);
-
-        return result;
+        BufferedImage hPass = convolve(image, kernel, size, 1);
+        return convolve(hPass, kernel, 1, size);
     }
 
     private static float[] createGaussianKernel(int size, int radius) {

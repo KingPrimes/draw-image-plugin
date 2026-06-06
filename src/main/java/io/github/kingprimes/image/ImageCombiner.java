@@ -7,6 +7,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 
 /**
  * 图片绘制组合器（建造者模式实现）
@@ -19,6 +23,19 @@ import java.io.IOException;
 public class ImageCombiner {
     private static final Color BORDER_OUTER_COLOR = new Color(0x3C3C5A);
     private static final Color BORDER_INNER_COLOR = new Color(0x4a4a6a);
+
+    private static final int ENCODER_POOL_SIZE = Math.max(1,
+            Integer.getInteger("draw.plugin.encoder.pool.size", 1));
+    private static final ExecutorService PLATFORM_ENCODER =
+            Executors.newFixedThreadPool(ENCODER_POOL_SIZE, r -> {
+                Thread t = new Thread(r, "image-encoder-worker");
+                t.setDaemon(true);
+                return t;
+            });
+
+    private static final int MAX_CONCURRENT_DRAWS = Math.max(1,
+            Integer.getInteger("draw.plugin.max.concurrent", 2));
+    private static final Semaphore DRAW_SEMAPHORE = new Semaphore(MAX_CONCURRENT_DRAWS, true);
     /**
      * 目标画布图像，所有绘制操作的最终载体（尺寸不可变）
      */
@@ -58,7 +75,7 @@ public class ImageCombiner {
         this.target = image;
         this.g2 = target.createGraphics();
         this.format = format;
-        setQualityRenderingHints(g2); // 初始化高质量渲染
+        setQualityRenderingHints(g2);
     }
 
     /**
@@ -77,7 +94,20 @@ public class ImageCombiner {
         this.g2 = target.createGraphics();
         this.format = format;
         g2.fillRect(0, 0, width, height);
-        setQualityRenderingHints(g2); // 初始化高质量渲染
+        setQualityRenderingHints(g2);
+    }
+
+    private static void acquireDrawPermit() {
+        try {
+            DRAW_SEMAPHORE.acquire();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("绘图请求被中断", e);
+        }
+    }
+
+    private void releaseDrawPermit() {
+        DRAW_SEMAPHORE.release();
     }
 
     protected void setQualityRenderingHints(Graphics2D g2) {
@@ -337,7 +367,13 @@ public class ImageCombiner {
      */
     public ImageCombiner createGradientBackground(int width, int height, Color startColor, Color endColor,
                                                   boolean vertical) {
-        g2.drawImage(GraphicsUtils.createGradientBackground(width, height, startColor, endColor, vertical), 0, 0, null);
+        GradientPaint gp = vertical
+                ? new GradientPaint(0, 0, startColor, 0, height, endColor)
+                : new GradientPaint(0, 0, startColor, width, 0, endColor);
+        Paint oldPaint = g2.getPaint();
+        g2.setPaint(gp);
+        g2.fillRect(0, 0, width, height);
+        g2.setPaint(oldPaint);
         return this;
     }
 
@@ -360,8 +396,10 @@ public class ImageCombiner {
     public ImageCombiner addRoundedImage(BufferedImage image, int x, int y, int cornerRadius) {
         if (image == null || cornerRadius < 0)
             return this;
-        BufferedImage roundedImage = GraphicsUtils.createRoundedImage(image, cornerRadius);
-        g2.drawImage(roundedImage, x, y, null);
+        Shape oldClip = g2.getClip();
+        g2.clip(new java.awt.geom.RoundRectangle2D.Float(x, y, image.getWidth(), image.getHeight(), cornerRadius, cornerRadius));
+        g2.drawImage(image, x, y, null);
+        g2.setClip(oldClip);
         return this;
     }
 
@@ -879,15 +917,32 @@ public class ImageCombiner {
      * @throws RuntimeException 若图片合并过程中发生I/O错误
      */
     public void combine() {
+        acquireDrawPermit();
         try {
             out = new ByteArrayOutputStream();
-            // 根据格式写入输出流（PNG支持透明，JPG不支持）
             String formatStr = format == OutputFormat.PNG ? "png" : "jpg";
-            ImageIO.write(target, formatStr, out);
-        } catch (IOException e) {
-            throw new RuntimeException("图片合并失败: " + e.getMessage(), e);
+            try {
+                ImageIO.write(target, formatStr, out);
+            } catch (IOException e) {
+                throw new RuntimeException("图片合并失败: " + e.getMessage(), e);
+            }
         } finally {
-            g2.dispose(); // 释放画笔资源
+            g2.dispose();
+            releaseDrawPermit();
+        }
+    }
+
+    /**
+     * 合并图像并提交到平台线程执行编码，避免 Virtual Thread carrier pin。
+     */
+    public ByteArrayOutputStream combineOnPlatformThread() {
+        try {
+            return PLATFORM_ENCODER.submit(() -> {
+                combine();
+                return out;
+            }).get();
+        } catch (Exception e) {
+            throw new RuntimeException("平台线程编码失败", e);
         }
     }
 

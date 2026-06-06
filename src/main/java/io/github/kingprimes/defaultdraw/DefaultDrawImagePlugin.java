@@ -2,14 +2,17 @@ package io.github.kingprimes.defaultdraw;
 
 import com.sun.jna.Pointer;
 import io.github.kingprimes.DrawImagePlugin;
+import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.model.*;
 import io.github.kingprimes.model.market.MarketLichSister;
 import io.github.kingprimes.model.market.MarketRiven;
 import io.github.kingprimes.model.market.Orders;
 import io.github.kingprimes.model.worldstate.*;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * 绘图 默认实现类
@@ -369,6 +372,30 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
     @Override
     public void releaseMemory() {
 
+    }
+
+    /**
+     * 预热绘图环境：预加载看板娘图片缓存和字体资源。
+     * 建议在服务启动后、首次绘图请求前调用，避免冷 I/O 导致首次请求超时。
+     * 2h2g 服务器上预热耗时约 2-5 秒。
+     */
+    public static void warmup() {
+        Logger logger = Logger.getLogger(DefaultDrawImagePlugin.class.getName());
+        logger.info("开始绘图插件预热...");
+        long start = System.currentTimeMillis();
+
+        ImageIOUtils.getRandomXiaoMeiWangImage();
+
+        String testStr = "预热";
+        Font f = DrawConstants.FONT.deriveFont(24f);
+        java.awt.font.FontRenderContext frc =
+                new java.awt.font.FontRenderContext(null, true, true);
+        f.getStringBounds(testStr, frc);
+        f = DrawConstants.FONT_WARFRAME_ICON.deriveFont(32F);
+        f.getStringBounds(testStr, frc);
+
+        long elapsed = System.currentTimeMillis() - start;
+        logger.info("绘图插件预热完成，耗时 " + elapsed + " ms");
     }
 
     /**

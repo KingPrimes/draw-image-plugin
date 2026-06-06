@@ -3,6 +3,7 @@ package io.github.kingprimes;
 import io.github.kingprimes.defaultdraw.DefaultDrawImagePlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  * 插件管理器，用于加载和管理DrawImagePlugin插件
@@ -21,6 +23,8 @@ import java.util.logging.Logger;
 public final class DrawImagePluginManager {
 
     private static final Logger LOGGER = Logger.getLogger(DrawImagePluginManager.class.getName());
+    private static final Pattern SAFE_LIBRARY_NAME = Pattern.compile("^[a-zA-Z0-9._-]+$");
+    private static final Pattern SAFE_FILE_NAME = Pattern.compile("^[a-zA-Z0-9._-]+\\.(jar|dll|so|dylib)$");
 
     private final List<DrawImagePlugin> plugins = new ArrayList<>();
 
@@ -30,6 +34,10 @@ public final class DrawImagePluginManager {
 
     /**
      * 从指定目录加载插件
+     * <p>
+     * <b>注意</b>：本方法涉及 URLClassLoader、ServiceLoader 和 JNA 原生库加载，
+     * 请在 platform thread 上调用，不要使用 Virtual Thread 初始化。
+     * </p>
      *
      * @param pluginDir 插件目录路径
      */
@@ -163,6 +171,14 @@ public final class DrawImagePluginManager {
     private void loadJNAPlugin(String libraryName, String libraryPath) {
         LOGGER.info("尝试加载JNA本地库插件: %s 从路径: %s".formatted(libraryName, libraryPath));
 
+        if (!SAFE_LIBRARY_NAME.matcher(libraryName).matches()) {
+            throw new RuntimeException("拒绝加载: 库名包含不安全字符: %s".formatted(libraryName));
+        }
+        File libFile = new File(libraryPath);
+        if (!libFile.isFile()) {
+            throw new RuntimeException("库文件不存在: %s".formatted(libraryPath));
+        }
+
         // 检查库是否已加载
         if (loadedLibraries.contains(libraryName)) {
             LOGGER.warning("本地库 %s 已经加载，跳过重复加载".formatted(libraryName));
@@ -170,26 +186,19 @@ public final class DrawImagePluginManager {
         }
 
         try {
-            // 将库路径添加到系统属性中，以便JNA可以找到它
-            String jnaLibPath = System.getProperty("jna.library.path", "");
-            String libraryDir = new File(libraryPath).getParent();
-            if (!jnaLibPath.contains(libraryDir)) {
-                if (!jnaLibPath.isEmpty()) {
-                    jnaLibPath += File.pathSeparator;
-                }
-                jnaLibPath += libraryDir;
-                System.setProperty("jna.library.path", jnaLibPath);
-            }
+            // 使用规范路径避免符号链接/路径遍历绕过
+            String canonicalPath = libFile.getCanonicalPath();
 
-            // 创建JNA插件适配器实例
-            JNADrawPluginAdapter jnaPlugin = new JNADrawPluginAdapter(libraryName);
+            // 不再修改全局 jna.library.path，直接传入绝对路径
+            JNADrawPluginAdapter jnaPlugin = new JNADrawPluginAdapter(libraryName, canonicalPath);
             plugins.add(jnaPlugin);
 
-            // 将库添加到已加载列表
             loadedLibraries.add(libraryName);
 
             LOGGER.info("成功创建JNA本地库插件实例: %s (版本: %s)".formatted(jnaPlugin.getPluginName(), jnaPlugin.getPluginVersion()));
 
+        } catch (IOException e) {
+            throw new RuntimeException("无法解析库路径: %s".formatted(libraryPath), e);
         } catch (UnsatisfiedLinkError e) {
             throw new RuntimeException("无法加载本地库: %s".formatted(libraryPath), e);
         } catch (Exception e) {

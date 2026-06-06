@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 /**
@@ -25,10 +27,12 @@ import java.util.stream.Stream;
  */
 @SuppressWarnings("unused")
 public final class ImageIOUtils {
+    private static final ReentrantLock cacheLock = new ReentrantLock();
+    private static final Logger LOGGER = Logger.getLogger(ImageIOUtils.class.getName());
     /**
      * 看板娘图片缓存，null = 未初始化，empty = 无图片
      */
-    private static List<BufferedImage> standingCache;
+    private static volatile List<BufferedImage> standingCache;
 
     private ImageIOUtils() {
     }
@@ -77,37 +81,44 @@ public final class ImageIOUtils {
     /**
      * 加载 /image/ 目录下所有看板娘图片到缓存
      */
-    private static synchronized void initStandingCache() {
+    private static void initStandingCache() {
         if (standingCache != null) return;
-        List<BufferedImage> list = new ArrayList<>();
-        URL url = ImageIOUtils.class.getResource("/image/");
-        if (url != null) {
-            try {
-                if ("file".equals(url.getProtocol())) {
-                    try (Stream<Path> files = Files.list(Paths.get(url.toURI()))) {
-                        files.filter(p -> p.getFileName().toString().matches("\\d+\\.png"))
-                                .sorted()
-                                .forEach(p -> {
-                                    BufferedImage img = getResourcesImage("/image/" + p.getFileName());
-                                    if (img != null) list.add(img);
-                                });
+        cacheLock.lock();
+        try {
+            if (standingCache != null) return;
+            List<BufferedImage> list = new ArrayList<>();
+            URL url = ImageIOUtils.class.getResource("/image/");
+            if (url != null) {
+                try {
+                    if ("file".equals(url.getProtocol())) {
+                        try (Stream<Path> files = Files.list(Paths.get(url.toURI()))) {
+                            files.filter(p -> p.getFileName().toString().matches("\\d+\\.png"))
+                                    .sorted()
+                                    .forEach(p -> {
+                                        BufferedImage img = getResourcesImage("/image/" + p.getFileName());
+                                        if (img != null) list.add(img);
+                                    });
+                        }
+                    }
+                } catch (IOException | URISyntaxException e) {
+                    LOGGER.warning("看板娘图片目录读取失败: " + e.getMessage());
+                }
+            }
+            // JAR 环境兜底
+            if (list.isEmpty()) {
+                for (int i = 1; i <= 20; i++) {
+                    try {
+                        BufferedImage img = getResourcesImage("/image/%d.png".formatted(i));
+                        if (img != null) list.add(img);
+                    } catch (RuntimeException e) {
+                        break;
                     }
                 }
-            } catch (IOException | URISyntaxException ignored) {
             }
+            standingCache = Collections.unmodifiableList(list);
+        } finally {
+            cacheLock.unlock();
         }
-        // JAR 环境兜底
-        if (list.isEmpty()) {
-            for (int i = 1; i <= 20; i++) {
-                try {
-                    BufferedImage img = getResourcesImage("/image/%d.png".formatted(i));
-                    if (img != null) list.add(img);
-                } catch (RuntimeException e) {
-                    break;
-                }
-            }
-        }
-        standingCache = Collections.unmodifiableList(list);
     }
 
     /**
@@ -131,13 +142,10 @@ public final class ImageIOUtils {
      * @throws RuntimeException 当图片加载失败或文件未找到时抛出运行时异常
      */
     public static BufferedImage getResourcesImage(String path) {
-        try {
-            // 使用 Classloader 从 resources/image 目录加载图片
-            InputStream inputStream = ImageIOUtils.class.getResourceAsStream(path);
+        try (InputStream inputStream = ImageIOUtils.class.getResourceAsStream(path)) {
             if (inputStream == null) {
                 throw new IOException("图片文件未找到: %s".formatted(path));
             }
-            // 使用 ImageIO 读取图片
             return ImageIO.read(inputStream);
         } catch (IOException e) {
             throw new RuntimeException("无法加载图片: %s".formatted(e.getMessage()), e);

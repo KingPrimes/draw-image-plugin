@@ -116,26 +116,23 @@ public final class TextUtils {
         }
 
         StringBuilder currentLine = new StringBuilder();
-        String[] words = text.split("");
-
-        for (String word : words) {
-            // 测试当前行加单词是否超过最大宽度
-            String testLine = currentLine + word + " ";
-            if (metrics.stringWidth(testLine) <= maxWidth) {
-                currentLine.append(word);
-            } else {
-                // 单个单词超过最大宽度，直接单独成行
-                if (currentLine.isEmpty()) {
-                    lines.add(word);
+        int len = text.length();
+        for (int i = 0; i < len; i++) {
+            char ch = text.charAt(i);
+            int prevLen = currentLine.length();
+            currentLine.append(ch);
+            if (metrics.stringWidth(currentLine.toString()) > maxWidth) {
+                currentLine.deleteCharAt(prevLen);
+                if (prevLen == 0) {
+                    lines.add(String.valueOf(ch));
                 } else {
-                    lines.add(currentLine.toString().trim());
-                    currentLine = new StringBuilder(word);
+                    lines.add(currentLine.toString());
+                    currentLine = new StringBuilder().append(ch);
                 }
             }
         }
-        // 添加最后一行
         if (!currentLine.isEmpty()) {
-            lines.add(currentLine.toString().trim());
+            lines.add(currentLine.toString());
         }
         return lines.toArray(new String[0]);
     }
