@@ -43,12 +43,21 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final int JNA_POOL_SIZE = Math.max(1,
             Integer.getInteger("draw.plugin.jna.pool.size", 1));
-    private static final ExecutorService PLATFORM_EXECUTOR =
+    private static volatile ExecutorService PLATFORM_EXECUTOR =
             Executors.newFixedThreadPool(JNA_POOL_SIZE, r -> {
                 Thread t = new Thread(r, "jna-platform-worker");
                 t.setDaemon(true);
                 return t;
             });
+
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            ExecutorService pool = PLATFORM_EXECUTOR;
+            if (pool != null && !pool.isShutdown()) {
+                pool.shutdownNow();
+            }
+        }, "jna-executor-shutdown"));
+    }
 
     private final NativeDrawLibrary library;
     private final DefaultDrawImagePlugin fallback = new DefaultDrawImagePlugin();
@@ -75,12 +84,35 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      * <pre>{@code
      *   adapter.supplyOnPlatformThread(() -> adapter.drawHelpImage(data));
      * }</pre>
+     *
+     * @throws IllegalStateException 如果平台线程池已通过 {@link #shutdownPlatformExecutor()} 关闭
      */
     public static <T> T supplyOnPlatformThread(Callable<T> task) {
+        ExecutorService pool = PLATFORM_EXECUTOR;
+        if (pool == null || pool.isShutdown()) {
+            throw new IllegalStateException("平台线程池已关闭");
+        }
         try {
-            return PLATFORM_EXECUTOR.submit(task).get();
+            return pool.submit(task).get();
         } catch (Exception e) {
             throw new RuntimeException("平台线程执行失败", e);
+        }
+    }
+
+    /**
+     * 关闭平台线程池。
+     * <p>
+     * 在插件热重载或容器卸载场景下，宿主应调用此方法释放线程资源。
+     * 调用后 {@link #supplyOnPlatformThread(Callable)} 将抛出 {@link IllegalStateException}。
+     * </p>
+     * <p>
+     * 注意：这是一个全局静态方法，会影响所有 {@link JNADrawPluginAdapter} 实例。
+     * </p>
+     */
+    public static void shutdownPlatformExecutor() {
+        ExecutorService pool = PLATFORM_EXECUTOR;
+        if (pool != null && !pool.isShutdown()) {
+            pool.shutdownNow();
         }
     }
 
@@ -370,11 +402,15 @@ public final class JNADrawPluginAdapter implements DrawImagePlugin {
      */
     private static Pointer serializeToPointer(Object obj) {
         if (obj == null) return Pointer.NULL;
-        byte[] jsonData = objectMapper.writeValueAsBytes(obj);
-        Memory memory = new Memory(jsonData.length + 4);
-        memory.setInt(0, jsonData.length);
-        memory.write(4, jsonData, 0, jsonData.length);
-        return memory;
+        try {
+            byte[] jsonData = objectMapper.writeValueAsBytes(obj);
+            Memory memory = new Memory(jsonData.length + 4);
+            memory.setInt(0, jsonData.length);
+            memory.write(4, jsonData, 0, jsonData.length);
+            return memory;
+        } catch (Exception e) {
+            throw new RuntimeException("序列化 JSON 数据失败: " + obj.getClass().getSimpleName(), e);
+        }
     }
 
     /**

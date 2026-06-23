@@ -67,7 +67,23 @@ public final class DrawImagePluginManager {
             }
         }
 
-        // 清空之前的插件
+        // 释放旧插件资源（图片缓存、原生内存等）
+        for (DrawImagePlugin old : plugins) {
+            try {
+                old.releaseMemory();
+            } catch (Exception e) {
+                LOGGER.warning("释放旧插件资源失败: %s".formatted(e.getMessage()));
+            }
+        }
+        // 清理 Native 加载器全局资源（如 JNA 平台线程池）
+        if (nativePluginLoader != null) {
+            try {
+                nativePluginLoader.cleanup();
+            } catch (Exception e) {
+                LOGGER.warning("清理 Native 加载器失败: %s".formatted(e.getMessage()));
+            }
+        }
+
         plugins.clear();
         loadedLibraries.clear();
         LOGGER.info("开始从目录加载插件: %s".formatted(pluginDir));

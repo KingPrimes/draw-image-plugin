@@ -53,7 +53,11 @@ public class SwitchableDrawImagePlugin implements DrawImagePlugin {
     }
 
     /**
-     * 原子切换到新的插件实现
+     * 原子切换到新的插件实现。
+     * <p>
+     * 切换前会对当前插件实例调用 {@link #releaseMemory()} 释放其占用的资源
+     * （如图片缓存、原生内存等），避免频繁切换导致资源泄漏。
+     * </p>
      *
      * @param newDelegate 新的插件实现
      */
@@ -61,7 +65,12 @@ public class SwitchableDrawImagePlugin implements DrawImagePlugin {
         if (newDelegate == null) {
             throw new IllegalArgumentException("newDelegate must not be null");
         }
+        // 释放旧插件资源
+        DrawImagePlugin old = this.delegate;
         this.delegate = newDelegate;
+        if (old != null) {
+            old.releaseMemory();
+        }
     }
 
     /**

@@ -22,4 +22,15 @@ public interface NativePluginLoader {
      * @throws Exception 加载失败时抛出
      */
     DrawImagePlugin loadNativePlugin(String libraryName, String libraryPath) throws Exception;
+
+    /**
+     * 清理 Native 加载器占用的全局资源。
+     * <p>
+     * 在宿主重载插件目录时由 {@link DrawImagePluginManager#loadPlugins(String)} 自动调用。
+     * 例如 JNA 实现可在此方法中关闭平台线程池。
+     * </p>
+     */
+    default void cleanup() {
+        // 默认无操作
+    }
 }

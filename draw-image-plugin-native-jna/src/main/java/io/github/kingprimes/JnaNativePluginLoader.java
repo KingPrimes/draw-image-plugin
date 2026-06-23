@@ -20,4 +20,9 @@ public class JnaNativePluginLoader implements NativePluginLoader {
         String canonicalPath = libFile.getCanonicalPath();
         return new JNADrawPluginAdapter(libraryName, canonicalPath);
     }
+
+    @Override
+    public void cleanup() {
+        JNADrawPluginAdapter.shutdownPlatformExecutor();
+    }
 }

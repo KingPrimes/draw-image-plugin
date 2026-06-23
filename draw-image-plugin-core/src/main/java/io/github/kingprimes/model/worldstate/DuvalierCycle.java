@@ -74,6 +74,10 @@ public final class DuvalierCycle implements Cycle {
     }
 
     public List<EndlessXpChoices> getChoices() {
-        return schedules.getFirst().getCategoryChoices();
+        if (schedules == null || schedules.isEmpty()) return List.of();
+        EndlessXpSchedule schedule = schedules.getFirst();
+        if (schedule == null) return List.of();
+        List<EndlessXpChoices> choices = schedule.getCategoryChoices();
+        return choices != null ? choices : List.of();
     }
 }
