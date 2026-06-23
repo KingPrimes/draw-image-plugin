@@ -3,12 +3,12 @@ package io.github.kingprimes;
 import io.github.kingprimes.defaultdraw.DefaultDrawImagePlugin;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -24,18 +24,36 @@ public final class DrawImagePluginManager {
 
     private static final Logger LOGGER = Logger.getLogger(DrawImagePluginManager.class.getName());
     private static final Pattern SAFE_LIBRARY_NAME = Pattern.compile("^[a-zA-Z0-9._-]+$");
-    private static final Pattern SAFE_FILE_NAME = Pattern.compile("^[a-zA-Z0-9._-]+\\.(jar|dll|so|dylib)$");
 
     private final List<DrawImagePlugin> plugins = new ArrayList<>();
 
     // 存储已加载的本地库，避免重复加载
     private final List<String> loadedLibraries = new ArrayList<>();
 
+    // Native 插件加载器（可为 null，不配置则不加载 native 插件）
+    private final NativePluginLoader nativePluginLoader;
+
+    /**
+     * 创建一个不加载 native 插件的管理器
+     */
+    public DrawImagePluginManager() {
+        this.nativePluginLoader = null;
+    }
+
+    /**
+     * 创建一个指定 native 插件加载器的管理器
+     *
+     * @param nativePluginLoader native 插件加载器
+     */
+    public DrawImagePluginManager(NativePluginLoader nativePluginLoader) {
+        this.nativePluginLoader = Objects.requireNonNull(nativePluginLoader);
+    }
+
 
     /**
      * 从指定目录加载插件
      * <p>
-     * <b>注意</b>：本方法涉及 URLClassLoader、ServiceLoader 和 JNA 原生库加载，
+     * <b>注意</b>：本方法涉及 URLClassLoader 和 ServiceLoader，
      * 请在 platform thread 上调用，不要使用 Virtual Thread 初始化。
      * </p>
      *
@@ -49,7 +67,23 @@ public final class DrawImagePluginManager {
             }
         }
 
-        // 清空之前的插件
+        // 释放旧插件资源（图片缓存、原生内存等）
+        for (DrawImagePlugin old : plugins) {
+            try {
+                old.releaseMemory();
+            } catch (Exception e) {
+                LOGGER.warning("释放旧插件资源失败: %s".formatted(e.getMessage()));
+            }
+        }
+        // 清理 Native 加载器全局资源（如 JNA 平台线程池）
+        if (nativePluginLoader != null) {
+            try {
+                nativePluginLoader.cleanup();
+            } catch (Exception e) {
+                LOGGER.warning("清理 Native 加载器失败: %s".formatted(e.getMessage()));
+            }
+        }
+
         plugins.clear();
         loadedLibraries.clear();
         LOGGER.info("开始从目录加载插件: %s".formatted(pluginDir));
@@ -132,10 +166,18 @@ public final class DrawImagePluginManager {
      * @param nativeLibraries 本地库文件列表
      */
     private void loadNativePlugins(List<File> nativeLibraries) {
+        if (nativeLibraries.isEmpty()) {
+            return;
+        }
+        if (nativePluginLoader == null) {
+            LOGGER.warning("检测到 native 插件文件，但未配置 NativePluginLoader，跳过加载。" +
+                    "如需 native 支持，请添加 draw-image-plugin-native-jna 依赖并创建 JnaNativePluginLoader。");
+            return;
+        }
         for (File libFile : nativeLibraries) {
             String libraryName = getLibraryName(libFile.getName());
             try {
-                loadJNAPlugin(libraryName, libFile.getAbsolutePath());
+                loadNativePlugin(libraryName, libFile.getAbsolutePath());
                 LOGGER.info("加载本地库插件: %s".formatted(libraryName));
             } catch (Exception e) {
                 throw new RuntimeException("无法加载本地库插件: %s".formatted(libFile.getName()), e);
@@ -163,13 +205,13 @@ public final class DrawImagePluginManager {
     }
 
     /**
-     * 从本地库文件加载插件（支持JNA）
+     * 通过 NativePluginLoader 加载本地库插件
      *
      * @param libraryName 本地库名称（不包含平台特定的前缀和后缀）
      * @param libraryPath 本地库完整路径
      */
-    private void loadJNAPlugin(String libraryName, String libraryPath) {
-        LOGGER.info("尝试加载JNA本地库插件: %s 从路径: %s".formatted(libraryName, libraryPath));
+    private void loadNativePlugin(String libraryName, String libraryPath) {
+        LOGGER.info("尝试加载本地库插件: %s 从路径: %s".formatted(libraryName, libraryPath));
 
         if (!SAFE_LIBRARY_NAME.matcher(libraryName).matches()) {
             throw new RuntimeException("拒绝加载: 库名包含不安全字符: %s".formatted(libraryName));
@@ -186,23 +228,12 @@ public final class DrawImagePluginManager {
         }
 
         try {
-            // 使用规范路径避免符号链接/路径遍历绕过
-            String canonicalPath = libFile.getCanonicalPath();
-
-            // 不再修改全局 jna.library.path，直接传入绝对路径
-            JNADrawPluginAdapter jnaPlugin = new JNADrawPluginAdapter(libraryName, canonicalPath);
-            plugins.add(jnaPlugin);
-
+            DrawImagePlugin plugin = nativePluginLoader.loadNativePlugin(libraryName, libraryPath);
+            plugins.add(plugin);
             loadedLibraries.add(libraryName);
-
-            LOGGER.info("成功创建JNA本地库插件实例: %s (版本: %s)".formatted(jnaPlugin.getPluginName(), jnaPlugin.getPluginVersion()));
-
-        } catch (IOException e) {
-            throw new RuntimeException("无法解析库路径: %s".formatted(libraryPath), e);
-        } catch (UnsatisfiedLinkError e) {
-            throw new RuntimeException("无法加载本地库: %s".formatted(libraryPath), e);
+            LOGGER.info("成功创建本地库插件实例: %s (版本: %s)".formatted(plugin.getPluginName(), plugin.getPluginVersion()));
         } catch (Exception e) {
-            throw new RuntimeException("创建本地库插件实例时出错", e);
+            throw new RuntimeException("创建本地库插件实例时出错: %s".formatted(libraryPath), e);
         }
     }
 

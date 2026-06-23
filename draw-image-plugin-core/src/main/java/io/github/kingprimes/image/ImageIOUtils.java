@@ -135,6 +135,22 @@ public final class ImageIOUtils {
     }
 
     /**
+     * 释放看板娘图片缓存，释放内存。
+     * 通常在插件不可用或需要释放资源时调用。
+     */
+    public static void releaseCache() {
+        cacheLock.lock();
+        try {
+            if (standingCache != null) {
+                standingCache = null;
+                LOGGER.info("看板娘图片缓存已释放");
+            }
+        } finally {
+            cacheLock.unlock();
+        }
+    }
+
+    /**
      * 从resources目录加载图片资源
      *
      * @param path 图片文件的路径

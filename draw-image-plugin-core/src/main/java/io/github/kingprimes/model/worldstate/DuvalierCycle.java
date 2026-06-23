@@ -45,7 +45,7 @@ public final class DuvalierCycle implements Cycle {
      *
      */
     @Setter
-    List<EndlessXpChoices> choices;
+    List<EndlessXpSchedule> schedules;
     /**
      * 剩余时间
      */
@@ -54,10 +54,10 @@ public final class DuvalierCycle implements Cycle {
     /**
      * 构造双衍王境循环
      *
-     * @param choices 当前循环可选内容列表 从{@link WorldState#endlessXpChoices} 中获取
+     * @param schedules 当前循环可选内容列表 从{@link WorldState#endlessXpSchedule} 中获取
      */
-    public DuvalierCycle(List<EndlessXpChoices> choices) {
-        this.choices = choices;
+    public DuvalierCycle(List<EndlessXpSchedule> schedules) {
+        this.schedules = schedules;
 
         long nowSeconds = Instant.now().getEpochSecond();
         long cycleDelta = (nowSeconds - 52) % CYCLE_TIME;
@@ -73,4 +73,11 @@ public final class DuvalierCycle implements Cycle {
         this.timeLeft = TimeUtils.timeDeltaToString(this.expiry.toEpochMilli() - System.currentTimeMillis());
     }
 
+    public List<EndlessXpChoices> getChoices() {
+        if (schedules == null || schedules.isEmpty()) return List.of();
+        EndlessXpSchedule schedule = schedules.getFirst();
+        if (schedule == null) return List.of();
+        List<EndlessXpChoices> choices = schedule.getCategoryChoices();
+        return choices != null ? choices : List.of();
+    }
 }
