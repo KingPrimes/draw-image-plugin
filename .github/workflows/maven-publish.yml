@@ -5,9 +5,60 @@ on:
     tags:
       - v*
   workflow_dispatch:
+
 jobs:
+  validate:
+    name: Validate Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v5
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: maven
+
+      - name: Build all modules
+        run: mvn clean package -DskipTests -q
+
+      - name: Verify all module artifacts exist
+        run: |
+          echo "=== 验证 jar 产物 ==="
+          for mod in draw-image-plugin-core draw-image-plugin-runtime draw-image-plugin-native-jna; do
+            if ls "$mod/target/$mod"*.jar 1>/dev/null 2>&1; then
+              echo "✅ $mod 构建成功"
+            else
+              echo "❌ $mod 缺少 jar 产物"
+              exit 1
+            fi
+          done
+          echo ""
+          echo "=== 验证 sources jar ==="
+          for mod in draw-image-plugin-core draw-image-plugin-runtime draw-image-plugin-native-jna; do
+            if [ -f "$mod/target/$mod"*-sources.jar ]; then
+              echo "✅ $mod sources jar 存在"
+            else
+              echo "❌ $mod sources jar 缺失"
+              exit 1
+            fi
+          done
+          echo ""
+          echo "=== 验证 javadoc jar ==="
+          for mod in draw-image-plugin-core draw-image-plugin-runtime draw-image-plugin-native-jna; do
+            if [ -f "$mod/target/$mod"*-javadoc.jar ]; then
+              echo "✅ $mod javadoc jar 存在"
+            else
+              echo "❌ $mod javadoc jar 缺失"
+              exit 1
+            fi
+          done
+
   publish:
     name: Publish to Maven Central
+    needs: validate
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -17,7 +68,7 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v5
 
-      - name: Set up Apache Maven Central
+      - name: Set up JDK 21 with Maven Central
         uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
@@ -29,9 +80,17 @@ jobs:
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
-      - name: Publish to Apache Maven Central
-        run: mvn deploy
+      - name: Publish all modules to Maven Central
+        run: mvn deploy -DskipTests -B
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_CENTRAL_TOKEN: ${{ secrets.OSSRH_TOKEN }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+      - name: Summary
+        run: |
+          TAG=${GITHUB_REF_NAME#v}
+          echo "✅ 发布完成"
+          echo "   - io.github.kingprimes:draw-image-plugin-core:${TAG}"
+          echo "   - io.github.kingprimes:draw-image-plugin-runtime:${TAG}"
+          echo "   - io.github.kingprimes:draw-image-plugin-native-jna:${TAG}"

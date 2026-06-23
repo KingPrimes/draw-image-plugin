@@ -1,6 +1,5 @@
 package io.github.kingprimes.defaultdraw;
 
-import com.sun.jna.Pointer;
 import io.github.kingprimes.DrawImagePlugin;
 import io.github.kingprimes.image.ImageIOUtils;
 import io.github.kingprimes.model.*;
@@ -10,17 +9,51 @@ import io.github.kingprimes.model.market.Orders;
 import io.github.kingprimes.model.worldstate.*;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * 绘图 默认实现类
+ * <p>
+ * 插件名称、版本等信息通过 {@code plugin.properties} 配置文件读取，
+ * 修改配置文件后重启生效，无需重新编译。
+ * </p>
  *
  * @author KingPrimes
  * @version 1.0.3
  */
 public class DefaultDrawImagePlugin implements DrawImagePlugin {
+
+    private static final Logger LOGGER = Logger.getLogger(DefaultDrawImagePlugin.class.getName());
+    private static final String PLUGIN_CONFIG_FILE = "plugin.properties";
+
+    private static final String PLUGIN_NAME;
+    private static final String PLUGIN_VERSION;
+    private static final String PLUGIN_AUTHOR;
+    private static final String PLUGIN_DESCRIPTION;
+
+    static {
+        Properties props = new Properties();
+        try (InputStream is = DefaultDrawImagePlugin.class.getClassLoader().getResourceAsStream(PLUGIN_CONFIG_FILE)) {
+            if (is != null) {
+                props.load(is);
+            } else {
+                LOGGER.warning("未找到配置文件 %s，将使用默认值".formatted(PLUGIN_CONFIG_FILE));
+            }
+        } catch (IOException e) {
+            LOGGER.log(Level.WARNING, "读取配置文件 %s 失败，将使用默认值".formatted(PLUGIN_CONFIG_FILE), e);
+        }
+
+        PLUGIN_NAME = props.getProperty("plugin.name", "Default");
+        PLUGIN_VERSION = props.getProperty("plugin.version", "1.0.0");
+        PLUGIN_AUTHOR = props.getProperty("plugin.author", "KingPrimes");
+        PLUGIN_DESCRIPTION = props.getProperty("plugin.description", "Draw Image Plugin 默认绘图实现");
+    }
 
     /**
      * 绘制帮助图像
@@ -349,21 +382,40 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
     /**
      * 获取插件名称
      *
-     * @return 插件名称
+     * @return 插件名称（来自 plugin.properties）
      */
     @Override
     public String getPluginName() {
-        return "Default";
+        return PLUGIN_NAME;
     }
 
     /**
      * 获取插件版本
      *
-     * @return 插件版本
+     * @return 插件版本（来自 plugin.properties）
      */
     @Override
     public String getPluginVersion() {
-        return "1.0.0";
+        return PLUGIN_VERSION;
+    }
+
+    /**
+     * 获取插件作者
+     *
+     * @return 插件作者（来自 plugin.properties）
+     */
+    public String getPluginAuthor() {
+        return PLUGIN_AUTHOR;
+    }
+
+    /**
+     * 获取插件描述
+     *
+     * @return 插件描述（来自 plugin.properties）
+     */
+    @Override
+    public String getPluginDescription() {
+        return PLUGIN_DESCRIPTION;
     }
 
     /**
@@ -371,7 +423,8 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      */
     @Override
     public void releaseMemory() {
-
+        ImageIOUtils.releaseCache();
+        LOGGER.info("DefaultDrawImagePlugin 资源已释放");
     }
 
     /**
@@ -379,9 +432,9 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
      * 建议在服务启动后、首次绘图请求前调用，避免冷 I/O 导致首次请求超时。
      * 2h2g 服务器上预热耗时约 2-5 秒。
      */
-    public static void warmup() {
-        Logger logger = Logger.getLogger(DefaultDrawImagePlugin.class.getName());
-        logger.info("开始绘图插件预热...");
+    @Override
+    public void warmup() {
+        LOGGER.info("开始绘图插件预热...");
         long start = System.currentTimeMillis();
 
         ImageIOUtils.getRandomXiaoMeiWangImage();
@@ -395,16 +448,6 @@ public class DefaultDrawImagePlugin implements DrawImagePlugin {
         f.getStringBounds(testStr, frc);
 
         long elapsed = System.currentTimeMillis() - start;
-        logger.info("绘图插件预热完成，耗时 " + elapsed + " ms");
-    }
-
-    /**
-     * 释放插件内存
-     *
-     * @param pointer 释放的对象
-     */
-    @Override
-    public void releaseMemory(Pointer pointer) {
-
+        LOGGER.info("绘图插件预热完成，耗时 " + elapsed + " ms");
     }
 }

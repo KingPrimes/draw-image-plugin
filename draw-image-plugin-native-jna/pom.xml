@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.github.kingprimes</groupId>
+        <artifactId>draw-image-plugin-parent</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>draw-image-plugin-native-jna</artifactId>
+    <packaging>jar</packaging>
+    <name>DrawImagePlugin Native JNA Bridge</name>
+    <description>JNA native library bridge for DrawImagePlugin — adapts .dll/.so/.dylib to DrawImagePlugin interface</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.kingprimes</groupId>
+            <artifactId>draw-image-plugin-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+    </dependencies>
+</project>

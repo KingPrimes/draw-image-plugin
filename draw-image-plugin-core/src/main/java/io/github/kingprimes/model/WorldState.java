@@ -218,7 +218,7 @@ public class WorldState {
 
     @JsonIgnore
     public DuvalierCycle getDuvalierCycle() {
-        return new DuvalierCycle(this.getEndlessXpChoices());
+        return new DuvalierCycle(endlessXpSchedule);
     }
 
     @JsonIgnore
