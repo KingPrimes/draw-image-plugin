@@ -61,7 +61,7 @@ jobs:
     needs: validate
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
 
     steps:
@@ -94,3 +94,13 @@ jobs:
           echo "   - io.github.kingprimes:draw-image-plugin-core:${TAG}"
           echo "   - io.github.kingprimes:draw-image-plugin-runtime:${TAG}"
           echo "   - io.github.kingprimes:draw-image-plugin-native-jna:${TAG}"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
+          draft: true
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
