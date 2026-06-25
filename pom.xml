@@ -19,7 +19,7 @@
     </modules>
 
     <properties>
-        <revision>2.0.0</revision>
+        <revision>2.0.1</revision>
         <maven.compiler.release>21</maven.compiler.release>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -172,6 +172,12 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.3.1</version>
+                <configuration>
+                    <excludes>
+                        <exclude>fonts/**</exclude>
+                        <exclude>image/**</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
